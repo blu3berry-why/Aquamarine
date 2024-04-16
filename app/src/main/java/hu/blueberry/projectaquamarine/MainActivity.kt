@@ -7,10 +7,12 @@ import android.graphics.BitmapFactory
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.result.contract.ActivityResultContracts
 
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import hu.blueberry.camera.models.photo.InternalStoragePhoto
+import hu.blueberry.camera.ui.SetPhotoData
 import hu.blueberry.camera.ui.TakePhotoView
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -45,8 +47,9 @@ class MainActivity : ComponentActivity() {
         }
 
         setContent {
-            TakePhotoView(applicationContext = applicationContext)
+            SetPhotoData()
         }
+
     }
 
     fun savePhotoToInternalStorage(filename:String, bitmap: Bitmap): Boolean{
