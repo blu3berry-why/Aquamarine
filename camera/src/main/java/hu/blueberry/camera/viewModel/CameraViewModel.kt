@@ -23,7 +23,7 @@ class CameraViewModel: ViewModel() {
 
     val selectedTakenType = MutableStateFlow<PhotoTakenTime>(PhotoTakenTime.OPENING)
 
-    // TODO Is there an other wy of auto updating it?
+    // TODO Is there an other way of auto updating it?
     val photoName = MutableStateFlow<String>(getPhotoName())
 
 
