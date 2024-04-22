@@ -31,7 +31,11 @@ class CameraViewModel: ViewModel() {
         _bitmaps.value += bitmap
     }
 
-
+    /**
+     * @param filename: The name of the file which you wanna save
+     * @param bitmap: The image you wanna save
+     * @return If the save was successful
+     */
     fun savePhotoToInternalStorage(context: Context, filename: String, bitmap: Bitmap): Boolean{
         return try {
             context.openFileOutput("$filename.jpg", ComponentActivity.MODE_PRIVATE).use { stream->

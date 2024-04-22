@@ -6,7 +6,6 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.result.launch
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -14,6 +13,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -22,18 +23,21 @@ import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.currentCompositionLocalContext
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.platform.LocalTextInputService
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -47,37 +51,42 @@ import kotlin.enums.EnumEntries
 @Composable
 fun SetPhotoData() {
     val viewModel = viewModel<CameraViewModel>()
-    var text = viewModel.photoName.collectAsState()
-    
-    var bitmaps = viewModel.bitmaps.collectAsState()
+    val text = viewModel.photoName.collectAsState()
 
-    var launcher = rememberLauncherForActivityResult(contract = ActivityResultContracts.TakePicturePreview()) {
-        it?.let { viewModel.onTakePhoto(it) }
-    }
+    val bitmaps = viewModel.bitmaps.collectAsState()
 
+    val launcher =
+        rememberLauncherForActivityResult(contract = ActivityResultContracts.TakePicturePreview()) {
+            it?.let { viewModel.onTakePhoto(it) }
+        }
 
 
     val asd = viewModel.selectedClockType.collectAsState()
     ProjectAquamarineTheme {
-        Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center){
-            Column (
+        Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+            Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.SpaceEvenly
-            ){
+            ) {
 
                 Text(text = text.value)
 
                 val context = LocalContext.current
                 val bitmap = bitmaps.value.firstOrNull()
 
-                Box(modifier = Modifier
-                    .height(500.dp)
-                    .width(400.dp),
-                    contentAlignment = Alignment.Center){
+                Box(
+                    modifier = Modifier
+                        .height(500.dp)
+                        .width(400.dp),
+                    contentAlignment = Alignment.Center
+                ) {
                     if (null != bitmap) {
-                        Column(horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.SpaceBetween){
+                        Column(
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                            verticalArrangement = Arrangement.SpaceBetween
+                        ) {
                             Image(
-                                bitmap = bitmap.asImageBitmap() ,
+                                bitmap = bitmap.asImageBitmap(),
                                 contentDescription = null,
                                 modifier = Modifier
                                     .height(400.dp)
@@ -86,9 +95,17 @@ fun SetPhotoData() {
 
                             )
                             Button(onClick = {
-                                val success = viewModel.savePhotoToInternalStorage(context = context, filename = viewModel.getPhotoName(), bitmap = bitmap )
-                                if (success){
-                                    Toast.makeText(context, "Image: ${viewModel.getPhotoName()} has been saved.", Toast.LENGTH_LONG).show()
+                                val success = viewModel.savePhotoToInternalStorage(
+                                    context = context,
+                                    filename = viewModel.getPhotoName(),
+                                    bitmap = bitmap
+                                )
+                                if (success) {
+                                    Toast.makeText(
+                                        context,
+                                        "Image: ${viewModel.getPhotoName()} has been saved.",
+                                        Toast.LENGTH_LONG
+                                    ).show()
                                 }
 
                             }
@@ -99,14 +116,19 @@ fun SetPhotoData() {
                         }
 
 
-                    }else{
+                    } else {
                         Button(onClick = { launcher.launch() }) {
                             Text(text = "Take Photo")
                         }
                     }
                 }
-                
-                ExposedDropdownMenuSample(options = PhotoTakenTime.entries, viewModel.selectedTakenType)
+
+
+
+                ExposedDropdownMenuSample(
+                    options = PhotoTakenTime.entries,
+                    viewModel.selectedTakenType
+                )
 
                 ExposedDropdownMenuSample(PhotoClockType.entries, viewModel.selectedClockType)
 
@@ -118,26 +140,42 @@ fun SetPhotoData() {
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class)
 @Composable
-fun <T,J: EnumEntries<T>> ExposedDropdownMenuSample(options: J, selectedData: MutableStateFlow<T>) {
+fun <T, J : EnumEntries<T>> ExposedDropdownMenuSample(
+    options: J,
+    selectedData: MutableStateFlow<T>,
+) {
     var expanded by remember { mutableStateOf(false) }
     var selectedOptionText by remember { mutableStateOf(selectedData.value) }
+    val keyboardController = LocalSoftwareKeyboardController.current
     // We want to react on tap/press on TextField to show menu
     ExposedDropdownMenuBox(
         expanded = expanded,
         onExpandedChange = { expanded = it },
     ) {
-        TextField(
-            // The `menuAnchor` modifier must be passed to the text field for correctness.
-            modifier = Modifier.menuAnchor(),
-            readOnly = true,
-            value = selectedOptionText.toString(),
-            onValueChange = {},
-            label = { Text("Label") },
-            trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) },
-            colors = ExposedDropdownMenuDefaults.textFieldColors(),
-        )
+        // Prevents keyboard from showing up
+        val myTextInputService = null
+        CompositionLocalProvider(
+            // You can also provides null to completely disable the default input service.
+            LocalTextInputService provides myTextInputService
+        ) {
+            TextField(
+                // The `menuAnchor` modifier must be passed to the text field for correctness.
+                modifier = Modifier.menuAnchor(),
+                readOnly = true,
+                value = selectedOptionText.toString(),
+                onValueChange = {},
+                label = { Text("Label") },
+                trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) },
+                colors = ExposedDropdownMenuDefaults.textFieldColors(),
+                /*
+                * Apparently this hides the keyboard
+                * */
+                keyboardOptions = KeyboardOptions(imeAction = ImeAction.Go),
+                keyboardActions = KeyboardActions(onGo = { keyboardController?.hide() })
+            )
+        }
         ExposedDropdownMenu(
             expanded = expanded,
             onDismissRequest = { expanded = false },
@@ -159,6 +197,6 @@ fun <T,J: EnumEntries<T>> ExposedDropdownMenuSample(options: J, selectedData: Mu
 
 @Preview
 @Composable
-fun PreviewSetPhotoData(){
+fun PreviewSetPhotoData() {
     SetPhotoData()
 }
