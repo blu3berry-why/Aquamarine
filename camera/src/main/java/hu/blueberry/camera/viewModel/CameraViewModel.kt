@@ -6,15 +6,21 @@ import android.icu.text.SimpleDateFormat
 import android.icu.util.Calendar
 import androidx.activity.ComponentActivity
 import androidx.lifecycle.ViewModel
+import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
 import hu.blueberry.camera.models.enums.PhotoClockType
 import hu.blueberry.camera.models.enums.PhotoTakenTime
+import hu.blueberry.camera.services.FileManager
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import java.io.IOException
 import java.util.Date
 import java.util.Locale
+import javax.inject.Inject
 
-class CameraViewModel: ViewModel() {
+
+
+class CameraViewModel: ViewModel () {
 
     private val _bitmaps = MutableStateFlow<List<Bitmap>>(emptyList())
     val bitmaps = _bitmaps.asStateFlow()
@@ -22,6 +28,8 @@ class CameraViewModel: ViewModel() {
     val selectedClockType = MutableStateFlow<PhotoClockType>(PhotoClockType.FNT_COLD)
 
     val selectedTakenType = MutableStateFlow<PhotoTakenTime>(PhotoTakenTime.OPENING)
+
+    val nameOfTheEvent = MutableStateFlow<String>("")
 
     // TODO Is there an other way of auto updating it?
     val photoName = MutableStateFlow<String>(getPhotoName())
@@ -31,24 +39,9 @@ class CameraViewModel: ViewModel() {
         _bitmaps.value += bitmap
     }
 
-    /**
-     * @param filename: The name of the file which you wanna save
-     * @param bitmap: The image you wanna save
-     * @return If the save was successful
-     */
-    fun savePhotoToInternalStorage(context: Context, filename: String, bitmap: Bitmap): Boolean{
-        return try {
-            context.openFileOutput("$filename.jpg", ComponentActivity.MODE_PRIVATE).use { stream->
-                if(!bitmap.compress(Bitmap.CompressFormat.JPEG, 95, stream)){
-                    throw IOException("Couldn't save bitmap.")
-                }
-            }
-            true
-        } catch (e: IOException){
-            e.printStackTrace()
-            return false
-        }
-    }
+   /* fun savePhotoToInternalStorage(filename: String, bitmap: Bitmap): Boolean {
+        return fileManager.savePhotoToInternalStorage(filename, bitmap)
+    }*/
 
 
     fun getPhotoName(): String {

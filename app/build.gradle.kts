@@ -1,6 +1,8 @@
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
+    kotlin("kapt")
+    id("com.google.dagger.hilt.android")
 }
 
 android {
@@ -53,13 +55,7 @@ dependencies {
 
     implementation(Dependencies.coreKtx)
     implementation(Dependencies.lifecycle)
-    implementation(Dependencies.activityCompose)
-    implementation(platform(Dependencies.composeBom))
-    implementation(Dependencies.composeUi)
-    implementation(Dependencies.composeUiGraphics)
-    implementation(Dependencies.composeUiTooling)
-    implementation(Dependencies.material)
-    implementation(Dependencies.composeMaterialIcons)
+    compose()
 
     testImplementation(Dependencies.junit)
     androidTestImplementation(Dependencies.androidTest)
@@ -73,21 +69,18 @@ dependencies {
     implementation(Dependencies.lifecycleViewModelCompose)
 
 
-    implementation(Dependencies.cameraXCore)
-    implementation(Dependencies.cameraXCamera2)
-    // If you want to additionally use the CameraX Lifecycle library
-    implementation(Dependencies.cameraXLifecycle)
-    // If you want to additionally use the CameraX VideoCapture library
-    implementation(Dependencies.cameraXVideo)
-    // If you want to additionally use the CameraX View class
-    implementation(Dependencies.cameraXView)
-    // If you want to additionally add CameraX ML Kit Vision Integration
-    implementation(Dependencies.cameraXMLKitVision)
-    // If you want to additionally use the CameraX Extensions library
-    implementation(Dependencies.cameraXExtensions)
+    camera()
+
+
+    //dependency injection
+    hilt()
+
+    //navigation compose
+    implementation(Dependencies.hiltNavigationCompose)
+
 
 
     //Modules
-    implementation(project(Modules.camera))
-    implementation(project(Modules.themes))
+    //cameraModule()
+    themesModule()
 }

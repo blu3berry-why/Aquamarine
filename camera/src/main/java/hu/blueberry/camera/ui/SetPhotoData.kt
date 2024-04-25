@@ -1,7 +1,7 @@
 package hu.blueberry.camera.ui
 
 
-import android.widget.Toast
+
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.result.launch
@@ -40,6 +40,7 @@ import androidx.compose.ui.platform.LocalTextInputService
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import hu.blueberry.camera.models.enums.PhotoClockType
 import hu.blueberry.camera.models.enums.PhotoTakenTime
@@ -49,11 +50,15 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlin.enums.EnumEntries
 
 @Composable
-fun SetPhotoData() {
+fun SetPhotoData(
+   // viewModel: CameraViewModel = hiltViewModel(),
+) {
     val viewModel = viewModel<CameraViewModel>()
     val text = viewModel.photoName.collectAsState()
 
     val bitmaps = viewModel.bitmaps.collectAsState()
+
+    val nameOfTheEvent = viewModel.nameOfTheEvent.collectAsState()
 
     val launcher =
         rememberLauncherForActivityResult(contract = ActivityResultContracts.TakePicturePreview()) {
@@ -70,6 +75,8 @@ fun SetPhotoData() {
             ) {
 
                 Text(text = text.value)
+
+                TextField(value = nameOfTheEvent.value, onValueChange ={viewModel.nameOfTheEvent.value = it} )
 
                 val context = LocalContext.current
                 val bitmap = bitmaps.value.firstOrNull()
@@ -95,8 +102,7 @@ fun SetPhotoData() {
 
                             )
                             Button(onClick = {
-                                val success = viewModel.savePhotoToInternalStorage(
-                                    context = context,
+                               /* val success = viewModel.savePhotoToInternalStorage(
                                     filename = viewModel.getPhotoName(),
                                     bitmap = bitmap
                                 )
@@ -106,7 +112,7 @@ fun SetPhotoData() {
                                         "Image: ${viewModel.getPhotoName()} has been saved.",
                                         Toast.LENGTH_LONG
                                     ).show()
-                                }
+                                }*/
 
                             }
 

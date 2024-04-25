@@ -1,3 +1,4 @@
+import org.gradle.api.artifacts.dsl.DependencyHandler
 
 
 object Dependencies {
@@ -32,9 +33,15 @@ object Dependencies {
     val playServicesDrive by lazy { "com.google.android.gms:play-services-drive:${Versions.playServicesDrive}" }
 
     //Dependency injection
-    val dagger by lazy { "com.google.dagger:hilt-android:${Versions.dagger}" }
-    val androidCompiler by lazy { "com.google.dagger:hilt-android-compiler:${Versions.androidCompiler}" }
-    val hiltCompiler by lazy { "androidx.hilt:hilt-compiler:${Versions.hiltCompiler}" }
+    /*val dagger by lazy { "com.google.dagger:hilt-android:${Versions.hilt}" }
+    val androidCompiler by lazy { "com.google.dagger:hilt-android-compiler:${Versions.hilt}" }
+    val hiltCompiler by lazy { "androidx.hilt:hilt-compiler:${Versions.hiltCompiler}" }*/
+
+    //hilt
+    val hiltAndroid by lazy { "com.google.dagger:hilt-android:${Versions.hilt}" }
+    val hiltDagger by lazy { "com.google.dagger:hilt-android-compiler:${Versions.hilt}" }
+    val hiltAgp by lazy { "com.google.dagger:hilt-android-gradle-plugin:${Versions.hilt}" }
+
 
     val hiltNavigationCompose by lazy { "androidx.hilt:hilt-navigation-compose:${Versions.hiltNavigationCompose}" }
 
@@ -62,8 +69,45 @@ object Dependencies {
 //    val cameraView by lazy {"androidx.camera:camera-view:${Versions.cameraView}-alpha02"}
 }
 
-object Modules{
-//    const val cloud = ":cloud"
-    const val camera = ":camera"
-    const val themes = ":themes"
+
+fun DependencyHandler.camera() {
+    implementation(Dependencies.cameraXCore)
+    implementation(Dependencies.cameraXCamera2)
+    // If you want to additionally use the CameraX Lifecycle library
+    implementation(Dependencies.cameraXLifecycle)
+    // If you want to additionally use the CameraX VideoCapture library
+    implementation(Dependencies.cameraXVideo)
+    // If you want to additionally use the CameraX View class
+    implementation(Dependencies.cameraXView)
+    // If you want to additionally add CameraX ML Kit Vision Integration
+    implementation(Dependencies.cameraXMLKitVision)
+    // If you want to additionally use the CameraX Extensions library
+    implementation(Dependencies.cameraXExtensions)
 }
+
+fun DependencyHandler.compose(){
+    implementation(Dependencies.activityCompose)
+    androidTestImplementation(Dependencies.composeBom)
+    implementation(Dependencies.composeUi)
+    implementation(Dependencies.composeUiGraphics)
+    implementation(Dependencies.composeUiTooling)
+    implementation(Dependencies.material)
+    implementation(Dependencies.composeMaterialIcons)
+}
+
+fun DependencyHandler.testImplementations(){
+    test(Dependencies.junit)
+    androidTestImplementation(Dependencies.androidTest)
+    androidTestImplementation(Dependencies.androidTestEspresso)
+    androidTestImplementation(Dependencies.composeBom)
+    androidTestImplementation(Dependencies.composeTestJUnit4)
+    debugImplementation(Dependencies.composeUiTooling)
+    debugImplementation(Dependencies.composeTestManifest)
+}
+
+fun DependencyHandler.hilt(){
+    implementation(Dependencies.hiltAndroid)
+    kapt(Dependencies.hiltDagger)
+}
+
+
