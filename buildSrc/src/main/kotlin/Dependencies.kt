@@ -91,6 +91,7 @@ fun DependencyHandler.compose(){
     implementation(Dependencies.composeUi)
     implementation(Dependencies.composeUiGraphics)
     implementation(Dependencies.composeUiTooling)
+    implementation(Dependencies.composeUiToolingPreview)
     implementation(Dependencies.material)
     implementation(Dependencies.composeMaterialIcons)
 }
@@ -108,6 +109,7 @@ fun DependencyHandler.testImplementations(){
 fun DependencyHandler.hilt(){
     implementation(Dependencies.hiltAndroid)
     kapt(Dependencies.hiltDagger)
+    implementation(Dependencies.hiltNavigationCompose)
 }
 
 

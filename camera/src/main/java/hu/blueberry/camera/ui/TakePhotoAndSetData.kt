@@ -2,6 +2,7 @@ package hu.blueberry.camera.ui
 
 
 
+import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.result.launch
@@ -41,7 +42,6 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
 import hu.blueberry.camera.models.enums.PhotoClockType
 import hu.blueberry.camera.models.enums.PhotoTakenTime
 import hu.blueberry.camera.viewModel.CameraViewModel
@@ -50,10 +50,9 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlin.enums.EnumEntries
 
 @Composable
-fun SetPhotoData(
-   // viewModel: CameraViewModel = hiltViewModel(),
+fun TakePhotoAndSetData(
+    viewModel: CameraViewModel = hiltViewModel(),
 ) {
-    val viewModel = viewModel<CameraViewModel>()
     val text = viewModel.photoName.collectAsState()
 
     val bitmaps = viewModel.bitmaps.collectAsState()
@@ -102,7 +101,7 @@ fun SetPhotoData(
 
                             )
                             Button(onClick = {
-                               /* val success = viewModel.savePhotoToInternalStorage(
+                                val success = viewModel.savePhotoToInternalStorage(
                                     filename = viewModel.getPhotoName(),
                                     bitmap = bitmap
                                 )
@@ -112,7 +111,7 @@ fun SetPhotoData(
                                         "Image: ${viewModel.getPhotoName()} has been saved.",
                                         Toast.LENGTH_LONG
                                     ).show()
-                                }*/
+                                }
 
                             }
 
@@ -129,19 +128,14 @@ fun SetPhotoData(
                     }
                 }
 
-
-
                 ExposedDropdownMenuSample(
                     options = PhotoTakenTime.entries,
-                    viewModel.selectedTakenType
+                    viewModel.selectedTakenType,
+                    viewModel::setPhotoName
                 )
 
-                ExposedDropdownMenuSample(PhotoClockType.entries, viewModel.selectedClockType)
-
-
+                ExposedDropdownMenuSample(PhotoClockType.entries, viewModel.selectedClockType, viewModel::setPhotoName)
             }
-
-
         }
     }
 }
@@ -151,6 +145,7 @@ fun SetPhotoData(
 fun <T, J : EnumEntries<T>> ExposedDropdownMenuSample(
     options: J,
     selectedData: MutableStateFlow<T>,
+    onClick: ()-> Unit = {}
 ) {
     var expanded by remember { mutableStateOf(false) }
     var selectedOptionText by remember { mutableStateOf(selectedData.value) }
@@ -193,6 +188,7 @@ fun <T, J : EnumEntries<T>> ExposedDropdownMenuSample(
                         selectedOptionText = selectionOption
                         selectedData.value = selectionOption
                         expanded = false
+                        onClick()
                     },
                     contentPadding = ExposedDropdownMenuDefaults.ItemContentPadding,
                 )
@@ -204,5 +200,5 @@ fun <T, J : EnumEntries<T>> ExposedDropdownMenuSample(
 @Preview
 @Composable
 fun PreviewSetPhotoData() {
-    SetPhotoData()
+    TakePhotoAndSetData()
 }

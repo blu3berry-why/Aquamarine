@@ -57,8 +57,6 @@ dependencies {
 
     //dependency injection
     hilt()
-    //navigation compose
-    implementation(Dependencies.hiltNavigationCompose)
 
     implementation(project(Modules.themes))
 }

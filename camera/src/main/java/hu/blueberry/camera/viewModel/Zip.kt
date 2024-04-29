@@ -14,6 +14,7 @@ class ZipManager {
 
     companion object {
         private const val BUFFER = 80000
+        private const val ZIP_MANAGER = "ZipManager"
     }
     fun zip(files: Array<String>, zipFileName: String?) {
         try {
@@ -39,7 +40,8 @@ class ZipManager {
             }
             out.close()
         } catch (e: Exception) {
-            e.printStackTrace()
+            Log.d(ZIP_MANAGER, "Error in zip:\n" + e.stackTrace)
+            throw e
         }
     }
 
@@ -69,7 +71,8 @@ class ZipManager {
             }
             zin.close()
         } catch (e: Exception) {
-            println(e)
+            Log.d(ZIP_MANAGER, "Error in zip:\n" + e.stackTrace)
+            throw e
         }
     }
 

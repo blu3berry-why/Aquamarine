@@ -29,7 +29,7 @@ object Versions {
     const val playServicesDrive = "17.0.0"
 
     //Dependency injection
-    const val hilt = "2.44"
+    const val hilt = "2.51.1"
     const val hiltCompiler = "1.0.0-alpha01"
     const val hiltNavigationCompose = "1.0.0"
     const val coroutines = "1.7.3"

@@ -5,6 +5,7 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import androidx.activity.ComponentActivity
+import com.zipp.ZipManager
 import dagger.hilt.android.AndroidEntryPoint
 import dagger.hilt.android.qualifiers.ApplicationContext
 import hu.blueberry.camera.models.photo.InternalStoragePhoto
@@ -19,6 +20,7 @@ import javax.inject.Inject
 class FileManager @Inject constructor(
     private var context: Context
 ) {
+
 
     /**
      * @param filename: The name of the file which you wanna save
@@ -51,7 +53,7 @@ class FileManager @Inject constructor(
     }
 
 
-    private fun deletePhotoFromInternalStorage(filename: String):Boolean{
+    fun deletePhotoFromInternalStorage(filename: String):Boolean{
         return try {
             context.deleteFile(filename)
         } catch (e: Exception){
@@ -59,4 +61,15 @@ class FileManager @Inject constructor(
             false
         }
     }
+
+    fun zipFiles(files: Array<String>, zipFileName: String?){
+        ZipManager().zip(files, zipFileName)
+    }
+
+
+    fun unzipFiles(zipFile: String?, targetLocation: String){
+        ZipManager().unzip(zipFile, targetLocation)
+    }
+
+
 }

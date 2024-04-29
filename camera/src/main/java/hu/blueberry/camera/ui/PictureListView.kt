@@ -76,5 +76,5 @@ fun PicturePreviewGridItem(image: Bitmap, name: String) {
 @Preview
 @Composable
 fun PictureListViewPreview() {
-
+    PictureListView(listOf())
 }

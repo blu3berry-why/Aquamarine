@@ -1,26 +1,24 @@
 package hu.blueberry.camera.viewModel
 
-import android.content.Context
 import android.graphics.Bitmap
 import android.icu.text.SimpleDateFormat
 import android.icu.util.Calendar
-import androidx.activity.ComponentActivity
 import androidx.lifecycle.ViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
-import dagger.hilt.android.qualifiers.ApplicationContext
 import hu.blueberry.camera.models.enums.PhotoClockType
 import hu.blueberry.camera.models.enums.PhotoTakenTime
 import hu.blueberry.camera.services.FileManager
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import java.io.IOException
 import java.util.Date
 import java.util.Locale
 import javax.inject.Inject
 
 
-
-class CameraViewModel: ViewModel () {
+@HiltViewModel
+class CameraViewModel @Inject constructor(
+    private val fileManager: FileManager
+): ViewModel() {
 
     private val _bitmaps = MutableStateFlow<List<Bitmap>>(emptyList())
     val bitmaps = _bitmaps.asStateFlow()
@@ -39,9 +37,9 @@ class CameraViewModel: ViewModel () {
         _bitmaps.value += bitmap
     }
 
-   /* fun savePhotoToInternalStorage(filename: String, bitmap: Bitmap): Boolean {
+    fun savePhotoToInternalStorage(filename: String, bitmap: Bitmap): Boolean {
         return fileManager.savePhotoToInternalStorage(filename, bitmap)
-    }*/
+    }
 
 
     fun getPhotoName(): String {
