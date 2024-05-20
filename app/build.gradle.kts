@@ -3,6 +3,7 @@ plugins {
     id("org.jetbrains.kotlin.android")
     kotlin("kapt")
     id("com.google.dagger.hilt.android")
+    kotlin("plugin.serialization")
 }
 
 android {
@@ -68,8 +69,12 @@ dependencies {
 
     implementation(Dependencies.lifecycleViewModelCompose)
 
+    navigation()
+
 
     camera()
+
+    implementation(Dependencies.oneTapAuth)
 
 
     //dependency injection

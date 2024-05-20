@@ -78,7 +78,7 @@ fun TakePhotoAndSetData(
                 TextField(value = nameOfTheEvent.value, onValueChange ={viewModel.nameOfTheEvent.value = it} )
 
                 val context = LocalContext.current
-                val bitmap = bitmaps.value.firstOrNull()
+                val bitmap = bitmaps.value
 
                 Box(
                     modifier = Modifier
@@ -149,7 +149,6 @@ fun <T, J : EnumEntries<T>> ExposedDropdownMenuSample(
 ) {
     var expanded by remember { mutableStateOf(false) }
     var selectedOptionText by remember { mutableStateOf(selectedData.value) }
-    val keyboardController = LocalSoftwareKeyboardController.current
     // We want to react on tap/press on TextField to show menu
     ExposedDropdownMenuBox(
         expanded = expanded,
@@ -174,7 +173,6 @@ fun <T, J : EnumEntries<T>> ExposedDropdownMenuSample(
                 * Apparently this hides the keyboard
                 * */
                 keyboardOptions = KeyboardOptions(imeAction = ImeAction.Go),
-                keyboardActions = KeyboardActions(onGo = { keyboardController?.hide() })
             )
         }
         ExposedDropdownMenu(

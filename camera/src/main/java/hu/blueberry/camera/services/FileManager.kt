@@ -11,6 +11,7 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import hu.blueberry.camera.models.photo.InternalStoragePhoto
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import java.io.File
 import java.io.IOException
 import java.lang.Exception
 import javax.inject.Inject
@@ -70,6 +71,17 @@ class FileManager @Inject constructor(
     fun unzipFiles(zipFile: String?, targetLocation: String){
         ZipManager().unzip(zipFile, targetLocation)
     }
+
+
+    fun createDir(folderName: String){
+
+        val path = context.filesDir
+        val letDirectory = File(path, folderName)
+        val resultMkdirs: Boolean = letDirectory.mkdirs()
+
+    }
+
+
 
 
 }

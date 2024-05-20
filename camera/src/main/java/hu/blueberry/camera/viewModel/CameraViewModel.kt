@@ -20,7 +20,7 @@ class CameraViewModel @Inject constructor(
     private val fileManager: FileManager
 ): ViewModel() {
 
-    private val _bitmaps = MutableStateFlow<List<Bitmap>>(emptyList())
+    private val _bitmaps = MutableStateFlow<Bitmap?>(null)
     val bitmaps = _bitmaps.asStateFlow()
 
     val selectedClockType = MutableStateFlow<PhotoClockType>(PhotoClockType.FNT_COLD)
@@ -34,7 +34,7 @@ class CameraViewModel @Inject constructor(
 
 
     fun onTakePhoto(bitmap:Bitmap){
-        _bitmaps.value += bitmap
+        _bitmaps.value = bitmap
     }
 
     fun savePhotoToInternalStorage(filename: String, bitmap: Bitmap): Boolean {

@@ -1,18 +1,23 @@
 object Versions {
 
 
+
+
     //Base
     const val coreKtx =  "1.12.0"
     const val lifecycle = "2.7.0" //2.6.1
     const val composeBom = "2023.08.00"
     const val appcompat = "1.6.1"
     const val activityCompose = "1.7.2"
-    const val navigationCompose = "2.7.3"
+    //navigation
+    const val navigationCompose = "2.8.0-alpha08"
+    const val serialization = "1.6.3"
+
     const val junit = "4.13.2"
     const val androidTest = "1.1.5"
     const val androidTestEspresso = "3.5.1"
 
-    const val kotlinCompilerExtensionVersion = "1.5.1"
+    const val kotlinCompilerExtensionVersion = "1.5.14"
 
     const val jvmTarget = "17"
 
@@ -24,6 +29,9 @@ object Versions {
     //Auth
     const val googleApiClient = "2.0.0"
     const val googleAuth = "1.11.0"
+
+    //OneTapAuth
+    const val oneTapAuth = "1.0.12"
 
     const val playServicesAuth = "20.7.0"
     const val playServicesDrive = "17.0.0"

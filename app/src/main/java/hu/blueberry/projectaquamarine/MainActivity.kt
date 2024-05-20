@@ -9,8 +9,8 @@ import androidx.compose.runtime.Composable
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import dagger.hilt.android.AndroidEntryPoint
-import hu.blueberry.camera.ui.FilteredInternalStoragePhotos
 import hu.blueberry.camera.ui.TakePhotoAndSetData
+import hu.blueberry.projectaquamarine.navigation.navigation
 
 
 @AndroidEntryPoint
@@ -43,8 +43,8 @@ class MainActivity : ComponentActivity() {
 
 
         setContent {
-            FilteredInternalStoragePhotos()
-
+           // TakePhotoAndSetData()
+            navigation()
         }
 
     }

@@ -29,6 +29,10 @@ object Dependencies {
     val googleApiClient by lazy { "com.google.api-client:google-api-client-android:${Versions.googleApiClient}" }
     val googleAuth by lazy { "com.google.auth:google-auth-library-oauth2-http:${Versions.googleAuth}" }
 
+
+    //OneTapAuth
+    val oneTapAuth by lazy {"com.github.stevdza-san:OneTapCompose:${Versions.oneTapAuth}"}
+
     val playServicesAuth by lazy { "com.google.android.gms:play-services-auth:${Versions.playServicesAuth}" }
     val playServicesDrive by lazy { "com.google.android.gms:play-services-drive:${Versions.playServicesDrive}" }
 
@@ -60,6 +64,8 @@ object Dependencies {
     //lifecycle
     val lifecycleViewModelCompose by lazy { "androidx.lifecycle:lifecycle-viewmodel-compose:${Versions.lifecycle}" }
 
+    val kotlinxSerialization by lazy { "org.jetbrains.kotlinx:kotlinx-serialization-json:${Versions.serialization}" }
+
 //    val splashScreen by lazy {"androidx.core:core-splashscreen:${Versions.splashScreen}"}
 //    val QRCode by lazy {"com.journeyapps:zxing-android-embedded:${Versions.QRCode}"}
 //    val QRZxingCore by lazy {"com.google.zxing:core:${Versions.QRZxingCore}"}
@@ -69,6 +75,10 @@ object Dependencies {
 //    val cameraView by lazy {"androidx.camera:camera-view:${Versions.cameraView}-alpha02"}
 }
 
+fun DependencyHandler.navigation() {
+    implementation(Dependencies.kotlinxSerialization)
+    implementation(Dependencies.navigationCompose)
+}
 
 fun DependencyHandler.camera() {
     implementation(Dependencies.cameraXCore)
