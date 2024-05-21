@@ -1,6 +1,7 @@
 package hu.blueberry.camera.ui
 
 
+import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.result.launch
@@ -39,6 +40,7 @@ fun TakePhotoAndSetData(
     val photoName = viewModel.photoName.collectAsState()
     val bitmap = viewModel.bitmap.collectAsState().value
     val nameOfTheEvent = viewModel.nameOfTheEvent.collectAsState()
+    val context = LocalContext.current
 
     val launcher =
         rememberLauncherForActivityResult(contract = ActivityResultContracts.TakePicturePreview()) {
@@ -81,7 +83,11 @@ fun TakePhotoAndSetData(
 
                             )
                             Button(onClick = {
-                                viewModel.uploadPNG()
+                                viewModel.uploadPNG(
+                                    onSuccess = {
+                                        Toast.makeText(context, "Image saved successfully", Toast.LENGTH_LONG).show()
+                                    }
+                                )
                                 //viewModel.saveImage(context)
                             }
 
@@ -93,7 +99,6 @@ fun TakePhotoAndSetData(
                     } else {
                         Button(onClick = {
                             launcher.launch()
-                            viewModel.createDriveFolder()
                         }) {
                             Text(text = "Take Photo")
                         }

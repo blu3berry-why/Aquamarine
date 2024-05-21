@@ -7,6 +7,7 @@ import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import hu.blueberry.drive.base.CloudBase
+import hu.blueberry.drive.model.MemoryDatabase
 import hu.blueberry.drive.repositories.DriveRepository
 import hu.blueberry.drive.services.DriveService
 import hu.blueberry.drive.services.FileService
@@ -19,6 +20,10 @@ class CloudModule {
 
     @Provides
     fun cloudBase(@ApplicationContext context: Context) = CloudBase(context)
+
+    @Provides
+    @Singleton
+    fun provideMemoryDatabase() = MemoryDatabase()
 
     @Provides
     @Singleton

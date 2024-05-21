@@ -17,6 +17,7 @@ import hu.blueberry.drive.services.FileService
 import hu.blueberry.drive.PermissionHandlingViewModel
 import hu.blueberry.drive.base.StringValues
 import hu.blueberry.drive.base.handleResponse
+import hu.blueberry.drive.model.MemoryDatabase
 import hu.blueberry.drive.permissions.PermissionRequestManager
 import hu.blueberry.drive.repositories.DriveRepository
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -32,9 +33,14 @@ import javax.inject.Inject
 class CameraViewModel @Inject constructor(
     private val fileService: FileService,
     private val driveRepository: DriveRepository,
+    private val memoryDatabase: MemoryDatabase,
 ) : ViewModel(), PermissionHandlingViewModel {
     companion object {
         const val TAG = "CameraViewModel"
+    }
+
+    init {
+        setFolderName()
     }
     override val permissionManager: PermissionRequestManager = PermissionRequestManager()
 
@@ -71,17 +77,19 @@ class CameraViewModel @Inject constructor(
         }
     }
 
-    fun uploadPNG(){
+    fun uploadPNG(onSuccess: ()-> Unit = {}, onError: (Any?) -> Unit = {}){
+        val list = memoryDatabase.folderId?.let { listOf(it) } ?: listOf()
         viewModelScope.launch {
-            driveRepository.createImageToDrive(photoName.value, bitmap.value!!).collectLatest {
+            driveRepository.createImageToDrive(photoName.value, bitmap.value!!, list).collectLatest {
                 handleResponse(it,
                     onSuccess = {
                         fileService.deletePhotoFromInternalStorage(filename = photoName.value+".png")
+                        onSuccess.invoke()
                     },
                     onError = { error ->
                         Log.d(TAG, error.toString())
                         requestPremission(error){
-                            uploadPNG()
+                            uploadPNG(onSuccess, onError)
                         }
                     })
             }
@@ -117,6 +125,20 @@ class CameraViewModel @Inject constructor(
                 "Image: ${getPhotoName()} has been saved.",
                 Toast.LENGTH_LONG
             ).show()
+        }
+    }
+
+    fun setFolderName(){
+        viewModelScope.launch {
+            driveRepository.searchFolderFlow(StringValues.BASE_FOLDER_NAME).collectLatest {
+                handleResponse(it,
+                    onSuccess = {id ->
+                        memoryDatabase.folderId = id
+                    },
+                    onError = { error->
+                        Log.d(TAG, error.toString())
+                    })
+            }
         }
     }
 
