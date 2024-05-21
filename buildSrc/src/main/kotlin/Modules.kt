@@ -6,6 +6,7 @@ object Modules{
     const val camera = ":camera"
     const val themes = ":themes"
     const val app = ":app"
+    const val drive = ":drive"
 }
 
 fun DependencyHandler.cameraModule(){
@@ -18,4 +19,8 @@ fun DependencyHandler.themesModule(){
 
 fun DependencyHandler.appModule(){
     implementation(project(Modules.app))
+}
+
+fun DependencyHandler.driveModule(){
+    implementation(project(Modules.drive))
 }

@@ -27,7 +27,7 @@ object Dependencies {
     val googleSheets by lazy { "com.google.apis:google-api-services-sheets:${Versions.googleSheets}" }
 
     //Auth
-    //val googleApiClient by lazy { "com.google.api-client:google-api-client-android:${Versions.googleApiClient}" }
+    val googleApiClient by lazy { "com.google.api-client:google-api-client-android:${Versions.googleApiClient}" }
     //val googleAuth by lazy { "com.google.auth:google-auth-library-oauth2-http:${Versions.googleAuth}" }
 
 
@@ -133,6 +133,8 @@ fun DependencyHandler.auth(){
 }
 
 fun DependencyHandler.drive(){
+    auth()
+    implementation(Dependencies.googleApiClient)
     implementation(Dependencies.googleDrive)
     implementation(Dependencies.googleSheets)
 }

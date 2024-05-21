@@ -50,12 +50,13 @@ dependencies {
 
     testImplementations()
 
-
     camera()
 
-
-    //dependency injection
     hilt()
 
-    implementation(project(Modules.themes))
+    /*
+    * MODULES:
+    */
+    driveModule()
+    themesModule()
 }

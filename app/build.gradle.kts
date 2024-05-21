@@ -48,6 +48,7 @@ android {
     packaging {
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
+            excludes += "META-INF/*"
         }
     }
 }
@@ -55,23 +56,18 @@ android {
 dependencies {
 
     core()
+
     testImplementations()
 
     compose()
 
     navigation()
 
-
     camera()
 
     auth()
 
-    //dependency injection
     hilt()
-
-    //navigation compose
-    implementation(Dependencies.hiltNavigationCompose)
-
 
 
     //Modules

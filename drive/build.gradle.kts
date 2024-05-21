@@ -33,12 +33,31 @@ android {
     kotlinOptions {
         jvmTarget = Versions.jvmTarget
     }
+
+
+    buildFeatures {
+        compose = true
+    }
+    composeOptions {
+        kotlinCompilerExtensionVersion = Versions.kotlinCompilerExtensionVersion
+    }
+
+
+
 }
 
 dependencies {
     core()
+    compose()
     testImplementations()
+
 
     compose()
     hilt()
+    drive()
+
+    /*
+    * MODULES:
+    */
+    themesModule()
 }
