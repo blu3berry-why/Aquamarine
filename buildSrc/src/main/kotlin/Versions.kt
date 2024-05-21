@@ -1,3 +1,5 @@
+import org.gradle.api.JavaVersion
+
 object Versions {
 
 
@@ -20,6 +22,7 @@ object Versions {
     const val kotlinCompilerExtensionVersion = "1.5.14"
 
     const val jvmTarget = "17"
+    val javaVersion = JavaVersion.VERSION_17
 
 
     //Drive

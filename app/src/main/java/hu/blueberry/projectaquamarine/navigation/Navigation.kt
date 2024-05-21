@@ -1,5 +1,6 @@
 package hu.blueberry.projectaquamarine.navigation
 
+import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -8,11 +9,14 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
 import hu.blueberry.camera.ui.TakePhotoAndSetData
+import hu.blueberry.projectaquamarine.auth.ButtonGoogleSignIn
+import hu.blueberry.projectaquamarine.auth.getGoogleSignInClient
 import kotlinx.serialization.Serializable
 
 @Composable
@@ -37,11 +41,24 @@ fun navigation(){
                 }) {
                     Text(text = "TakePhoto")
                 }
+
+
                 Button(onClick = {
                     navController.navigate(TakePhoto)
                 }) {
                     Text(text = "Google Authentication")
                 }
+
+                ButtonGoogleSignIn(
+                    onGoogleSignInCompleted = {
+                        navController.navigate(TakePhoto)
+                                              },
+                    onError = {
+                            val h = 2;
+                              /*TODO*/
+                              },
+                    googleSignInClient = getGoogleSignInClient(LocalContext.current)
+                )
             }
             
         }

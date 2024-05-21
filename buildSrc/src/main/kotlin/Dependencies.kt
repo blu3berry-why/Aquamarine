@@ -21,9 +21,10 @@ object Dependencies {
     val activityCompose by lazy { "androidx.activity:activity-compose:${Versions.activityCompose}" }
     val navigationCompose by lazy { "androidx.navigation:navigation-compose:${Versions.navigationCompose}" }
 
+
     //Drive
-    val googleDrive by lazy { "com.google.apis:google-api-services-drive:${Versions.googleDrive}" }
-    val googleSheets by lazy { "com.google.apis:google-api-services-sheets:${Versions.googleSheets}" }
+    //val googleDrive by lazy { "com.google.apis:google-api-services-drive:${Versions.googleDrive}" }
+    //val googleSheets by lazy { "com.google.apis:google-api-services-sheets:${Versions.googleSheets}" }
 
     //Auth
     val googleApiClient by lazy { "com.google.api-client:google-api-client-android:${Versions.googleApiClient}" }
@@ -33,8 +34,8 @@ object Dependencies {
     //OneTapAuth
     val oneTapAuth by lazy {"com.github.stevdza-san:OneTapCompose:${Versions.oneTapAuth}"}
 
-    val playServicesAuth by lazy { "com.google.android.gms:play-services-auth:${Versions.playServicesAuth}" }
-    val playServicesDrive by lazy { "com.google.android.gms:play-services-drive:${Versions.playServicesDrive}" }
+    //val playServicesAuth by lazy { "com.google.android.gms:play-services-auth:${Versions.playServicesAuth}" }
+    //val playServicesDrive by lazy { "com.google.android.gms:play-services-drive:${Versions.playServicesDrive}" }
 
     //Dependency injection
     /*val dagger by lazy { "com.google.dagger:hilt-android:${Versions.hilt}" }
