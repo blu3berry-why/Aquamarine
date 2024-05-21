@@ -1,15 +1,19 @@
 package hu.blueberry.drive.repositories
 
+import android.graphics.Bitmap
+import android.net.Uri
 import hu.blueberry.drive.base.ResourceState
 import hu.blueberry.drive.base.handleWithFlow
 import hu.blueberry.drive.model.FileInfo
 import hu.blueberry.drive.services.DriveService
+import hu.blueberry.drive.services.FileService
 import kotlinx.coroutines.flow.Flow
 import java.io.File
 import javax.inject.Inject
 
 class DriveRepository @Inject constructor(
-    private var driveManager: DriveService
+    private var driveManager: DriveService,
+    private val fileService: FileService
 ) {
     suspend fun createFolder(name: String): Flow<ResourceState<String>> {
         return handleWithFlow { driveManager.createFolder(name) }
@@ -33,6 +37,17 @@ class DriveRepository @Inject constructor(
         file: File
     ): Flow<ResourceState<String>> {
         return handleWithFlow { driveManager.createFile(fileName, parents, mimeType, file) }
+    }
+
+    suspend fun createImageToDrive(fileName: String, bitmap: Bitmap, parents: List<String> = listOf()): Flow<ResourceState<String>> {
+        val success = fileService.savePhotoToInternalStorage(fileName, bitmap)
+        if (success){
+            return handleWithFlow { driveManager.createFile(fileName, parents, mimeType = DriveService.MimeType.PNG,
+                fileService.createFilePathFromFilename(fileName, ".png")) }
+        }else{
+            throw Exception("Image can't be created, maybe there is an image with the same name...")
+        }
+
     }
 
     suspend fun searchFolderFlow(name: String): Flow<ResourceState<String?>> {
@@ -85,9 +100,9 @@ class DriveRepository @Inject constructor(
 
 
     suspend fun upsertFolder(folderName: String): Flow<ResourceState<String>> {
-        return handleWithFlow {  searchFolderBlocking(folderName) ?: createFolderBlocking(
-            folderName
-        )
+        return handleWithFlow {
+            searchFolderBlocking(folderName)
+                ?: createFolderBlocking(folderName)
         }
     }
 

@@ -9,8 +9,8 @@ import hu.blueberry.projectaquamarine.auth.AuthViewModel
 
 fun getGoogleSignInClient(context: Context): GoogleSignInClient {
     val signInOptions = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-        .requestIdToken(AuthViewModel.CLIENT_ID)
-        //.requestEmail()
+        //.requestIdToken(AuthViewModel.CLIENT_ID)
+        .requestEmail()
         .build()
 
     return GoogleSignIn.getClient(context, signInOptions)

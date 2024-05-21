@@ -24,7 +24,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import hu.blueberry.camera.models.photo.InternalStoragePhoto
+import hu.blueberry.drive.model.InternalStoragePhoto
 
 @Composable
 fun PictureListView(images: List<InternalStoragePhoto>) {

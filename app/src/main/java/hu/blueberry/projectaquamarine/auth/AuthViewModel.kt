@@ -28,7 +28,8 @@ class AuthViewModel @Inject constructor(val authenticatedUser: AuthenticatedUser
             } else {
                     try {
                         //val account = GoogleSignIn.getLastSignedInAccount(context)
-                        onSuccess(account.idToken!!)
+                        //onSuccess(account.idToken!!)
+                        onSuccess(account.email.toString())
                     }catch (e: Exception){
                         onError(e.message.toString())
                     }

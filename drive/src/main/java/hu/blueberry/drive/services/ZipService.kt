@@ -1,4 +1,4 @@
-package com.zipp
+package hu.blueberry.drive.services
 
 import android.util.Log
 import java.io.BufferedInputStream
@@ -10,7 +10,7 @@ import java.util.zip.ZipEntry
 import java.util.zip.ZipInputStream
 import java.util.zip.ZipOutputStream
 
-class ZipManager {
+class ZipService {
 
     companion object {
         private const val BUFFER = 80000

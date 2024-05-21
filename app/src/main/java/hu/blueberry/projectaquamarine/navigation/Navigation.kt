@@ -1,6 +1,7 @@
 package hu.blueberry.projectaquamarine.navigation
 
 import android.util.Log
+import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -49,14 +50,14 @@ fun navigation(){
                     Text(text = "Google Authentication")
                 }
 
+                val context = LocalContext.current
                 ButtonGoogleSignIn(
                     onGoogleSignInCompleted = {
                         navController.navigate(TakePhoto)
                                               },
                     onError = {
-                            val h = 2;
+                            Toast.makeText(context, "Error: $it", Toast.LENGTH_LONG).show()
                             Log.d("GoogleSignIn", it)
-                              /*TODO*/
                               },
                     googleSignInClient = getGoogleSignInClient(LocalContext.current)
                 )

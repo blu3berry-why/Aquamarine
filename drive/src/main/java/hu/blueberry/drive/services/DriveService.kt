@@ -22,6 +22,7 @@ class DriveService @Inject constructor(
         const val FOLDER = "application/vnd.google-apps.folder"
         const val SPREADSHEET = "application/vnd.google-apps.spreadsheet"
         const val PDF = "application/pdf"
+        const val PNG = "image/png"
     }
 
     companion object{
@@ -33,10 +34,10 @@ class DriveService @Inject constructor(
 
 
     private fun getDriveService(): Drive? {
-        return Drive.Builder(
-            NetHttpTransport(), GsonFactory.getDefaultInstance(),
-            cloudBase.getCredentials(scopes)
-        ).setApplicationName("Grapefruit").build()
+            return Drive.Builder(
+                NetHttpTransport(), GsonFactory.getDefaultInstance(),
+                cloudBase.getCredentials(scopes)
+            ).setApplicationName("Project Aquamarine").build()
     }
 
 
@@ -52,8 +53,6 @@ class DriveService @Inject constructor(
         folder = drive.files().create(folderData).execute()
 
         return folder.id
-
-
     }
 
 

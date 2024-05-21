@@ -1,4 +1,4 @@
-package hu.blueberry.camera.models.photo
+package hu.blueberry.drive.model
 
 import android.graphics.Bitmap
 

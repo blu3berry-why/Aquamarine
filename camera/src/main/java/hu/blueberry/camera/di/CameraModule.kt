@@ -6,7 +6,7 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
-import hu.blueberry.camera.services.FileManager
+import hu.blueberry.drive.services.FileService
 import javax.inject.Singleton
 
 
@@ -14,8 +14,6 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 object CameraModule {
 
-@Provides
-@Singleton
-fun provideFileManager(@ApplicationContext context: Context) = FileManager(context)
+
 
 }
