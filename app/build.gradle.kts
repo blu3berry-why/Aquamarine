@@ -54,28 +54,17 @@ android {
 
 dependencies {
 
-    implementation(Dependencies.coreKtx)
-    implementation(Dependencies.lifecycle)
+    core()
+    testImplementations()
+
     compose()
-
-    testImplementation(Dependencies.junit)
-    androidTestImplementation(Dependencies.androidTest)
-    androidTestImplementation(Dependencies.androidTestEspresso)
-    androidTestImplementation(platform(Dependencies.composeBom))
-    androidTestImplementation(Dependencies.composeTestJUnit4)
-    debugImplementation(Dependencies.composeUiTooling)
-    debugImplementation(Dependencies.composeTestManifest)
-
-
-    implementation(Dependencies.lifecycleViewModelCompose)
 
     navigation()
 
 
     camera()
 
-    implementation(Dependencies.oneTapAuth)
-    implementation("com.google.android.gms:play-services-auth:20.4.1")
+    auth()
 
     //dependency injection
     hilt()

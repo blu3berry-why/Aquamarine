@@ -16,7 +16,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
 import hu.blueberry.camera.ui.TakePhotoAndSetData
 import hu.blueberry.projectaquamarine.auth.ButtonGoogleSignIn
-import hu.blueberry.projectaquamarine.auth.getGoogleSignInClient
+import hu.blueberry.projectaquamarine.auth.helper.getGoogleSignInClient
 import kotlinx.serialization.Serializable
 
 @Composable
@@ -55,6 +55,7 @@ fun navigation(){
                                               },
                     onError = {
                             val h = 2;
+                            Log.d("GoogleSignIn", it)
                               /*TODO*/
                               },
                     googleSignInClient = getGoogleSignInClient(LocalContext.current)

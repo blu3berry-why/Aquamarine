@@ -44,14 +44,12 @@ android {
 
 dependencies {
 
-    implementation(Dependencies.coreKtx)
-    implementation(Dependencies.lifecycle)
+    core()
 
     compose()
 
     testImplementations()
 
-    implementation(Dependencies.lifecycleViewModelCompose)
 
     camera()
 

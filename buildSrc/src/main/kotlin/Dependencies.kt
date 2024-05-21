@@ -23,18 +23,17 @@ object Dependencies {
 
 
     //Drive
-    //val googleDrive by lazy { "com.google.apis:google-api-services-drive:${Versions.googleDrive}" }
-    //val googleSheets by lazy { "com.google.apis:google-api-services-sheets:${Versions.googleSheets}" }
+    val googleDrive by lazy { "com.google.apis:google-api-services-drive:${Versions.googleDrive}" }
+    val googleSheets by lazy { "com.google.apis:google-api-services-sheets:${Versions.googleSheets}" }
 
     //Auth
-    val googleApiClient by lazy { "com.google.api-client:google-api-client-android:${Versions.googleApiClient}" }
-    val googleAuth by lazy { "com.google.auth:google-auth-library-oauth2-http:${Versions.googleAuth}" }
+    //val googleApiClient by lazy { "com.google.api-client:google-api-client-android:${Versions.googleApiClient}" }
+    //val googleAuth by lazy { "com.google.auth:google-auth-library-oauth2-http:${Versions.googleAuth}" }
 
 
-    //OneTapAuth
-    val oneTapAuth by lazy {"com.github.stevdza-san:OneTapCompose:${Versions.oneTapAuth}"}
 
-    //val playServicesAuth by lazy { "com.google.android.gms:play-services-auth:${Versions.playServicesAuth}" }
+
+    val playServicesAuth by lazy { "com.google.android.gms:play-services-auth:${Versions.playServicesAuth}" }
     //val playServicesDrive by lazy { "com.google.android.gms:play-services-drive:${Versions.playServicesDrive}" }
 
     //Dependency injection
@@ -50,8 +49,8 @@ object Dependencies {
 
     val hiltNavigationCompose by lazy { "androidx.hilt:hilt-navigation-compose:${Versions.hiltNavigationCompose}" }
 
-    val coroutinesCore by lazy { "org.jetbrains.kotlinx:kotlinx-coroutines-core:${Versions.coroutines}" }
-    val coroutinesAndroid by lazy { "org.jetbrains.kotlinx:kotlinx-coroutines-android:${Versions.coroutines}" }
+    //val coroutinesCore by lazy { "org.jetbrains.kotlinx:kotlinx-coroutines-core:${Versions.coroutines}" }
+    //val coroutinesAndroid by lazy { "org.jetbrains.kotlinx:kotlinx-coroutines-android:${Versions.coroutines}" }
 
     //Camera
     val cameraXCore by lazy { "androidx.camera:camera-core:${Versions.cameraX}" }
@@ -121,6 +120,20 @@ fun DependencyHandler.hilt(){
     implementation(Dependencies.hiltAndroid)
     kapt(Dependencies.hiltDagger)
     implementation(Dependencies.hiltNavigationCompose)
+    implementation(Dependencies.lifecycleViewModelCompose)
 }
 
+fun DependencyHandler.core(){
+    implementation(Dependencies.coreKtx)
+    implementation(Dependencies.lifecycle)
+}
+
+fun DependencyHandler.auth(){
+    implementation(Dependencies.playServicesAuth)
+}
+
+fun DependencyHandler.drive(){
+    implementation(Dependencies.googleDrive)
+    implementation(Dependencies.googleSheets)
+}
 

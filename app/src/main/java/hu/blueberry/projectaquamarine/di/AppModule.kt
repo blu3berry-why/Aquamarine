@@ -4,14 +4,17 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import hu.blueberry.projectaquamarine.auth.helper.AuthenticatedUser
 import javax.inject.Singleton
 
-//@Module
+@Module
 // The component will decide how long this component will live
-/*
-* */
-/*@InstallIn(SingletonComponent::class)
+@InstallIn(SingletonComponent::class)
 object AppModule {
 
 
-}*/
+    @Provides
+    @Singleton
+    fun provideAuthenticatedUser() = AuthenticatedUser()
+
+}

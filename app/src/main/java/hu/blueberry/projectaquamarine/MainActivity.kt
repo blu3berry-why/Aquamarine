@@ -11,7 +11,6 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import dagger.hilt.android.AndroidEntryPoint
 import hu.blueberry.projectaquamarine.auth.ButtonGoogleSignIn
-import hu.blueberry.projectaquamarine.auth.getGoogleSignInClient
 import hu.blueberry.projectaquamarine.navigation.navigation
 
 
