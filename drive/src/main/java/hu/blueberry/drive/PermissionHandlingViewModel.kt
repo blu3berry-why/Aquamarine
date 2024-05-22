@@ -1,8 +1,7 @@
 package hu.blueberry.drive
 
-import android.content.Intent
+
 import android.util.Log
-import androidx.lifecycle.ViewModel
 import com.google.api.client.googleapis.extensions.android.gms.auth.UserRecoverableAuthIOException
 import hu.blueberry.drive.permissions.PermissionRequestManager
 
@@ -25,4 +24,6 @@ interface PermissionHandlingViewModel {
             throw Exception(exception.toString())
         }
     }
+
+
 }

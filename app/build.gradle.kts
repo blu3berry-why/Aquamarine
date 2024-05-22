@@ -57,9 +57,9 @@ dependencies {
 
     core()
 
-    testImplementations()
-
     compose()
+
+    testImplementations()
 
     navigation()
 
@@ -71,6 +71,9 @@ dependencies {
 
 
     //Modules
-    cameraModule()
     themesModule()
+    cameraModule()
+    drinksModule()
+    driveModule()
+
 }

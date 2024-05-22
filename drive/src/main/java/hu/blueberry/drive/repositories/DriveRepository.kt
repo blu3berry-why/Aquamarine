@@ -106,4 +106,15 @@ class DriveRepository @Inject constructor(
         }
     }
 
+    suspend fun searchSpreadSheet(spreadSheetName: String): Flow<ResourceState<List<FileInfo>>> {
+        return handleWithFlow {
+            _searchSpreadSheet(spreadSheetName)
+        }
+    }
+
+    private suspend fun _searchSpreadSheet(spreadSheetName: String): List<FileInfo> {
+        val spreadSheets = driveManager.searchFiles(spreadSheetName)
+        return spreadSheets.map {  FileInfo(name = it.name, id = it.id)}
+    }
+
 }

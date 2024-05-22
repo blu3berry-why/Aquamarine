@@ -6,11 +6,9 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.platform.LocalContext
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import dagger.hilt.android.AndroidEntryPoint
-import hu.blueberry.projectaquamarine.auth.ButtonGoogleSignIn
 import hu.blueberry.projectaquamarine.navigation.navigation
 
 
@@ -44,9 +42,8 @@ class MainActivity : ComponentActivity() {
 
 
         setContent {
-           // TakePhotoAndSetData()
             navigation()
-
+            //ProductListPage()
         }
 
     }

@@ -21,6 +21,7 @@ class DriveService @Inject constructor(
     object MimeType {
         const val FOLDER = "application/vnd.google-apps.folder"
         const val SPREADSHEET = "application/vnd.google-apps.spreadsheet"
+        const val XLSL_DOCUMENT = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
         const val PDF = "application/pdf"
         const val PNG = "image/png"
     }
@@ -80,7 +81,7 @@ class DriveService @Inject constructor(
     }
 
 
-    fun searchFilesInFolder(parentIdList: List<String>, mimeType: String): MutableList<File> {
+    fun searchFilesInFolder(parentIdList: List<String>, mimeType: String?): MutableList<File> {
 
         val files = drive.files().list()
 
@@ -90,7 +91,30 @@ class DriveService @Inject constructor(
             stringBuilder.append(" and '${parent}' in parents")
         }
 
-        files.q = "mimeType='${mimeType}'" + stringBuilder.toString()
+        files.q = mimeType?.let { "mimeType='${mimeType}'" + stringBuilder.toString() } ?: stringBuilder.toString()
+
+        val result = files.execute()
+
+        result.files.forEach {
+            Log.d(TAG, "File(name = ${it.name}, id = ${it.id})")
+        }
+
+        return result.files ?: mutableListOf()
+
+    }
+
+    fun searchFiles(name:String): MutableList<File> {
+
+        val files = drive.files().list()
+
+        //files.q = "mimeType='${MimeType.SPREADSHEET}'" + " and name contains '$name'"
+        files.q = GoogleDriveQueryBuilder()
+            .mimeType(MimeType.SPREADSHEET)
+            .and()
+            .queryText("name")
+            .contains()
+            .stringValue(name)
+            .createQuery()
 
         val result = files.execute()
 
@@ -133,5 +157,6 @@ class DriveService @Inject constructor(
         f = drive.files().create(f, mediaContent).execute()
         return f.id
     }
+
 
 }

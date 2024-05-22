@@ -1,68 +1,30 @@
 package hu.blueberry.projectaquamarine.navigation
 
-import android.util.Log
-import android.widget.Toast
+
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
 import hu.blueberry.camera.ui.TakePhotoAndSetData
-import hu.blueberry.projectaquamarine.auth.ButtonGoogleSignIn
-import hu.blueberry.projectaquamarine.auth.helper.getGoogleSignInClient
+import hu.blueberry.projectaquamarine.ui.product.ProductListPage
+import hu.blueberry.projectaquamarine.ui.AuthenticationPage
+import hu.blueberry.projectaquamarine.ui.HomeMenuPage
+import hu.blueberry.projectaquamarine.ui.product.ProductDetailsPage
 import kotlinx.serialization.Serializable
 
 @Composable
 fun navigation(){
     val navController = rememberNavController()
-    NavHost(navController = navController , startDestination = LoginScreen) {
-        composable<LoginScreen> {
-            Column (modifier = Modifier.fillMaxSize(),
-                verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.CenterHorizontally)
-            {   
-                Button(onClick = {
-                    navController.navigate(ScreenB(
-                        name = "William",
-                        age = 5
-                    ))
-                }) {
-                    Text(text = "Go to next page")
-                }
-                Button(onClick = {
-                    navController.navigate(TakePhoto)
-                }) {
-                    Text(text = "TakePhoto")
-                }
-
-
-                Button(onClick = {
-                    navController.navigate(TakePhoto)
-                }) {
-                    Text(text = "Google Authentication")
-                }
-
-                val context = LocalContext.current
-                ButtonGoogleSignIn(
-                    onGoogleSignInCompleted = {
-                        navController.navigate(TakePhoto)
-                                              },
-                    onError = {
-                            Toast.makeText(context, "Error: $it", Toast.LENGTH_LONG).show()
-                            Log.d("GoogleSignIn", it)
-                              },
-                    googleSignInClient = getGoogleSignInClient(LocalContext.current)
-                )
-            }
-            
+    NavHost(navController = navController , startDestination = AuthScreen) {
+        composable<AuthScreen> {
+            AuthenticationPage(navController = navController)
         }
 
         composable<ScreenB> {
@@ -78,17 +40,20 @@ fun navigation(){
         composable<TakePhoto> {
             TakePhotoAndSetData()
         }
+
+        composable<HomeMenuPage> {
+            HomeMenuPage(navController = navController)
+        }
+
+        composable<ProductList> {
+            ProductListPage(navController)
+        }
+
+        composable<ProductDetails> {
+            val args = it.toRoute<ProductDetails>()
+            ProductDetailsPage(args.id)
+        }
+
+
     }
 }
-
- @Serializable
-object TakePhoto
-
-@Serializable
-object LoginScreen
-
-@Serializable
-data class ScreenB(
-    val name: String?,
-    val age: Int
-)

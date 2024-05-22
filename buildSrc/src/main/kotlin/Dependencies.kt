@@ -7,11 +7,11 @@ object Dependencies {
     val lifecycle by lazy { "androidx.lifecycle:lifecycle-runtime-ktx:${Versions.lifecycle}" }
     val composeBom by lazy { "androidx.compose:compose-bom:${Versions.composeBom}" }
     val appcompat by lazy { "androidx.appcompat:appcompat:${Versions.appcompat}" }
-    val material by lazy { "androidx.compose.material3:material3" }
+    val material by lazy { "androidx.compose.material3:material3:${Versions.material}" }
     val composeUi by lazy { "androidx.compose.ui:ui" }
     val composeUiToolingPreview by lazy { "androidx.compose.ui:ui-tooling-preview" }
-    val composeMaterialIcons by lazy { "androidx.compose.material:material-icons-extended" }
-    val composeTestJUnit4 by lazy { "androidx.compose.ui:ui-test-junit4" }
+    val composeMaterialIcons by lazy { "androidx.compose.material:material-icons-extended:${Versions.materialIcons}" }
+    val composeTestJUnit4 by lazy { "androidx.compose.ui:ui-test-junit4:${Versions.junit4}" }
     val composeTestManifest by lazy { "androidx.compose.ui:ui-test-manifest" }
     val composeUiTooling by lazy { "androidx.compose.ui:ui-tooling" }
     val composeUiGraphics by lazy { "androidx.compose.ui:ui-graphics" }
@@ -31,15 +31,9 @@ object Dependencies {
     //val googleAuth by lazy { "com.google.auth:google-auth-library-oauth2-http:${Versions.googleAuth}" }
 
 
-
-
     val playServicesAuth by lazy { "com.google.android.gms:play-services-auth:${Versions.playServicesAuth}" }
     //val playServicesDrive by lazy { "com.google.android.gms:play-services-drive:${Versions.playServicesDrive}" }
 
-    //Dependency injection
-    /*val dagger by lazy { "com.google.dagger:hilt-android:${Versions.hilt}" }
-    val androidCompiler by lazy { "com.google.dagger:hilt-android-compiler:${Versions.hilt}" }
-    val hiltCompiler by lazy { "androidx.hilt:hilt-compiler:${Versions.hiltCompiler}" }*/
 
     //hilt
     val hiltAndroid by lazy { "com.google.dagger:hilt-android:${Versions.hilt}" }
@@ -48,9 +42,6 @@ object Dependencies {
 
 
     val hiltNavigationCompose by lazy { "androidx.hilt:hilt-navigation-compose:${Versions.hiltNavigationCompose}" }
-
-    //val coroutinesCore by lazy { "org.jetbrains.kotlinx:kotlinx-coroutines-core:${Versions.coroutines}" }
-    //val coroutinesAndroid by lazy { "org.jetbrains.kotlinx:kotlinx-coroutines-android:${Versions.coroutines}" }
 
     //Camera
     val cameraXCore by lazy { "androidx.camera:camera-core:${Versions.cameraX}" }
@@ -64,15 +55,14 @@ object Dependencies {
     //lifecycle
     val lifecycleViewModelCompose by lazy { "androidx.lifecycle:lifecycle-viewmodel-compose:${Versions.lifecycle}" }
 
+    //serialization
     val kotlinxSerialization by lazy { "org.jetbrains.kotlinx:kotlinx-serialization-json:${Versions.serialization}" }
 
-//    val splashScreen by lazy {"androidx.core:core-splashscreen:${Versions.splashScreen}"}
-//    val QRCode by lazy {"com.journeyapps:zxing-android-embedded:${Versions.QRCode}"}
-//    val QRZxingCore by lazy {"com.google.zxing:core:${Versions.QRZxingCore}"}
-//
-//    val cameraCamera2 by lazy {"androidx.camera:camera-camera2:${Versions.cameraCamera2}"}
-//    val cameraLifecycle by lazy {"androidx.camera:camera-lifecycle:${Versions.cameraLifecycle}"}
-//    val cameraView by lazy {"androidx.camera:camera-view:${Versions.cameraView}-alpha02"}
+    //room
+    val room by lazy { "androidx.room:room-runtime:${Versions.room}" }
+    val roomAnnotationProcessor by lazy { "androidx.room:room-compiler:${Versions.room}" }
+    val roomCoroutines by lazy { "androidx.room:room-ktx:${Versions.room}" }
+
 }
 
 fun DependencyHandler.navigation() {
@@ -139,3 +129,10 @@ fun DependencyHandler.drive(){
     implementation(Dependencies.googleSheets)
 }
 
+
+fun DependencyHandler.room(){
+    implementation(Dependencies.kotlinxSerialization)
+    implementation(Dependencies.room)
+    kapt(Dependencies.roomAnnotationProcessor)
+    implementation(Dependencies.roomCoroutines)
+}

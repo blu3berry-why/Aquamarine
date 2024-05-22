@@ -18,5 +18,6 @@ rootProject.name = "Project Aquamarine"
 include(":app")
 include(":camera")
 include(":themes")
-include(":di")
 include(":drive")
+include(":drinks")
+include(":persistentStorage")

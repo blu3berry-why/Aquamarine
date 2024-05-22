@@ -8,7 +8,9 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import hu.blueberry.drive.base.CloudBase
 import hu.blueberry.drive.model.MemoryDatabase
+import hu.blueberry.drive.permissions.PermissionRequestManager
 import hu.blueberry.drive.repositories.DriveRepository
+import hu.blueberry.drive.repositories.GoogleSheetRepository
 import hu.blueberry.drive.services.DriveService
 import hu.blueberry.drive.services.FileService
 import hu.blueberry.drive.services.GoogleSheetsService
@@ -26,6 +28,9 @@ class CloudModule {
     fun provideMemoryDatabase() = MemoryDatabase()
 
     @Provides
+    fun providePermissionRequestManager() = PermissionRequestManager()
+
+    @Provides
     @Singleton
     fun provideDriveService(cloudBase: CloudBase) = DriveService(cloudBase)
 
@@ -38,8 +43,8 @@ class CloudModule {
     fun provideFileService(@ApplicationContext context: Context) = FileService(context)
 
     @Provides
-    @Singleton
     fun providesDriveRepository(driveManager: DriveService, fileService: FileService): DriveRepository = DriveRepository(driveManager, fileService)
 
-
+    @Provides
+    fun providesSpreadSheetRepository( googlesheetService: GoogleSheetsService) = GoogleSheetRepository(googlesheetService)
 }

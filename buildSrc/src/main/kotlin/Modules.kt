@@ -2,11 +2,12 @@ import org.gradle.api.artifacts.dsl.DependencyHandler
 import org.gradle.kotlin.dsl.project
 
 object Modules{
-    //    const val cloud = ":cloud"
     const val camera = ":camera"
     const val themes = ":themes"
     const val app = ":app"
     const val drive = ":drive"
+    const val drinks = ":drinks"
+    const val persistentStorage= ":persistentStorage"
 }
 
 fun DependencyHandler.cameraModule(){
@@ -23,4 +24,14 @@ fun DependencyHandler.appModule(){
 
 fun DependencyHandler.driveModule(){
     implementation(project(Modules.drive))
+}
+
+fun DependencyHandler.drinksModule(){
+    persistentStorageModule()
+    implementation(project(Modules.drinks))
+}
+
+fun DependencyHandler.persistentStorageModule(){
+    room()
+    implementation(project(Modules.persistentStorage))
 }

@@ -23,8 +23,9 @@
             <option value="$PROJECT_DIR$/app" />
             <option value="$PROJECT_DIR$/buildSrc" />
             <option value="$PROJECT_DIR$/camera" />
-            <option value="$PROJECT_DIR$/di" />
+            <option value="$PROJECT_DIR$/drinks" />
             <option value="$PROJECT_DIR$/drive" />
+            <option value="$PROJECT_DIR$/persistentStorage" />
             <option value="$PROJECT_DIR$/themes" />
           </set>
         </option>

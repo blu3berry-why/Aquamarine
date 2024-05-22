@@ -2,15 +2,18 @@ import org.gradle.api.JavaVersion
 
 object Versions {
 
-
-
-
     //Base
     const val coreKtx =  "1.12.0"
     const val lifecycle = "2.7.0" //2.6.1
-    const val composeBom = "2023.08.00"
+    const val composeBom = "2024.05.00"
     const val appcompat = "1.6.1"
     const val activityCompose = "1.7.2"
+
+    //compose
+    const val material = "1.2.1"
+    const val junit4 = "1.6.7"
+    const val materialIcons= "1.6.7"
+
     //navigation
     const val navigationCompose = "2.8.0-alpha08"
     const val serialization = "1.6.3"
@@ -31,28 +34,18 @@ object Versions {
 
     //Auth
     const val googleApiClient = "2.0.0"
-    const val googleAuth = "1.11.0"
-
-    //OneTapAuth
-    const val oneTapAuth = "1.0.12"
 
     const val playServicesAuth = "20.7.0"
-    const val playServicesDrive = "17.0.0"
 
     //Dependency injection
     const val hilt = "2.51.1"
-    const val hiltCompiler = "1.0.0-alpha01"
     const val hiltNavigationCompose = "1.0.0"
     const val coroutines = "1.7.3"
 
     //Camera
     const val cameraX = "1.4.0-alpha04"
 
+    //Room
+    const val room = "2.6.1"
 
-//    const val splashScreen = "1.0.1"
-//    const val QRCode = "4.1.0"
-//    const val QRZxingCore = "3.3.3"
-//    const val cameraCamera2 = "1.3.0"
-//    const val cameraLifecycle = "1.3.0"
-//    const val cameraView = "1.4.0"
 }
