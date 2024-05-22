@@ -18,9 +18,15 @@ interface ProductDao {
     @Update
     fun update(product: Product)
 
+    @Query("DELETE FROM products WHERE 1")
+    fun deleteAll()
+
     @Query("SELECT * FROM products")
     fun getAll():List<Product>
 
     @Query("SELECT * FROM products WHERE id=:id")
     fun getProductById(id :Long): Product
+
+    @Query("SELECT * FROM products WHERE name=:name")
+    fun getProductByName(name:String): Product
 }

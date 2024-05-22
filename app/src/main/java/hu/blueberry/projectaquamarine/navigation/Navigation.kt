@@ -51,8 +51,10 @@ fun navigation(){
 
         composable<ProductDetails> {
             val args = it.toRoute<ProductDetails>()
-            ProductDetailsPage(args.id)
+            ProductDetailsPage(args.name)
         }
+
+
 
 
     }

@@ -85,7 +85,7 @@ fun TakePhotoAndSetData(
                             Button(onClick = {
                                 viewModel.uploadPNG(
                                     onSuccess = {
-                                        Toast.makeText(context, "Image saved successfully", Toast.LENGTH_LONG).show()
+                                        viewModel.showToastImageHasBeenSaved(context)
                                     }
                                 )
                                 //viewModel.saveImage(context)

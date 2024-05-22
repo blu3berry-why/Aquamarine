@@ -22,4 +22,4 @@ object HomeMenuPage
 object ProductList
 
 @Serializable
-data class ProductDetails(val id:Long)
+data class ProductDetails(val name:String)

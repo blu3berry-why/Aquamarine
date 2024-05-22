@@ -34,7 +34,7 @@ class CameraViewModel @Inject constructor(
     private val fileService: FileService,
     private val driveRepository: DriveRepository,
     private val memoryDatabase: MemoryDatabase,
-) : ViewModel(), PermissionHandlingViewModel {
+) : PermissionHandlingViewModel() {
     companion object {
         const val TAG = "CameraViewModel"
     }
@@ -42,7 +42,6 @@ class CameraViewModel @Inject constructor(
     init {
         setFolderName()
     }
-    override val permissionManager: PermissionRequestManager = PermissionRequestManager()
 
     private val _bitmap = MutableStateFlow<Bitmap?>(null)
     val bitmap = _bitmap.asStateFlow()
@@ -62,38 +61,23 @@ class CameraViewModel @Inject constructor(
     }
 
     fun createDriveFolder() {
-        viewModelScope.launch {
-            driveRepository.upsertFolder(StringValues.BASE_FOLDER_NAME).collectLatest {
-                handleResponse(it,
-                    onSuccess = {
-                        Log.d(TAG, it)
-                    },
-                    onError = { error ->
-                        requestPremission(exception = error){
-                            createDriveFolder()
-                        }
-                    })
+        handleUserRecoverableAuthError(
+            request = { driveRepository.upsertFolder(StringValues.BASE_FOLDER_NAME) },
+            onSuccess = {
+                Log.d(TAG, it)
             }
-        }
+        )
     }
 
-    fun uploadPNG(onSuccess: ()-> Unit = {}, onError: (Any?) -> Unit = {}){
+    fun uploadPNG(onSuccess: () -> Unit = {}, onError: (Any?) -> Unit = {}) {
         val list = memoryDatabase.folderId?.let { listOf(it) } ?: listOf()
-        viewModelScope.launch {
-            driveRepository.createImageToDrive(photoName.value, bitmap.value!!, list).collectLatest {
-                handleResponse(it,
-                    onSuccess = {
-                        fileService.deletePhotoFromInternalStorage(filename = photoName.value+".png")
-                        onSuccess.invoke()
-                    },
-                    onError = { error ->
-                        Log.d(TAG, error.toString())
-                        requestPremission(error){
-                            uploadPNG(onSuccess, onError)
-                        }
-                    })
-            }
-        }
+        handleUserRecoverableAuthError(
+            request = { driveRepository.createImageToDrive(photoName.value, bitmap.value!!, list) },
+            onSuccess = {
+                fileService.deletePhotoFromInternalStorage(filename = photoName.value + ".png")
+                onSuccess.invoke()
+            },
+        )
     }
 
 
@@ -114,7 +98,18 @@ class CameraViewModel @Inject constructor(
         photoName.value = getPhotoName()
     }
 
-    fun saveImage(context: Context){
+    fun showToastImageHasBeenSaved(context: Context){
+        viewModelScope.launch {
+            Toast.makeText(
+                context,
+                "Image: ${getPhotoName()} has been saved.",
+                Toast.LENGTH_LONG
+            ).show()
+        }
+
+    }
+
+    fun saveImage(context: Context) {
         val success = savePhotoToInternalStorage(
             filename = getPhotoName(),
             bitmap = bitmap.value!!
@@ -128,19 +123,12 @@ class CameraViewModel @Inject constructor(
         }
     }
 
-    fun setFolderName(){
-        viewModelScope.launch {
-            driveRepository.searchFolderFlow(StringValues.BASE_FOLDER_NAME).collectLatest {
-                handleResponse(it,
-                    onSuccess = {id ->
-                        memoryDatabase.folderId = id
-                    },
-                    onError = { error->
-                        Log.d(TAG, error.toString())
-                    })
-            }
-        }
+    private fun setFolderName() {
+        handleUserRecoverableAuthError(
+            request = { driveRepository.searchFolderFlow(StringValues.BASE_FOLDER_NAME) },
+            onSuccess = { id ->
+                memoryDatabase.folderId = id
+            },
+        )
     }
-
-
 }

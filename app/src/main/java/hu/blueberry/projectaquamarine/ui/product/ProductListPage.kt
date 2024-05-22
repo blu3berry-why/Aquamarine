@@ -36,7 +36,7 @@ fun ProductListPage(
                 ProductRow(product = product) {
                     navController.navigate(
                         ProductDetails(
-                            product.id ?: 1
+                            product.name!!
                         )
                     )
                 }
