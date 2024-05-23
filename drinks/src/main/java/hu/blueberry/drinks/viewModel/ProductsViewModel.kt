@@ -5,6 +5,7 @@ import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import hu.blueberry.drinks.helper.productListFromValueRangeTyped
 import hu.blueberry.drinks.model.Drinks
 import hu.blueberry.persistentstorage.model.Product
 import hu.blueberry.drive.PermissionHandlingViewModel
@@ -61,6 +62,8 @@ class ProductsViewModel @Inject constructor(
                      viewModelScope.launch(Dispatchers.IO) {
                          // To really refresh the list
                          database.productDao().deleteAll()
+                         _productList.clear()
+                         _productList.addAll(productListFromValueRangeTyped(data))
                          saveToDatabase()
                          refreshFromDatabase()
                      }
@@ -87,9 +90,11 @@ class ProductsViewModel @Inject constructor(
     }
 
     private fun refreshFromDatabase(){
-        _productList.clear()
         viewModelScope.launch(Dispatchers.IO) {
-            _productList.addAll(database.productDao().getAll())
+            //For the least time delay between the clear and the add
+            val products = database.productDao().getAll()
+            _productList.clear()
+            _productList.addAll(products)
         }
     }
 }

@@ -11,11 +11,13 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color.Companion.Black
 import androidx.compose.ui.graphics.Color.Companion.Gray
 import androidx.compose.ui.graphics.Color.Companion.White
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -28,11 +30,17 @@ import hu.blueberry.projectaquamarine.auth.helper.AuthResultContract
 
 @Composable
 fun ButtonGoogleSignIn(
-    onGoogleSignInCompleted: (String) -> Unit,
+    onGoogleSignInCompleted: () -> Unit,
     onError: (String) -> Unit,
     googleSignInClient: GoogleSignInClient,
     viewModel: AuthViewModel = hiltViewModel(),
 ) {
+
+    val context = LocalContext.current
+
+    LaunchedEffect(key1 = viewModel) {
+        viewModel.checkSignIn(context, { onGoogleSignInCompleted() })
+    }
 
     val authResultLauncher =
         rememberLauncherForActivityResult(contract = AuthResultContract(googleSignInClient)) {

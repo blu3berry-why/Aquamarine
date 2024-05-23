@@ -16,7 +16,7 @@ import hu.blueberry.projectaquamarine.navigation.HomeMenuPage
 
 @Composable
 fun AuthenticationPage(
-    navController: NavController
+    onAuthenticated: () -> Unit
 ){
 
     Column (modifier = Modifier.fillMaxSize(),
@@ -26,7 +26,7 @@ fun AuthenticationPage(
         val context = LocalContext.current
         ButtonGoogleSignIn(
             onGoogleSignInCompleted = {
-                navController.navigate(HomeMenuPage)
+                onAuthenticated()
             },
             onError = {
                 Toast.makeText(context, "Error: $it", Toast.LENGTH_LONG).show()

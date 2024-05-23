@@ -132,6 +132,12 @@ fun SingleItemStand(
                     }) {
                         Text(text = "Add to Value")
                     }
+
+                    Button(onClick = {
+                        viewModel.setAllToZero()
+                    }) {
+                        Text(text = "Set all to zero")
+                    }
                 }
 
 

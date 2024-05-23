@@ -20,16 +20,20 @@ class AuthViewModel @Inject constructor(val authenticatedUser: AuthenticatedUser
         const val SIGN_IN_REQUEST_CODE = 1
     }
 
-    fun handle(task: Task<GoogleSignInAccount>?, onError: (String) -> Unit, onSuccess: (String) -> Unit){
+    fun checkSignIn(context: Context, onSuccess: () -> Unit) {
+        if(GoogleSignIn.getLastSignedInAccount(context) != null){
+            onSuccess()
+        }
+    }
+
+    fun handle(task: Task<GoogleSignInAccount>?, onError: (String) -> Unit, onSuccess: () -> Unit){
         val account = task?.getResult(ApiException::class.java)
         try {
             if (account == null) {
                 onError("Account is null")
             } else {
                     try {
-                        //val account = GoogleSignIn.getLastSignedInAccount(context)
-                        //onSuccess(account.idToken!!)
-                        onSuccess(account.email.toString())
+                        onSuccess()
                     }catch (e: Exception){
                         onError(e.message.toString())
                     }

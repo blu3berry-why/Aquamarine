@@ -31,8 +31,15 @@ fun appNavigation(){
     val navController = rememberNavController()
     NavHost(navController = navController , startDestination = AuthScreen) {
         composable<AuthScreen> {
-            AuthenticationPage(navController = navController)
+            AuthenticationPage {
+                navController.navigate(HomeMenuPage) {
+                    popUpTo(AuthScreen) {
+                        inclusive = true
+                    }
+                }
+            }
         }
+
 
         composable<ScreenB> {
             val args = it.toRoute<ScreenB>()

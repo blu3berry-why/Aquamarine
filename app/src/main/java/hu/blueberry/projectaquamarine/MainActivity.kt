@@ -9,7 +9,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import dagger.hilt.android.AndroidEntryPoint
 import hu.blueberry.projectaquamarine.navigation.appNavigation
-
+import hu.blueberry.themes.theme.ProjectAquamarineTheme
 
 
 @AndroidEntryPoint
@@ -42,7 +42,10 @@ class MainActivity : ComponentActivity() {
 
 
         setContent {
-            appNavigation()
+            ProjectAquamarineTheme {
+                appNavigation()
+            }
+
             //SingleItemStand(id = 1, "F17")
         }
 

@@ -22,19 +22,17 @@ import hu.blueberry.persistentstorage.model.Product
 fun ProductRow(product: Product, navigateToDetails: ()-> Unit = {}){
 
     Box(modifier = Modifier
-        .fillMaxWidth()
-        .padding(vertical = 3.dp)
-        .clip(RoundedCornerShape(10))
-        .border(2.dp, Color.Black, RoundedCornerShape(10))
-        .background(Color.Gray)
-        .padding(10.dp),
+        .fillMaxWidth(),
         contentAlignment = Alignment.Center)
     {
-        Row(modifier = Modifier.padding(horizontal = 4.dp)) {
+        Button(modifier = Modifier.fillMaxWidth()
+            .padding(vertical =  3.dp)
+            .clip(RoundedCornerShape(10))
+            .border(2.dp, Color.Black, RoundedCornerShape(10))
+            .background(Color.Gray)
+            .padding(5.dp),
+            onClick = { navigateToDetails()}) {
             Text(text = product.name ?: "No product name given.", fontSize = 20.sp)
-            Button(onClick = { navigateToDetails()}) {
-                Text(text = "Details")
-            }
         }
         
     }

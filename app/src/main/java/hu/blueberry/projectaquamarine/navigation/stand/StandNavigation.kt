@@ -24,7 +24,12 @@ fun NavGraphBuilder.addStandNestedGraph(navController: NavController){
                 itemCount = args.itemCount,
                 standType = args.standType,
                 onNavigateToSingleItemStandPage = { singleStandItemScreen -> navController.navigate(singleStandItemScreen)},
-                onNavigateToStandPage = { navController.navigate(StandScreen) })
+                onNavigateToStandPage = {
+                    navController.navigate(StandNavigation){
+                    popUpTo(StandNavigation){
+                        inclusive = true
+                    }
+                } })
         }
     }
 }

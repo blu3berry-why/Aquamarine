@@ -32,8 +32,5 @@ fun HomeMenuPage(
             Text(text = "Product List")
         }
 
-        Button(onClick = { navController.navigate(StandNavigation) }) {
-            Text(text = "Stand")
-        }
     }
 }

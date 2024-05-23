@@ -106,4 +106,12 @@ class SingleItemStandViewModel @Inject constructor(
         _scaleValue.value = string.toIntOrNull() ?: 0
     }
 
+    fun setAllToZero() {
+        _sum.value = 0
+        _cartonCount.value = 0
+        _botteCount.value = 0
+        _scaleValue.value = 0
+
+    }
+
 }
