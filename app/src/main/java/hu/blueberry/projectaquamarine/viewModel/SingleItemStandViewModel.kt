@@ -2,6 +2,7 @@ package hu.blueberry.projectaquamarine.viewModel
 
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import hu.blueberry.drinks.model.StandType
 import hu.blueberry.drive.PermissionHandlingViewModel
 import hu.blueberry.persistentstorage.Database
 import hu.blueberry.persistentstorage.model.Product
@@ -15,6 +16,7 @@ import javax.inject.Inject
 class SingleItemStandViewModel @Inject constructor(
     private val database: Database
 ): PermissionHandlingViewModel() {
+
     private val _product:MutableStateFlow<Product?> = MutableStateFlow(null)
     val product = _product.asStateFlow()
 
@@ -30,13 +32,41 @@ class SingleItemStandViewModel @Inject constructor(
     private val _sum = MutableStateFlow<Int>(0)
     val sum = _sum.asStateFlow()
 
-    fun loadProductFromDatabase(id: Long){
+    fun loadProductFromDatabase(id: Long, storageName: String, standType: StandType){
         viewModelScope.launch(Dispatchers.IO) {
         _product.value = database.productDao().getProductById(id)
+
+            val storageData = product.value?.storages?.firstOrNull{ it.name.contains(storageName)}
+
+            if (storageData != null){
+                _sum.value = when (standType){
+                    StandType.OPEN -> storageData.open
+                    StandType.CART -> storageData.cart
+                    StandType.CLOSE -> storageData.close
+                }
+            }
+
         }
     }
 
-    fun updateSum(){
+    fun saveProductToDatabase(standType: StandType, storageName: String){
+        val storageData = product.value?.storages?.firstOrNull{ it.name.contains(storageName)}
+        if (storageData == null){
+            return
+        }else{
+            when (standType){
+                StandType.OPEN -> storageData.open = sum.value
+                StandType.CART -> storageData.cart = sum.value
+                StandType.CLOSE -> storageData.close = sum.value
+            }
+        }
+
+
+
+        viewModelScope.launch(Dispatchers.IO) {
+            database.productDao().update(product.value!!)
+        }
+
     }
 
     fun addCarton(){

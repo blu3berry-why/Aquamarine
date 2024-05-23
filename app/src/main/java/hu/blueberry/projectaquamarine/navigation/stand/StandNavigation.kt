@@ -14,12 +14,17 @@ import hu.blueberry.projectaquamarine.ui.stand.StandPage
 fun NavGraphBuilder.addStandNestedGraph(navController: NavController){
     navigation<StandNavigation>(startDestination = StandScreen){
         composable<StandScreen> {
-            StandPage()
+            StandPage ( { navController.navigate(it) } )
         }
 
         composable<SingleStandItemScreen> {
             val args = it.toRoute<SingleStandItemScreen>()
-            SingleItemStand(id = args.id, storageName = "F17")
+            SingleItemStand(
+                id = args.id,
+                itemCount = args.itemCount,
+                standType = args.standType,
+                onNavigateToSingleItemStandPage = { singleStandItemScreen -> navController.navigate(singleStandItemScreen)},
+                onNavigateToStandPage = { navController.navigate(StandScreen) })
         }
     }
 }

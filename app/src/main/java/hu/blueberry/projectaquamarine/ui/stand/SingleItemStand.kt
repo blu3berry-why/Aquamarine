@@ -30,33 +30,35 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import hu.blueberry.drinks.model.StandType
+import hu.blueberry.projectaquamarine.navigation.stand.SingleStandItemScreen
 import hu.blueberry.projectaquamarine.ui.stand.elemets.StandUnitCounterRow
 import hu.blueberry.projectaquamarine.viewModel.SingleItemStandViewModel
 
 
-@Preview
-@Composable
-fun SingleItemStandPreview() {
-    SingleItemStand(id = 1, "F17")
-}
 
 @Composable
 fun SingleItemStand(
     id: Long,
-    storageName: String,
+    itemCount: Int,
+    standType: String,
+    onNavigateToSingleItemStandPage: (SingleStandItemScreen) -> Unit,
+    onNavigateToStandPage: ()->Unit,
     viewModel: SingleItemStandViewModel = hiltViewModel(),
 ) {
-    LaunchedEffect(key1 = viewModel) {
-        viewModel.loadProductFromDatabase(id)
-    }
 
     val product = viewModel.product.collectAsState()
+    LaunchedEffect(key1 = product.value) {
+        viewModel.loadProductFromDatabase(id, "F17", StandType.fromStringValue(standType))
+    }
+
+
     val bottleCount = viewModel.botteCount.collectAsState()
     val cartonCount = viewModel.cartonCount.collectAsState()
     val sum = viewModel.sum.collectAsState()
 
 
-    var scaleValue = viewModel.scaleValue.collectAsState()
+    val scaleValue = viewModel.scaleValue.collectAsState()
 
     product.value?.let { product ->
         Column(
@@ -141,11 +143,29 @@ fun SingleItemStand(
                     .background(Color.Blue), contentAlignment = Alignment.Center
             ) {
                 Row {
-                    Button(modifier = Modifier.width(150.dp), onClick = { /*TODO*/ }) {
+                    Button(modifier = Modifier.width(150.dp), onClick = { //Save product
+                        viewModel.saveProductToDatabase(StandType.fromStringValue(standType), "F17")
+                        //Go to next page, if there is no more pages return to the stand page
+                        if (id > 1){
+                            onNavigateToSingleItemStandPage(SingleStandItemScreen((id - 1), itemCount, standType ))
+                        }else{
+                            //TODO should I save here to the Sheets?
+                            onNavigateToStandPage()
+                        } }) {
                         Text(text = "Previous")
                     }
                     Spacer(modifier = Modifier.width(30.dp))
-                    Button(modifier = Modifier.width(150.dp), onClick = { /*TODO*/ }) {
+                    Button(modifier = Modifier.width(150.dp), onClick = {
+                        //Save product
+                        viewModel.saveProductToDatabase(StandType.fromStringValue(standType), "F17")
+                        //Go to next page, if there is no more pages return to the stand page
+                        if (id <= itemCount){
+                            onNavigateToSingleItemStandPage(SingleStandItemScreen((id + 1), itemCount, standType ))
+                        }else{
+                            //TODO should I save here to the Sheets?
+                            onNavigateToStandPage()
+                        }
+                    }) {
                         Text(text = "Next")
                     }
 

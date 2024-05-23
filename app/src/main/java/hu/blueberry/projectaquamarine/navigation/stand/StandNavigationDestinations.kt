@@ -5,7 +5,7 @@ import hu.blueberry.drinks.model.StandType
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class SingleStandItemScreen(val id: Long, val standType: String)
+data class SingleStandItemScreen(val id: Long, val itemCount: Int, val standType: String)
 
 @Serializable
 object StandScreen

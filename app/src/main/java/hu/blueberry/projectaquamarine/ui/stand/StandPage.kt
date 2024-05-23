@@ -11,27 +11,34 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
+import hu.blueberry.drinks.model.StandType
+import hu.blueberry.projectaquamarine.navigation.stand.SingleStandItemScreen
+import hu.blueberry.projectaquamarine.viewModel.StandPageViewModel
 
 @Composable
-fun StandPage (
+fun StandPage(
+    onNavigateToSingleItemStandPage: (SingleStandItemScreen) -> Unit,
+    viewModel: StandPageViewModel = hiltViewModel(),
 ){
     Column(modifier = Modifier.fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center) {
 
-        Button(onClick = { /*TODO*/ }) {
+        Button(onClick = { onNavigateToSingleItemStandPage(SingleStandItemScreen(1, viewModel.itemCount, StandType.OPEN.toStringValue())) }) {
             Text(text = "Open")
         }
 
-        Button(onClick = { /*TODO*/ }) {
+        Button(onClick = { onNavigateToSingleItemStandPage(SingleStandItemScreen(1, viewModel.itemCount, StandType.CART.toStringValue())) }) {
             Text(text = "Cart")
         }
 
-        Button(onClick = { /*TODO*/ }) {
+        Button(onClick = { onNavigateToSingleItemStandPage(SingleStandItemScreen(1, viewModel.itemCount, StandType.CLOSE.toStringValue())) }) {
             Text(text = "Close")
         }
 
         Spacer(modifier = Modifier.height(20.dp))
 
-        Button(onClick = { /*TODO*/ }) {
+        Button(onClick = {  viewModel.saveProducts {  } }) {
             Text(text = "Save")
         }
     }

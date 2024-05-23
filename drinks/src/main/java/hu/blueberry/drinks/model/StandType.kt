@@ -5,7 +5,9 @@ import kotlinx.serialization.Serializable
 @Serializable
 enum class StandType() {
     OPEN(), CART(), CLOSE();
-    fun toStringValue() = this.name
 
-    fun fromStringValue(string: String) = enumValueOf<StandType>(string)
+    companion object{
+        fun fromStringValue(string: String) = enumValueOf<StandType>(string)
+    }
+    fun toStringValue() = this.name
 }
