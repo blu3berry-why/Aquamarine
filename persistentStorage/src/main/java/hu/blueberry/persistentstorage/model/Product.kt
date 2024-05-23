@@ -26,4 +26,31 @@ data class Product(
             }
         }
     }
+
+    fun toRowList(workSheetName: String):List<Any>{
+        val list = mutableListOf<Any>()
+
+        //We don't need the name in the first row do we?
+        list.addIfNotNull(this.measureUnit.displayString)
+
+        this.storages.firstOrNull {it.name.contains(workSheetName)}
+            ?.let {
+                list.add(it.open)
+                list.add(it.cart)
+                list.add(it.close)
+            }
+        return list
+    }
+
+    fun <T> MutableList<T>.addIfNotNull(value: T?): MutableList<T>?{
+        if (value == null){
+            return null
+        }else{
+            this.add(value)
+            return this
+        }
+    }
+
+
+
 }

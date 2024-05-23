@@ -21,7 +21,7 @@ import javax.inject.Singleton
 
 @Singleton
 class GoogleSheetsService @Inject constructor(
-    private var cloudBase: CloudBase
+    private var cloudBase: CloudBase,
 ) {
     var scopes = listOf(SheetsScopes.SPREADSHEETS)
 
@@ -69,7 +69,7 @@ class GoogleSheetsService @Inject constructor(
     fun writeSpreadSheet(
         spreadsheetId: String,
         range: String,
-        values: MutableList<MutableList<Any>>
+        values: MutableList<MutableList<Any>>,
     ): UpdateValuesResponse? {
 
         var result: UpdateValuesResponse? = null
@@ -85,10 +85,15 @@ class GoogleSheetsService @Inject constructor(
         return result
     }
 
+    fun updateSpreadSheet(spreadsheetId: String, valueRange: ValueRange): UpdateValuesResponse? {
+        return sheets.spreadsheets().values().update(spreadsheetId, valueRange.range, valueRange)
+            .apply { valueInputOption = InputOption.USER_ENTERED }.execute()
+    }
+
     fun appendToSpreadSheet(
         spreadsheetId: String,
         range: String,
-        values: MutableList<MutableList<Any>>
+        values: MutableList<MutableList<Any>>,
     ): AppendValuesResponse? {
 
         var result: AppendValuesResponse? = null
@@ -111,7 +116,7 @@ class GoogleSheetsService @Inject constructor(
                 AddSheetRequest()
                     .apply {
                         this.properties = SheetProperties()
-                            .apply{ this.title = name }
+                            .apply { this.title = name }
                     }
             )
         val batch = BatchUpdateSpreadsheetRequest().setRequests(listOf(request))
@@ -120,11 +125,16 @@ class GoogleSheetsService @Inject constructor(
         return spreadsheet
     }
 
-    fun renameWorksheet(spreadsheetId: String, oldName: String, newName:String): BatchUpdateSpreadsheetResponse? {
+    fun renameWorksheet(
+        spreadsheetId: String,
+        oldName: String,
+        newName: String,
+    ): BatchUpdateSpreadsheetResponse? {
         var spreadsheet = BatchUpdateSpreadsheetResponse()
         val sheet = sheets.spreadsheets().get(spreadsheetId).execute()
 
-        val sheetId = sheet.sheets.filter { it.properties.title == oldName }.firstOrNull()?.properties?.sheetId ?: return null
+        val sheetId = sheet.sheets.filter { it.properties.title == oldName }
+            .firstOrNull()?.properties?.sheetId ?: return null
 
 
         val request = Request().apply {
@@ -142,7 +152,10 @@ class GoogleSheetsService @Inject constructor(
         return spreadsheet
     }
 
-    fun initializeFirstTab(spreadsheetId: String, newName:String): BatchUpdateSpreadsheetResponse? {
+    fun initializeFirstTab(
+        spreadsheetId: String,
+        newName: String,
+    ): BatchUpdateSpreadsheetResponse? {
         var spreadsheet = BatchUpdateSpreadsheetResponse()
         val sheet = sheets.spreadsheets().get(spreadsheetId).execute()
 
@@ -162,7 +175,11 @@ class GoogleSheetsService @Inject constructor(
 
         spreadsheet = sheets.spreadsheets().batchUpdate(spreadsheetId, batch).execute()
 
-        writeSpreadSheet(spreadsheetId, "${newName}!A1:B1", mutableListOf(mutableListOf("Név", "Hányad")))
+        writeSpreadSheet(
+            spreadsheetId,
+            "${newName}!A1:B1",
+            mutableListOf(mutableListOf("Név", "Hányad"))
+        )
         return spreadsheet
     }
 

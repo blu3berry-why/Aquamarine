@@ -1,6 +1,5 @@
 package hu.blueberry.drive
 
-
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -20,7 +19,7 @@ abstract class PermissionHandlingViewModel : ViewModel() {
 
     val permissionManager: PermissionRequestManager = PermissionRequestManager()
 
-    fun requestPremission(exception: Any, repeatRequest: (() -> Unit)?) {
+    private fun requestPremission(exception: Any, repeatRequest: (() -> Unit)?) {
         //Log the error just to be a reminder
         Log.d(TAG, exception.toString())
         //If it is Recoverable we ask for the permission
@@ -86,12 +85,7 @@ abstract class PermissionHandlingViewModel : ViewModel() {
         request: suspend () -> Flow<ResourceState<T>>,
         onError: (error: Any) -> Unit = {},
         onSuccess: (T) -> Unit = {},
-        retry: Int = 3,
     ) {
-        if (retry == 0) {
-            return
-        }
-
         viewModelScope.launch(Dispatchers.IO) {
             request().collectLatest {
                 handleResponse(it,

@@ -12,6 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
 import hu.blueberry.projectaquamarine.navigation.ProductList
 import hu.blueberry.projectaquamarine.navigation.TakePhoto
+import hu.blueberry.projectaquamarine.navigation.stand.StandNavigation
 
 @Composable
 fun HomeMenuPage(
@@ -29,6 +30,10 @@ fun HomeMenuPage(
 
         Button(onClick = { navController.navigate(ProductList) }) {
             Text(text = "Product List")
+        }
+
+        Button(onClick = { navController.navigate(StandNavigation) }) {
+            Text(text = "Stand")
         }
     }
 }

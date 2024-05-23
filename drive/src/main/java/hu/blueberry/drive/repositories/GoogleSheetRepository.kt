@@ -1,6 +1,7 @@
 package hu.blueberry.drive.repositories
 
 import com.google.api.services.sheets.v4.model.BatchUpdateSpreadsheetResponse
+import com.google.api.services.sheets.v4.model.UpdateValuesResponse
 import com.google.api.services.sheets.v4.model.ValueRange
 import hu.blueberry.drive.base.ResourceState
 import hu.blueberry.drive.base.handleWithFlow
@@ -18,6 +19,10 @@ class GoogleSheetRepository @Inject constructor(
 
     suspend fun initializeFirstTab(spreadSheetId:String, name:String): BatchUpdateSpreadsheetResponse? {
        return googleSheetsManager.initializeFirstTab(spreadSheetId,name)
+    }
+
+    suspend fun updateSpreadSheet(spreadSheetId:String, valueRange: ValueRange): Flow<ResourceState<UpdateValuesResponse?>> {
+        return handleWithFlow { googleSheetsManager.updateSpreadSheet(spreadSheetId, valueRange) }
     }
 
     suspend fun createWorksheet(spreadSheetId: String, name: String): Flow<ResourceState<BatchUpdateSpreadsheetResponse>> {

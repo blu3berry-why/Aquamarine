@@ -5,11 +5,11 @@ import android.content.pm.PackageManager
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.runtime.Composable
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import dagger.hilt.android.AndroidEntryPoint
-import hu.blueberry.projectaquamarine.navigation.navigation
+import hu.blueberry.projectaquamarine.navigation.appNavigation
+
 
 
 @AndroidEntryPoint
@@ -42,20 +42,11 @@ class MainActivity : ComponentActivity() {
 
 
         setContent {
-            navigation()
-            //ProductListPage()
+            appNavigation()
+            //SingleItemStand(id = 1, "F17")
         }
 
     }
-
-    @Composable
-    fun Content(){
-
-
-
-    }
-
-
 
 }
 

@@ -3,6 +3,7 @@ plugins {
     id("org.jetbrains.kotlin.android")
     kotlin("kapt")
     id("com.google.dagger.hilt.android")
+    kotlin("plugin.serialization")
 }
 
 android {
@@ -58,6 +59,8 @@ dependencies {
     hilt()
 
     drive()
+
+    implementation(Dependencies.kotlinxSerialization)
 
     /*
     * MODULES:
