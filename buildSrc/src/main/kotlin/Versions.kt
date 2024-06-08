@@ -2,9 +2,11 @@ import org.gradle.api.JavaVersion
 
 object Versions {
 
+
+
     //Base
     const val coreKtx =  "1.12.0"
-    const val lifecycle = "2.7.0" //2.6.1
+    const val lifecycle = "2.7.0"
     const val composeBom = "2024.05.00"
     const val appcompat = "1.6.1"
     const val activityCompose = "1.7.2"
@@ -47,5 +49,7 @@ object Versions {
 
     //Room
     const val room = "2.6.1"
+
+    const val coil = "2.6.0"
 
 }

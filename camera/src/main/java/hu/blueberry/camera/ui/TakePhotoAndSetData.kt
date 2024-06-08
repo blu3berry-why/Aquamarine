@@ -1,6 +1,7 @@
 package hu.blueberry.camera.ui
 
 
+import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.result.launch
@@ -17,14 +18,20 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.core.content.FileProvider
 import androidx.hilt.navigation.compose.hiltViewModel
+import coil.compose.AsyncImage
+import hu.blueberry.camera.R
 import hu.blueberry.camera.models.enums.PhotoClockType
 import hu.blueberry.camera.models.enums.PhotoTakenTime
 import hu.blueberry.camera.ui.elements.ExposedDropdownMenuSample
@@ -37,16 +44,22 @@ fun TakePhotoAndSetData(
     viewModel: CameraViewModel = hiltViewModel(),
 ) {
     val photoName = viewModel.photoName.collectAsState()
-    val bitmap = viewModel.bitmap.collectAsState().value
+    val selectedImageUri = viewModel.selectedImageUri.collectAsState()
     val nameOfTheEvent = viewModel.nameOfTheEvent.collectAsState()
     val context = LocalContext.current
+    val fileProvider = stringResource(id = R.string.fileprovider)
 
+
+
+    //TODO https://stackoverflow.com/questions/75387353/activityresultcontracts-takepicture-it-is-always-returning-false-as-a-result
     val launcher =
-        rememberLauncherForActivityResult(contract = ActivityResultContracts.TakePicturePreview()) {
-            it?.let { viewModel.onTakePhoto(it) }
+        rememberLauncherForActivityResult(contract = ActivityResultContracts.TakePicture()) {
+            viewModel.setImageUri(viewModel.uri!!)
         }
 
     ManagePermissionsWithPermissionManager(permissionManager = viewModel.permissionManager)
+
+
 
     ProjectAquamarineTheme {
         Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
@@ -67,20 +80,20 @@ fun TakePhotoAndSetData(
                         .width(400.dp),
                     contentAlignment = Alignment.Center
                 ) {
-                    if (null != bitmap) {
+                    if (null != selectedImageUri.value) {
                         Column(
                             horizontalAlignment = Alignment.CenterHorizontally,
                             verticalArrangement = Arrangement.SpaceBetween
                         ) {
-                            Image(
-                                bitmap = bitmap.asImageBitmap(),
+                            
+                            AsyncImage(
+                                model = selectedImageUri.value,
                                 contentDescription = null,
                                 modifier = Modifier
                                     .height(400.dp)
                                     .width(300.dp)
-                                    .clip(RoundedCornerShape(10.dp))
+                                    .clip(RoundedCornerShape(10.dp)), contentScale = ContentScale.Crop )
 
-                            )
                             Button(onClick = {
                                 viewModel.uploadPNG(
                                     onSuccess = {
@@ -97,7 +110,16 @@ fun TakePhotoAndSetData(
 
                     } else {
                         Button(onClick = {
-                            launcher.launch()
+                            val file = viewModel.createImageFile(context)
+
+                              viewModel.uri = FileProvider.getUriForFile(
+                                context,
+                                fileProvider,
+                                file
+                                )
+
+
+                            launcher.launch(viewModel.uri)
                         }) {
                             Text(text = "Take Photo")
                         }

@@ -8,6 +8,7 @@ import com.google.api.services.drive.Drive
 import com.google.api.services.drive.DriveScopes
 import com.google.api.services.drive.model.File
 import hu.blueberry.drive.base.CloudBase
+import java.io.InputStream
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -42,6 +43,7 @@ class DriveService @Inject constructor(
     }
 
 
+
     fun createFolder(name: String): String {
 
         val folder: File
@@ -57,12 +59,15 @@ class DriveService @Inject constructor(
     }
 
 
-    fun searchFolder(name: String): String? {
+    fun searchSingleFolder(name: String): String? {
 
         val folderId: String?
 
         val files = drive.files().list()
-        files.q = "mimeType='${MimeType.FOLDER}'"
+
+        files.q = GoogleDriveQueryBuilder()
+            .mimeType(MimeType.FOLDER)
+            .createQuery()
 
         val result = files.execute()
 
@@ -85,13 +90,11 @@ class DriveService @Inject constructor(
 
         val files = drive.files().list()
 
-        val stringBuilder = StringBuilder()
-
-        for(parent in parentIdList){
-            stringBuilder.append(" and '${parent}' in parents")
-        }
-
-        files.q = mimeType?.let { "mimeType='${mimeType}'" + stringBuilder.toString() } ?: stringBuilder.toString()
+        files.q = GoogleDriveQueryBuilder()
+            .parents(parentIdList)
+            .and()
+            .mimeType(mimeType)
+            .createQuery()
 
         val result = files.execute()
 
@@ -151,12 +154,14 @@ class DriveService @Inject constructor(
             this.mimeType = mimeType
         }
 
-
         val mediaContent = FileContent(MimeType.PDF, file)
 
         f = drive.files().create(f, mediaContent).execute()
         return f.id
     }
+
+
+
 
 
 }

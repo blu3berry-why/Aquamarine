@@ -4,9 +4,13 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.icu.text.SimpleDateFormat
 import android.icu.util.Calendar
+import android.net.Uri
+import android.os.Build
 import android.util.Log
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.compose.ui.graphics.asImageBitmap
+import androidx.core.content.FileProvider
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -24,8 +28,10 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import java.io.File
 import java.util.Date
 import java.util.Locale
+import java.util.Objects
 import javax.inject.Inject
 
 
@@ -55,10 +61,15 @@ class CameraViewModel @Inject constructor(
     // TODO Is there an other way of auto updating it?
     val photoName = MutableStateFlow<String>(getPhotoName())
 
+    var filePath: File? = null
 
-    fun onTakePhoto(bitmap: Bitmap) {
-        _bitmap.value = bitmap
-    }
+    var _selectedImageUri: MutableStateFlow<Uri?> = MutableStateFlow<Uri?>(null)
+
+    val selectedImageUri = _selectedImageUri.asStateFlow()
+
+    var uri: Uri? = null
+
+
 
     fun createDriveFolder() {
         handleUserRecoverableAuthError(
@@ -72,17 +83,24 @@ class CameraViewModel @Inject constructor(
     fun uploadPNG(onSuccess: () -> Unit = {}, onError: (Any?) -> Unit = {}) {
         val list = memoryDatabase.folderId?.let { listOf(it) } ?: listOf()
         handleUserRecoverableAuthError(
-            request = { driveRepository.createImageToDrive(photoName.value, bitmap.value!!, list) },
+            request = { driveRepository.createImageToDrive(photoName.value, filePath!!, list) },
             onSuccess = {
                 fileService.deletePhotoFromInternalStorage(filename = photoName.value + ".png")
                 onSuccess.invoke()
             },
+            onError = onError
         )
     }
 
+    fun createImageFile(context: Context):File{
+        return context.createImageFile(photoName.value)
+    }
 
-    private fun savePhotoToInternalStorage(filename: String, bitmap: Bitmap): Boolean {
-        return fileService.savePhotoToInternalStorage(filename, bitmap)
+    @RequiresApi(Build.VERSION_CODES.Q)
+    fun setImageUri(uri: Uri){
+        _selectedImageUri.value = uri
+        fileService.fileInputStreamFronUri(uri, filename = photoName.value)
+        filePath = fileService.createFilePathFromFilename(photoName.value, ".png")
     }
 
 
@@ -109,19 +127,6 @@ class CameraViewModel @Inject constructor(
 
     }
 
-    fun saveImage(context: Context) {
-        val success = savePhotoToInternalStorage(
-            filename = getPhotoName(),
-            bitmap = bitmap.value!!
-        )
-        if (success) {
-            Toast.makeText(
-                context,
-                "Image: ${getPhotoName()} has been saved.",
-                Toast.LENGTH_LONG
-            ).show()
-        }
-    }
 
     private fun setFolderName() {
         handleUserRecoverableAuthError(
@@ -131,4 +136,14 @@ class CameraViewModel @Inject constructor(
             },
         )
     }
+}
+
+fun Context.createImageFile(name:String): File {
+    // Create an image file name
+    val image = File.createTempFile(
+        name, /* prefix */
+        ".png", /* suffix */
+        externalCacheDir      /* directory */
+    )
+    return image
 }

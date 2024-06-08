@@ -1,7 +1,6 @@
 package hu.blueberry.drive.repositories
 
 import android.graphics.Bitmap
-import android.net.Uri
 import hu.blueberry.drive.base.ResourceState
 import hu.blueberry.drive.base.handleWithFlow
 import hu.blueberry.drive.model.FileInfo
@@ -50,8 +49,12 @@ class DriveRepository @Inject constructor(
 
     }
 
+    suspend fun createImageToDrive(fileName: String, filePath: File, parents: List<String> = listOf()): Flow<ResourceState<String>> {
+        return handleWithFlow { driveManager.createFile(fileName, parents, mimeType = DriveService.MimeType.PNG, filePath) }
+    }
+
     suspend fun searchFolderFlow(name: String): Flow<ResourceState<String?>> {
-        return handleWithFlow { driveManager.searchFolder(name) }
+        return handleWithFlow { driveManager.searchSingleFolder(name) }
     }
 
     suspend fun createFolderBlocking(name: String): String {
@@ -59,7 +62,7 @@ class DriveRepository @Inject constructor(
     }
 
     suspend fun searchFolderBlocking(name: String): String? {
-        return driveManager.searchFolder(name)
+        return driveManager.searchSingleFolder(name)
     }
 
     suspend fun createSpreadSheetInFolderBlocking(

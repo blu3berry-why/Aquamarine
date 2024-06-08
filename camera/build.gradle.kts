@@ -60,6 +60,8 @@ dependencies {
 
     hilt()
 
+    implementation(Dependencies.coil)
+
     /*
     * MODULES:
     */

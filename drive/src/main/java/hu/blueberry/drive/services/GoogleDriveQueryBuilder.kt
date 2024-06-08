@@ -18,8 +18,10 @@ class GoogleDriveQueryBuilder {
         return this
     }
 
-    fun mimeType(mimeType:String): GoogleDriveQueryBuilder {
-        queryBuilder.append("mimeType='${mimeType}'")
+    fun mimeType(mimeType:String?): GoogleDriveQueryBuilder {
+        mimeType?.let {
+            queryBuilder.append("mimeType='${mimeType}'")
+        }
         return this
     }
     fun parents(parentIdList:List<String>): GoogleDriveQueryBuilder {

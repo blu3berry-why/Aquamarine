@@ -63,6 +63,9 @@ object Dependencies {
     val roomAnnotationProcessor by lazy { "androidx.room:room-compiler:${Versions.room}" }
     val roomCoroutines by lazy { "androidx.room:room-ktx:${Versions.room}" }
 
+    //Glide
+    val coil by lazy { "io.coil-kt:coil-compose:${Versions.coil}" }
+
 }
 
 fun DependencyHandler.navigation() {
