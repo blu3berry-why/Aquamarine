@@ -4,22 +4,19 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
-import android.os.Build
-import android.os.FileUtils
 import androidx.activity.ComponentActivity
-import androidx.annotation.RequiresApi
-import com.google.api.client.util.IOUtils
 import hu.blueberry.drive.model.InternalStoragePhoto
-
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.io.File
 import java.io.IOException
-import java.lang.Exception
+import java.io.InputStream
+import java.io.OutputStream
 import javax.inject.Inject
 
+
 class FileService @Inject constructor(
-    private var context: Context
+    private var context: Context,
 ) {
 
     /**
@@ -67,14 +64,21 @@ class FileService @Inject constructor(
         return createFilePathFromFilename(filename, extension)
     }
 
+    @Throws(IOException::class)
+    fun copy(source: InputStream, target: OutputStream) {
+        val buf = ByteArray(8192)
+        var length: Int
+        while ((source.read(buf).also { length = it }) != -1) {
+            target.write(buf, 0, length)
+        }
+    }
 
-    @RequiresApi(Build.VERSION_CODES.Q)
-    fun fileInputStreamFronUri(uri: Uri, filename: String): Boolean{
+
+    fun fileInputStreamFromUri(uri: Uri, filename: String): Boolean{
         val inputStream = context.contentResolver.openInputStream(uri)
         return try {
-
             context.openFileOutput("$filename.png", ComponentActivity.MODE_PRIVATE).use { stream->
-                FileUtils.copy(inputStream!!, stream)
+                copy(inputStream!!, stream)
             }
             true
         } catch (e: IOException){
@@ -92,13 +96,6 @@ class FileService @Inject constructor(
         ZipService().unzip(zipFile, targetLocation)
     }
 
-
-    fun createDir(folderName: String){
-        val path = context.filesDir
-        val letDirectory = File(path, folderName)
-        val resultMkdirs: Boolean = letDirectory.mkdirs()
-
-    }
 
     fun createFilePathFromFilename(filename: String, extension:String): File{
         return File(context.filesDir, filename+extension)

@@ -1,11 +1,8 @@
 package hu.blueberry.camera.ui
 
 
-import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.activity.result.launch
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -15,14 +12,11 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -45,21 +39,17 @@ fun TakePhotoAndSetData(
 ) {
     val photoName = viewModel.photoName.collectAsState()
     val selectedImageUri = viewModel.selectedImageUri.collectAsState()
-    val nameOfTheEvent = viewModel.nameOfTheEvent.collectAsState()
     val context = LocalContext.current
+
+    //Used https://stackoverflow.com/questions/75387353/activityresultcontracts-takepicture-it-is-always-returning-false-as-a-result
     val fileProvider = stringResource(id = R.string.fileprovider)
 
-
-
-    //TODO https://stackoverflow.com/questions/75387353/activityresultcontracts-takepicture-it-is-always-returning-false-as-a-result
     val launcher =
         rememberLauncherForActivityResult(contract = ActivityResultContracts.TakePicture()) {
-            viewModel.setImageUri(viewModel.uri!!)
+            viewModel.createTempImageAndSetFilePathAndSelectedUri(viewModel.uri!!)
         }
 
     ManagePermissionsWithPermissionManager(permissionManager = viewModel.permissionManager)
-
-
 
     ProjectAquamarineTheme {
         Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
@@ -69,10 +59,6 @@ fun TakePhotoAndSetData(
             ) {
 
                 Text(text = photoName.value)
-
-                TextField(
-                    value = nameOfTheEvent.value,
-                    onValueChange = { viewModel.nameOfTheEvent.value = it })
 
                 Box(
                     modifier = Modifier
