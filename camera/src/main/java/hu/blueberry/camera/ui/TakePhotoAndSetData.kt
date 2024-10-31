@@ -44,7 +44,7 @@ fun TakePhotoAndSetData(
     //Used https://stackoverflow.com/questions/75387353/activityresultcontracts-takepicture-it-is-always-returning-false-as-a-result
     val fileProvider = stringResource(id = R.string.fileprovider)
 
-    val launcher =
+    val takePictureLauncher =
         rememberLauncherForActivityResult(contract = ActivityResultContracts.TakePicture()) {
             viewModel.createTempImageAndSetFilePathAndSelectedUri(viewModel.uri!!)
         }
@@ -66,47 +66,61 @@ fun TakePhotoAndSetData(
                         .width(400.dp),
                     contentAlignment = Alignment.Center
                 ) {
-                    if (null != selectedImageUri.value) {
+                    if (selectedImageUri.value != null) {
+                        /*
+                        * When an image has been taken already
+                        * */
                         Column(
                             horizontalAlignment = Alignment.CenterHorizontally,
                             verticalArrangement = Arrangement.SpaceBetween
                         ) {
-                            
+                            /*
+                            * Image preview
+                            * */
                             AsyncImage(
                                 model = selectedImageUri.value,
                                 contentDescription = null,
                                 modifier = Modifier
                                     .height(400.dp)
                                     .width(300.dp)
-                                    .clip(RoundedCornerShape(10.dp)), contentScale = ContentScale.Crop )
-
-                            Button(onClick = {
-                                viewModel.uploadPNG(
-                                    onSuccess = {
-                                        viewModel.showToastImageHasBeenSaved(context)
-                                    }
-                                )
-                                //viewModel.saveImage(context)
-                            }
-
+                                    .clip(RoundedCornerShape(10.dp)),
+                                contentScale = ContentScale.Crop
+                            )
+                            /*
+                            * Save Button
+                            * */
+                            Button(
+                                onClick =
+                                {
+                                    viewModel.uploadPNG(
+                                        onSuccess = {
+                                            viewModel.showToastImageHasBeenSaved(context)
+                                        }
+                                    )
+                                }
                             ) {
                                 Text(text = "Save")
                             }
                         }
 
                     } else {
-                        Button(onClick = {
-                            val file = viewModel.createImageFile(context)
+                        /*
+                        * No image just a button to take one
+                        * */
+                        Button(
+                            onClick =
+                            {
+                                val file = viewModel.createImageFile(context)
 
-                              viewModel.uri = FileProvider.getUriForFile(
-                                context,
-                                fileProvider,
-                                file
+                                viewModel.uri = FileProvider.getUriForFile(
+                                    context,
+                                    fileProvider,
+                                    file
                                 )
-
-
-                            launcher.launch(viewModel.uri)
-                        }) {
+                                // Take picture
+                                takePictureLauncher.launch(viewModel.uri)
+                            }
+                        ) {
                             Text(text = "Take Photo")
                         }
                     }

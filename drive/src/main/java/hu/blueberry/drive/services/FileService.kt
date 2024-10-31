@@ -38,6 +38,10 @@ class FileService @Inject constructor(
         }
     }
 
+    /**
+     * Returns a list of photos from the internal storage.
+     * @return a list of files ending with ".jpg"
+     */
     suspend fun loadPhotosFromInternalStorage(): List<InternalStoragePhoto>{
         return withContext(Dispatchers.IO) {
             val files = context.filesDir.listFiles()
@@ -48,6 +52,7 @@ class FileService @Inject constructor(
             } ?: listOf()
         }
     }
+
 
 
     fun deletePhotoFromInternalStorage(filename: String):Boolean{
