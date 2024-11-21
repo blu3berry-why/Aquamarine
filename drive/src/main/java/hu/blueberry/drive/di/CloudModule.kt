@@ -14,6 +14,7 @@ import hu.blueberry.drive.repositories.GoogleSheetRepository
 import hu.blueberry.drive.services.DriveService
 import hu.blueberry.drive.services.FileService
 import hu.blueberry.drive.services.GoogleSheetsService
+import hu.bme.aut.android.news.connection.NetworkConnectivityObserver
 import javax.inject.Singleton
 
 @Module
@@ -26,6 +27,10 @@ class CloudModule {
     @Provides
     @Singleton
     fun provideMemoryDatabase() = MemoryDatabase()
+
+    @Provides
+    @Singleton
+    fun provideNetworkConnectivityObserver(@ApplicationContext context: Context) = NetworkConnectivityObserver(context)
 
     @Provides
     fun providePermissionRequestManager() = PermissionRequestManager()

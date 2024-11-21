@@ -45,10 +45,10 @@ class FileService @Inject constructor(
     suspend fun loadPhotosFromInternalStorage(): List<InternalStoragePhoto>{
         return withContext(Dispatchers.IO) {
             val files = context.filesDir.listFiles()
-            files?.filter { it.canRead() && it.isFile && it.name.endsWith(".jpg") }?.map {
+            files?.filter { it.canRead() && it.isFile && it.name.endsWith(".png") }?.map {
                 val bytes = it.readBytes()
                 val bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
-                InternalStoragePhoto(it.name, bitmap)
+                InternalStoragePhoto(it.name, bitmap, it.path)
             } ?: listOf()
         }
     }
@@ -62,6 +62,19 @@ class FileService @Inject constructor(
             e.printStackTrace()
             false
         }
+    }
+
+    /**
+     * Checks if a file exists in the internal storage directory
+     * @param filename: The name of the file that you want to check if exists
+     * @return Boolean value if the file exists or not
+     */
+    suspend fun checkFileAlreadyExists(filename: String): Boolean{
+        val files = context.filesDir.listFiles()?.filter { it.name == filename }
+        if (files != null) {
+            return files.isNotEmpty()
+        }
+        return false
     }
 
     fun createPhotoFilePath(filename: String, extension: String = ".png"): File{

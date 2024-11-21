@@ -5,10 +5,21 @@ import android.content.pm.PackageManager
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.Icon
+import androidx.compose.material3.Text
+import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteScaffold
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import dagger.hilt.android.AndroidEntryPoint
-import hu.blueberry.projectaquamarine.navigation.appNavigation
+import hu.blueberry.projectaquamarine.navigation.AppNavigation
+import hu.blueberry.projectaquamarine.ui.navigationsuitescaffold.AppDestinations
 import hu.blueberry.themes.theme.ProjectAquamarineTheme
 
 
@@ -43,7 +54,9 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             ProjectAquamarineTheme {
-                appNavigation()
+               AppNavigation()
+
+
             }
 
             //SingleItemStand(id = 1, "F17")

@@ -6,14 +6,20 @@ import hu.blueberry.drive.base.handleWithFlow
 import hu.blueberry.drive.model.FileInfo
 import hu.blueberry.drive.services.DriveService
 import hu.blueberry.drive.services.FileService
+import hu.bme.aut.android.news.connection.ConnectivityObserver
+import hu.bme.aut.android.news.connection.NetworkConnectivityObserver
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.collectLatest
 import java.io.File
 import javax.inject.Inject
 
 class DriveRepository @Inject constructor(
     private var driveManager: DriveService,
-    private val fileService: FileService
+    private val fileService: FileService,
 ) {
+
+
+
     suspend fun createFolder(name: String): Flow<ResourceState<String>> {
         return handleWithFlow { driveManager.createFolder(name) }
     }
@@ -52,6 +58,7 @@ class DriveRepository @Inject constructor(
     suspend fun createImageToDrive(fileName: String, filePath: File, parents: List<String> = listOf()): Flow<ResourceState<String>> {
         return handleWithFlow { driveManager.createFile(fileName, parents, mimeType = DriveService.MimeType.PNG, filePath) }
     }
+
 
     suspend fun searchFolderFlow(name: String): Flow<ResourceState<String?>> {
         return handleWithFlow { driveManager.searchSingleFolder(name) }
@@ -119,5 +126,6 @@ class DriveRepository @Inject constructor(
         val spreadSheets = driveManager.searchFiles(spreadSheetName)
         return spreadSheets.map {  FileInfo(name = it.name, id = it.id)}
     }
+
 
 }

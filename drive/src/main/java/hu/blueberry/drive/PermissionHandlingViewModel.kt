@@ -72,6 +72,7 @@ abstract class PermissionHandlingViewModel : ViewModel() {
                             Log.d(TAG, e.toString())
                             onError(e)
 
+
                             //When developing the app should crash to see the problem
                             throw e
                         }

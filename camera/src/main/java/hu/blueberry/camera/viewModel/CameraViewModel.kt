@@ -76,12 +76,25 @@ class CameraViewModel @Inject constructor(
 
     /**
      * Creates a temporary file from the uri, and sets the *selectedImageUri* and the *filePath* for that temporary image.
+     * If the filename already exists it automatically puts an asterisk ("*") at the end
      * @param uri The uri of the file which is needed to be cached and selected in the view model
      */
     fun createTempImageAndSetFilePathAndSelectedUri(uri: Uri){
         _selectedImageUri.value = uri
-        fileService.fileInputStreamFromUri(uri, filename = photoName.value)
-        filePath = fileService.createFilePathFromFilename(photoName.value, ".png")
+
+        viewModelScope.launch {
+            if (fileService.checkFileAlreadyExists((photoName.value + ".png"))){
+                photoName.value += "*"
+            }
+
+            if(fileService.fileInputStreamFromUri(uri, filename = photoName.value)){
+                filePath = fileService.createFilePathFromFilename(photoName.value, ".png")
+            }else{
+                TODO()
+            }
+        }
+
+
     }
 
     /**
@@ -97,9 +110,9 @@ class CameraViewModel @Inject constructor(
      *
      */
     fun uploadPNG(onSuccess: () -> Unit = {}, onError: (Any?) -> Unit = {}) {
-        val list = memoryDatabase.folderId?.let { listOf(it) } ?: listOf()
+        val parentList = memoryDatabase.folderId?.let { listOf(it) } ?: listOf()
         handleUserRecoverableAuthError(
-            request = { driveRepository.createImageToDrive(photoName.value, filePath!!, list) },
+            request = { driveRepository.createImageToDrive(photoName.value, filePath!!, parentList) },
             onSuccess = {
                 fileService.deletePhotoFromInternalStorage(filename = photoName.value + ".png")
                 onSuccess.invoke()
@@ -128,4 +141,10 @@ class CameraViewModel @Inject constructor(
             },
         )
     }
+
+    fun resetPage(){
+        _selectedImageUri.value = null
+    }
+
+
 }

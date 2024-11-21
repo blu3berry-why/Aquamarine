@@ -66,6 +66,9 @@ object Dependencies {
     //Glide
     val coil by lazy { "io.coil-kt:coil-compose:${Versions.coil}" }
 
+    //Scaffold
+    val adaptiveNavigationSuite by lazy {"androidx.compose.material3:material3-adaptive-navigation-suite-android:${Versions.adaptiveNavigationSuite}"}
+
 }
 
 fun DependencyHandler.navigation() {
@@ -139,3 +142,4 @@ fun DependencyHandler.room(){
     kapt(Dependencies.roomAnnotationProcessor)
     implementation(Dependencies.roomCoroutines)
 }
+

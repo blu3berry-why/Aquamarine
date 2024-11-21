@@ -6,6 +6,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
@@ -86,21 +87,37 @@ fun TakePhotoAndSetData(
                                     .clip(RoundedCornerShape(10.dp)),
                                 contentScale = ContentScale.Crop
                             )
-                            /*
-                            * Save Button
+                            Row {
+                                /*
+                            * Upload Button
                             * */
-                            Button(
-                                onClick =
-                                {
-                                    viewModel.uploadPNG(
-                                        onSuccess = {
-                                            viewModel.showToastImageHasBeenSaved(context)
-                                        }
-                                    )
+                                Button(
+                                    onClick =
+                                    {
+                                        viewModel.uploadPNG(
+                                            onSuccess = {
+                                                viewModel.showToastImageHasBeenSaved(context)
+                                            }
+                                        )
+                                    }
+                                ) {
+                                    Text(text = "Upload")
                                 }
-                            ) {
-                                Text(text = "Save")
+
+                            /*
+                            * Take New Picture
+                            * */
+                                Button(
+                                    onClick =
+                                    {
+                                        viewModel.resetPage()
+                                    }
+                                ) {
+                                    Text(text = "Take new picture")
+                                }
                             }
+
+
                         }
 
                     } else {

@@ -19,4 +19,5 @@ plugins {
     id("com.google.dagger.hilt.android") version "2.44" apply false
     id("com.android.library") version "8.4.1" apply false
     kotlin("plugin.serialization") version "1.9.24" apply false
+    id("org.jlleitschuh.gradle.ktlint") version "12.1.1" apply false
 }

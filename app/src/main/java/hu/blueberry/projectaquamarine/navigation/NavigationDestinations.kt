@@ -23,3 +23,6 @@ object ProductList
 
 @Serializable
 data class ProductDetails(val name:String)
+
+@Serializable
+object StoredPictures

@@ -55,6 +55,7 @@ android {
 
 dependencies {
 
+    implementation(Dependencies.adaptiveNavigationSuite)
     core()
 
     compose()
@@ -70,6 +71,8 @@ dependencies {
     hilt()
 
     drive()
+
+
 
 
     //Modules

@@ -4,6 +4,7 @@ object Versions {
 
 
 
+
     //Base
     const val coreKtx =  "1.12.0"
     const val lifecycle = "2.7.0"
@@ -51,5 +52,7 @@ object Versions {
     const val room = "2.6.1"
 
     const val coil = "2.6.0"
+
+    const val adaptiveNavigationSuite = "1.3.1"
 
 }
