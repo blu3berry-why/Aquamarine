@@ -1,4 +1,4 @@
-package hu.blueberry.projectaquamarine.ui.navigationsuitescaffold
+package hu.blueberry.projectaquamarine.features.navigationsuitescaffold
 
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Icon

@@ -6,7 +6,7 @@ import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import hu.blueberry.drinks.helper.productListFromValueRangeTyped
-import hu.blueberry.drinks.model.Drinks
+import hu.blueberry.drinks.helper.Drinks
 import hu.blueberry.persistentstorage.model.Product
 import hu.blueberry.drive.PermissionHandlingViewModel
 import hu.blueberry.drive.base.StringValues

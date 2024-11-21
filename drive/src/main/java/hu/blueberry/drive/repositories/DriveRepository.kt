@@ -6,10 +6,7 @@ import hu.blueberry.drive.base.handleWithFlow
 import hu.blueberry.drive.model.FileInfo
 import hu.blueberry.drive.services.DriveService
 import hu.blueberry.drive.services.FileService
-import hu.bme.aut.android.news.connection.ConnectivityObserver
-import hu.bme.aut.android.news.connection.NetworkConnectivityObserver
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.collectLatest
 import java.io.File
 import javax.inject.Inject
 
@@ -60,8 +57,12 @@ class DriveRepository @Inject constructor(
     }
 
 
-    suspend fun searchFolderFlow(name: String): Flow<ResourceState<String?>> {
-        return handleWithFlow { driveManager.searchSingleFolder(name) }
+    suspend fun searchSingleFolderMatchingStringInName(name: String): Flow<ResourceState<String?>> {
+        return handleWithFlow { driveManager.searchSingleFolderMatchingStringInName(name) }
+    }
+
+    suspend fun searchFilesMatchingParentsAndMimeType(parentsList: List<String>?, mimeType: String?): Flow<ResourceState<MutableList<com.google.api.services.drive.model.File>>> {
+        return handleWithFlow { driveManager.searchFilesMatchingParentsAndMimeType(parentsList, mimeType) }
     }
 
     suspend fun createFolderBlocking(name: String): String {
@@ -69,7 +70,7 @@ class DriveRepository @Inject constructor(
     }
 
     suspend fun searchFolderBlocking(name: String): String? {
-        return driveManager.searchSingleFolder(name)
+        return driveManager.searchSingleFolderMatchingStringInName(name)
     }
 
     suspend fun createSpreadSheetInFolderBlocking(
@@ -94,7 +95,7 @@ class DriveRepository @Inject constructor(
         mimeType: String = DriveService.MimeType.SPREADSHEET
     ): List<FileInfo> {
 
-        val fileList = driveManager.searchFilesInFolder(parentsList, mimeType)
+        val fileList = driveManager.searchFilesMatchingParentsAndMimeType(parentsList, mimeType)
 
         return fileList.map { FileInfo(name = it.name, id = it.id) }
     }
@@ -123,7 +124,7 @@ class DriveRepository @Inject constructor(
     }
 
     private suspend fun _searchSpreadSheet(spreadSheetName: String): List<FileInfo> {
-        val spreadSheets = driveManager.searchFiles(spreadSheetName)
+        val spreadSheets = driveManager.searchFilesWithStringMatchingInName(spreadSheetName)
         return spreadSheets.map {  FileInfo(name = it.name, id = it.id)}
     }
 

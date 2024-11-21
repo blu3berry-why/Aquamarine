@@ -17,5 +17,6 @@ object PersistentStorageModule {
     @Singleton
     fun provideDatabase(@ApplicationContext context: Context)
     =  Room.databaseBuilder(context, Database::class.java, "aquamarine")
+        .fallbackToDestructiveMigration()
         .build()
 }

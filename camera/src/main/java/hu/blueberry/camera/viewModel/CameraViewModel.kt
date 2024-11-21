@@ -135,7 +135,7 @@ class CameraViewModel @Inject constructor(
 
     private fun setFolderName() {
         handleUserRecoverableAuthError(
-            request = { driveRepository.searchFolderFlow(StringValues.BASE_FOLDER_NAME) },
+            request = { driveRepository.searchSingleFolderMatchingStringInName(StringValues.BASE_FOLDER_NAME) },
             onSuccess = { id ->
                 memoryDatabase.folderId = id
             },

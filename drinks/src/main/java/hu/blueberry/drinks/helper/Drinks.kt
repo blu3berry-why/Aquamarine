@@ -1,4 +1,4 @@
-package hu.blueberry.drinks.model
+package hu.blueberry.drinks.helper
 
 import hu.blueberry.persistentstorage.model.Product
 import hu.blueberry.persistentstorage.model.ProductType

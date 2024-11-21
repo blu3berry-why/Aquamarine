@@ -7,8 +7,8 @@ import com.google.api.client.json.gson.GsonFactory
 import com.google.api.services.drive.Drive
 import com.google.api.services.drive.DriveScopes
 import com.google.api.services.drive.model.File
+import com.google.api.services.drive.model.FileList
 import hu.blueberry.drive.base.CloudBase
-import java.io.InputStream
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -59,7 +59,7 @@ class DriveService @Inject constructor(
     }
 
 
-    fun searchSingleFolder(name: String): String? {
+    fun searchSingleFolderMatchingStringInName(name: String): String? {
 
         val folderId: String?
 
@@ -86,7 +86,7 @@ class DriveService @Inject constructor(
     }
 
 
-    fun searchFilesInFolder(parentIdList: List<String>, mimeType: String?): MutableList<File> {
+    fun searchFilesMatchingParentsAndMimeType(parentIdList: List<String>?, mimeType: String?): MutableList<File> {
 
         val files = drive.files().list()
 
@@ -102,11 +102,11 @@ class DriveService @Inject constructor(
             Log.d(TAG, "File(name = ${it.name}, id = ${it.id})")
         }
 
-        return result.files ?: mutableListOf()
+        return result?.files ?: mutableListOf()
 
     }
 
-    fun searchFiles(name:String): MutableList<File> {
+    fun searchFilesWithStringMatchingInName(name:String): MutableList<File> {
 
         val files = drive.files().list()
 

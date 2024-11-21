@@ -1,4 +1,4 @@
-package hu.blueberry.projectaquamarine.ui.stand
+package hu.blueberry.projectaquamarine.features.stand.standpage
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -12,10 +12,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
 import hu.blueberry.drinks.model.StandType
 import hu.blueberry.projectaquamarine.navigation.stand.SingleStandItemScreen
-import hu.blueberry.projectaquamarine.viewModel.StandPageViewModel
 
 @Composable
 fun StandPage(

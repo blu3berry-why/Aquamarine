@@ -1,4 +1,4 @@
-package hu.blueberry.projectaquamarine.ui.navigationsuitescaffold
+package hu.blueberry.projectaquamarine.features.navigationsuitescaffold
 
 import androidx.annotation.StringRes
 import androidx.compose.material.icons.Icons

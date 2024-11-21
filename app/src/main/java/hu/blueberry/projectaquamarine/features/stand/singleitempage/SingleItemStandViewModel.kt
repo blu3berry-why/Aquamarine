@@ -1,4 +1,4 @@
-package hu.blueberry.projectaquamarine.viewModel
+package hu.blueberry.projectaquamarine.features.stand.singleitempage
 
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel

@@ -2,13 +2,22 @@ package hu.blueberry.drive.services
 
 class GoogleDriveQueryBuilder {
     var queryBuilder = StringBuilder()
+    var previousArgumentWasEmtpy = false
 
     fun and(): GoogleDriveQueryBuilder {
+        if (previousArgumentWasEmtpy){
+            previousArgumentWasEmtpy = false
+            return this
+        }
         queryBuilder.append(" and ")
         return this
     }
 
     fun or(): GoogleDriveQueryBuilder {
+        if (previousArgumentWasEmtpy){
+            previousArgumentWasEmtpy = false
+            return this
+        }
         queryBuilder.append(" or ")
         return this
     }
@@ -19,15 +28,32 @@ class GoogleDriveQueryBuilder {
     }
 
     fun mimeType(mimeType:String?): GoogleDriveQueryBuilder {
-        mimeType?.let {
-            queryBuilder.append("mimeType='${mimeType}'")
+        if (mimeType == null){
+            previousArgumentWasEmtpy = true
+            return this
         }
+        queryBuilder.append("mimeType='${mimeType}'")
         return this
     }
-    fun parents(parentIdList:List<String>): GoogleDriveQueryBuilder {
-        for(parent in parentIdList){
-            queryBuilder.append(" and '${parent}' in parents")
+
+    fun parents(parentIdList:List<String>?): GoogleDriveQueryBuilder {
+        if (parentIdList.isNullOrEmpty()){
+            previousArgumentWasEmtpy = true
+            return this
         }
+        val mutableParentIdList = parentIdList.toMutableList()
+        val lastParent = mutableParentIdList.removeAt(mutableParentIdList.lastIndex)
+
+        for(parent in parentIdList){
+            appendParent(parent).and()
+        }
+
+        appendParent(lastParent)
+        return this
+    }
+
+    private fun appendParent(parent: String): GoogleDriveQueryBuilder {
+        queryBuilder.append("'${parent}' in parents")
         return this
     }
 

@@ -17,6 +17,7 @@ class GoogleSheetRepository @Inject constructor(
         return handleWithFlow { googleSheetsManager.readSpreadSheet(spreadSheetId,range) }
     }
 
+
     suspend fun initializeFirstTab(spreadSheetId:String, name:String): BatchUpdateSpreadsheetResponse? {
        return googleSheetsManager.initializeFirstTab(spreadSheetId,name)
     }

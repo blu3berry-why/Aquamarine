@@ -15,10 +15,10 @@ import androidx.navigation.toRoute
 import hu.blueberry.camera.ui.FilteredInternalStoragePhotos
 import hu.blueberry.camera.ui.TakePhotoAndSetData
 import hu.blueberry.projectaquamarine.navigation.stand.addStandNestedGraph
-import hu.blueberry.projectaquamarine.ui.product.ProductListPage
-import hu.blueberry.projectaquamarine.ui.AuthenticationPage
-import hu.blueberry.projectaquamarine.ui.HomeMenuPage
-import hu.blueberry.projectaquamarine.ui.product.ProductDetailsPage
+import hu.blueberry.projectaquamarine.features.product.ProductListPage
+import hu.blueberry.projectaquamarine.features.AuthenticationPage
+import hu.blueberry.projectaquamarine.features.HomeMenuPage
+import hu.blueberry.projectaquamarine.features.product.ProductDetailsPage
 
 @Composable
 fun AppNavigation(){

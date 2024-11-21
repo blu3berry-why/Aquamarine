@@ -1,4 +1,4 @@
-package hu.blueberry.projectaquamarine.ui
+package hu.blueberry.projectaquamarine.features
 
 import android.util.Log
 import android.widget.Toast
@@ -9,10 +9,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.navigation.NavController
 import hu.blueberry.projectaquamarine.auth.ButtonGoogleSignIn
 import hu.blueberry.projectaquamarine.auth.helper.getGoogleSignInClient
-import hu.blueberry.projectaquamarine.navigation.HomeMenuPage
 
 @Composable
 fun AuthenticationPage(

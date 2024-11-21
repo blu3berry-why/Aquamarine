@@ -1,9 +1,9 @@
-package hu.blueberry.projectaquamarine.viewModel
+package hu.blueberry.projectaquamarine.features.stand.standpage
 
 
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import hu.blueberry.drinks.model.Drinks
+import hu.blueberry.drinks.helper.Drinks
 import hu.blueberry.drive.PermissionHandlingViewModel
 import hu.blueberry.drive.model.MemoryDatabase
 import hu.blueberry.drive.model.google.MajorDimension

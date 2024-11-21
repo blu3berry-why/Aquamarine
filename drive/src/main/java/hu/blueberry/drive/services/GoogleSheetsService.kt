@@ -39,6 +39,7 @@ class GoogleSheetsService @Inject constructor(
     object InputOption {
         val RAW = "RAW"
         val USER_ENTERED = "USER_ENTERED"
+        val FORMULA = "FORMULA"
     }
 
     val MAJOR_DIMENSION = "ROWS"
@@ -55,7 +56,7 @@ class GoogleSheetsService @Inject constructor(
         return spreadsheet.spreadsheetId
     }
 
-    fun readSpreadSheet(
+    suspend fun readSpreadSheet(
         spreadsheetId: String,
         range: String,
     ): ValueRange? {
@@ -64,6 +65,20 @@ class GoogleSheetsService @Inject constructor(
         result = sheets.spreadsheets().values().get(spreadsheetId, range).execute()
 
         return result
+    }
+
+    suspend fun readSpreadSheetFormula(
+        spreadsheetId: String,
+        range: String,
+    ): ValueRange? {
+        var valueRange: ValueRange? = null
+
+        val spreadsheet = sheets.spreadsheets().values().get(spreadsheetId, range)
+        spreadsheet.valueRenderOption = InputOption.FORMULA
+
+        valueRange = spreadsheet.execute()
+
+        return valueRange
     }
 
     fun writeSpreadSheet(

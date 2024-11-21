@@ -1,6 +1,5 @@
-package hu.blueberry.projectaquamarine.ui.product
+package hu.blueberry.projectaquamarine.features.product
 
-import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -11,9 +10,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
 import hu.blueberry.drinks.viewModel.ProductsViewModel
 import hu.blueberry.drive.permissions.ManagePermissionsWithPermissionManager
