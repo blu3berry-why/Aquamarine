@@ -15,7 +15,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class FilePickerViewModel @Inject constructor(
+class FolderPickerViewModel @Inject constructor(
     private val driveRepository: DriveRepository,
     private val memoryDatabase: MemoryDatabase
 ) : PermissionHandlingViewModel(){
@@ -28,11 +28,12 @@ class FilePickerViewModel @Inject constructor(
             name = "Root"
         })
 
-    private val lastParent: String?
+     private val lastParent: String?
         /**
          * @returns The last parent (the current folder's id) or null
          */
         get() = parentList.lastOrNull()?.id
+
 
     /**
      * Here we only work with folders

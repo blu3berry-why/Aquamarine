@@ -11,10 +11,18 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import hu.blueberry.camera.ui.CameraOptionsScreen
+import hu.blueberry.drinks.feature.StandOptionsScreen
+import hu.blueberry.projectaquamarine.features.SettingsScreen
 import hu.blueberry.projectaquamarine.navigation.AppNavigation
 
 @Composable
-fun MyBottomBarNavigation() {
+fun MyBottomBarNavigation(
+    navigateToTakePhoto: () -> Unit,
+    navigateToStoredPictures: () -> Unit,
+    navigateToProductList: () -> Unit,
+    navigateToSelectFolder: () -> Unit,
+) {
     var currentDestination by rememberSaveable { mutableStateOf(AppDestinations.CAMERA) }
 
     NavigationSuiteScaffold(
@@ -36,9 +44,15 @@ fun MyBottomBarNavigation() {
         modifier = Modifier.fillMaxSize()
     ) {
         when (currentDestination) {
-            AppDestinations.CAMERA -> AppNavigation()
-            AppDestinations.STAND -> AppNavigation()
-            AppDestinations.SETTINGS-> AppNavigation()
+            AppDestinations.CAMERA -> CameraOptionsScreen(
+                navigateToTakePhoto = navigateToTakePhoto,
+                navigateToStoredPictures = navigateToStoredPictures,
+                navigateToSelectFolder = navigateToSelectFolder,
+            )
+            AppDestinations.STAND -> StandOptionsScreen(
+                navigateToProductList = navigateToProductList,
+            )
+            AppDestinations.SETTINGS-> SettingsScreen()
         }
     }
 }

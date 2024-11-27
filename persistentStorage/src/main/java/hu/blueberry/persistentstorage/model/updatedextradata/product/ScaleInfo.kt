@@ -1,4 +1,4 @@
-package hu.blueberry.persistentstorage.model.updatedextradata
+package hu.blueberry.persistentstorage.model.updatedextradata.product
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
@@ -6,7 +6,7 @@ import androidx.room.PrimaryKey
 
 @Entity(tableName = "scale_info")
 data class ScaleInfo(
-    @PrimaryKey val id: Int,
+    @PrimaryKey val id: Int?,
     val productOwnerId: Int,
     @ColumnInfo("full_weight") val fullWeight: Double,
     @ColumnInfo("empty_weight") val emptyWeight: Double,

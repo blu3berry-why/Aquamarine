@@ -18,6 +18,8 @@ import hu.blueberry.projectaquamarine.navigation.stand.addStandNestedGraph
 import hu.blueberry.projectaquamarine.features.product.ProductListPage
 import hu.blueberry.projectaquamarine.features.AuthenticationPage
 import hu.blueberry.projectaquamarine.features.HomeMenuPage
+import hu.blueberry.projectaquamarine.features.filepicker.FilePicker
+import hu.blueberry.projectaquamarine.features.navigationsuitescaffold.MyBottomBarNavigation
 import hu.blueberry.projectaquamarine.features.product.ProductDetailsPage
 
 @Composable
@@ -27,7 +29,7 @@ fun AppNavigation(){
     NavHost(navController = navController , startDestination = AuthScreen) {
         composable<AuthScreen> {
             AuthenticationPage {
-                navController.navigate(HomeMenuPage) {
+                navController.navigate(MenuScreen) {
                     popUpTo(AuthScreen) {
                         inclusive = true
                     }
@@ -53,6 +55,20 @@ fun AppNavigation(){
         composable<HomeMenuPage> {
             HomeMenuPage(navController = navController)
         }
+
+        composable<MenuScreen> {
+            MyBottomBarNavigation(
+                navigateToTakePhoto = { navController.navigate(TakePhoto) },
+                navigateToStoredPictures = { navController.navigate(StoredPictures)},
+                navigateToProductList = { navController.navigate(ProductList)},
+                navigateToSelectFolder = {navController.navigate(SelectFolder)}
+            )
+        }
+
+        composable<SelectFolder> {
+            FilePicker()
+        }
+
 
         composable<ProductList> {
             ProductListPage(navController)

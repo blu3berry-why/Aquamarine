@@ -26,3 +26,9 @@ data class ProductDetails(val name:String)
 
 @Serializable
 object StoredPictures
+
+@Serializable
+object MenuScreen
+
+@Serializable
+object SelectFolder

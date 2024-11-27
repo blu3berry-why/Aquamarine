@@ -5,6 +5,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -14,6 +15,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Star
+import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -27,20 +29,33 @@ import com.google.api.services.drive.model.File
 
 @Composable
 fun FilePicker(
-    viewModel: FilePickerViewModel = hiltViewModel()
-){
+    viewModel: FolderPickerViewModel = hiltViewModel()
+) {
     val folders = viewModel.displayedFiles.collectAsState()
 
-    LazyColumn {
-        items(folders.value, key = {it.name}){ folder->
-            FileRow(folder, onClick = { viewModel.openFolder(folder = folder) })
+
+    Column {
+
+
+        LazyColumn {
+            items(folders.value, key = { it.name }) { folder ->
+                FileRow(
+                    folder, onClick = { viewModel.openFolder(folder = folder)
+                    }
+                )
+            }
+        }
+        Button(onClick = {viewModel.selectFolder()}) {
+            Text(text = "Select Folder")
         }
     }
+
+
 
 }
 
 @Composable
-fun FileRow(file: File, onClick: ()->Unit) {
+fun FileRow(file: File, onClick: () -> Unit) {
     Row(
         horizontalArrangement = Arrangement.Start,
         verticalAlignment = Alignment.CenterVertically,

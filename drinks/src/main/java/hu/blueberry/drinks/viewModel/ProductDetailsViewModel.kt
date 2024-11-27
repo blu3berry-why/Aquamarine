@@ -1,30 +1,32 @@
 package hu.blueberry.drinks.viewModel
 
-import android.util.Log
-import androidx.lifecycle.viewModelScope
-import androidx.lifecycle.viewmodel.compose.viewModel
+
 import dagger.hilt.android.lifecycle.HiltViewModel
 import hu.blueberry.drinks.repository.ProductPropertiesRepository
+import hu.blueberry.drinks.repository.ScaleRepository
+import hu.blueberry.drinks.repository.StandRepository
 import hu.blueberry.drive.PermissionHandlingViewModel
 import hu.blueberry.drive.base.StringValues
-import hu.blueberry.drive.base.handleResponse
-import hu.blueberry.drive.base.handleWithFlow
 import hu.blueberry.drive.model.MemoryDatabase
 import hu.blueberry.drive.repositories.DriveRepository
-import hu.blueberry.drive.repositories.GoogleSheetRepository
-import hu.blueberry.persistentstorage.model.updatedextradata.ProductProperties
-import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.launch
+import hu.blueberry.persistentstorage.Database
+import hu.blueberry.persistentstorage.model.updatedextradata.product.ProductProperties
 import javax.inject.Inject
 
 @HiltViewModel
 class ProductDetailsViewModel @Inject constructor(
     private val productPropertiesRepository: ProductPropertiesRepository,
     private val memoryDatabase: MemoryDatabase,
-    private val driveRepository: DriveRepository
+    private val driveRepository: DriveRepository,
+    private val scaleRepository: ScaleRepository,
+    private val standRepository: StandRepository,
+    private val database: Database
 ): PermissionHandlingViewModel() {
 
+    var productDatabaseList : MutableList<ProductProperties> = mutableListOf()
     var productList : MutableList<ProductProperties> = mutableListOf()
+
+
 
     init {
         handleUserRecoverableAuthError(
@@ -44,9 +46,29 @@ class ProductDetailsViewModel @Inject constructor(
                 productPropertiesRepository.readProductDetailsFlow(memoryDatabase.spreadsheetId!!, workSheetName)
             },
             onSuccess = {
-                data -> productList = data
+                data ->
+                    productList = data
             }
         )
     }
+
+    fun readScaleInfo(workSheetName: String){
+        handleUserRecoverableAuthError(
+            request = {
+                scaleRepository.readScaleFlow(memoryDatabase.spreadsheetId!!, workSheetName)
+            }
+        )
+    }
+
+    fun readStock(){
+        handleUserRecoverableAuthError(
+            request = {standRepository.readStorageSheetFlow(spreadsheetId = memoryDatabase.spreadsheetId!!, worksheetName = "F17-Raktár")}
+        )
+    }
+
+
+
+
+
 
 }

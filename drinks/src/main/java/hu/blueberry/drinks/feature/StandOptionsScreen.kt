@@ -1,6 +1,4 @@
-package hu.blueberry.projectaquamarine.features
-
-
+package hu.blueberry.drinks.feature
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -11,31 +9,35 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavController
 import hu.blueberry.drinks.viewModel.ProductDetailsViewModel
-import hu.blueberry.projectaquamarine.features.filepicker.FilePicker
-import hu.blueberry.projectaquamarine.navigation.ProductList
-import hu.blueberry.projectaquamarine.navigation.StoredPictures
-import hu.blueberry.projectaquamarine.navigation.TakePhoto
 
 @Composable
-fun HomeMenuPage(
-    navController: NavController,
-    viewModel: ProductDetailsViewModel = hiltViewModel()
+fun StandOptionsScreen(
+    navigateToProductList: () -> Unit,
+    viewModel: ProductDetailsViewModel = hiltViewModel<ProductDetailsViewModel>()
 ) {
-
-
 
     Column(
         modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
-    )
-    {
+    ) {
+        Button(onClick = { navigateToProductList() }) {
+            Text(text = "Product List")
+        }
 
 
+        Button(onClick = { viewModel.readProductDetails("Segedlet") }) {
+            Text(text = "Read SpreadSheet")
+        }
+
+        Button(onClick = { viewModel.readScaleInfo("Mérleg_segéd") }) {
+            Text(text = "Read Scale")
+        }
+
+        Button(onClick = { viewModel.readStock() }) {
+            Text(text = "Read F17")
+        }
 
     }
-
-
 }
