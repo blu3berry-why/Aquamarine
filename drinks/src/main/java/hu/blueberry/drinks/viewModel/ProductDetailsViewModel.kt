@@ -60,9 +60,9 @@ class ProductDetailsViewModel @Inject constructor(
         )
     }
 
-    fun readStock(){
+    fun readAllStock(){
         handleUserRecoverableAuthError(
-            request = {standRepository.readStorageSheetFlow(spreadsheetId = memoryDatabase.spreadsheetId!!, worksheetName = "F17-Raktár")}
+            request = {standRepository.readAllStorageSheetsFlow(spreadsheetId = memoryDatabase.spreadsheetId!!, storageMarker = "-Raktár")}
         )
     }
 

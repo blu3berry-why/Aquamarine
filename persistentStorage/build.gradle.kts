@@ -47,4 +47,5 @@ dependencies {
     testImplementations()
     room()
     hilt()
+    implementation(Dependencies.googleDrive)
 }

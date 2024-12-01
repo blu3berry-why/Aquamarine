@@ -61,8 +61,8 @@ class DriveRepository @Inject constructor(
         return handleWithFlow { driveManager.searchSingleFolderMatchingStringInName(name) }
     }
 
-    suspend fun searchFilesMatchingParentsAndMimeType(parentsList: List<String>?, mimeType: String?): Flow<ResourceState<MutableList<com.google.api.services.drive.model.File>>> {
-        return handleWithFlow { driveManager.searchFilesMatchingParentsAndMimeType(parentsList, mimeType) }
+    suspend fun searchFilesMatchingParentsAndMimeTypes(parentsList: List<String>?, mimeTypes: List<String>?): Flow<ResourceState<MutableList<com.google.api.services.drive.model.File>>> {
+        return handleWithFlow { driveManager.searchFilesMatchingParentsAndMimeTypes(parentsList, mimeTypes) }
     }
 
     suspend fun createFolderBlocking(name: String): String {
@@ -95,7 +95,7 @@ class DriveRepository @Inject constructor(
         mimeType: String = DriveService.MimeType.SPREADSHEET
     ): List<FileInfo> {
 
-        val fileList = driveManager.searchFilesMatchingParentsAndMimeType(parentsList, mimeType)
+        val fileList = driveManager.searchFilesMatchingParentsAndMimeTypes(parentsList, listOf( mimeType))
 
         return fileList.map { FileInfo(name = it.name, id = it.id) }
     }

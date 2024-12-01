@@ -6,6 +6,7 @@ import hu.blueberry.drive.services.GoogleSheetsService
 import hu.blueberry.persistentstorage.Database
 import hu.blueberry.persistentstorage.dao.ProductIdAndRowInSpreadSheet
 import hu.blueberry.persistentstorage.model.updatedextradata.product.ProductStand
+import hu.blueberry.persistentstorage.model.updatedextradata.spreadsheet.WorksheetStorageInfo
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
@@ -17,20 +18,53 @@ class StandRepository @Inject constructor(
 
     var worksheetId: Int? = null
 
-    suspend fun getStorageSheetNames(spreadsheetId: String, storageMarker: String): List<String> {
-        val worksheetNames = googleSheetsService.listWorkSheetNames(spreadsheetId)
-        return worksheetNames.filter { worksheetName -> worksheetName.contains(storageMarker) }
-    }
 
     suspend fun readStorageSheetFlow(spreadsheetId: String, worksheetName: String): Flow<ResourceState<Unit>> {
         return handleWithFlow { readStorageSheet(spreadsheetId, worksheetName) }
     }
 
+    suspend fun readAllStorageSheetsFlow(spreadsheetId: String, storageMarker: String): Flow<ResourceState<Unit>> {
+        return handleWithFlow { readAllStorageSheets(spreadsheetId, storageMarker) }
+    }
+
+    private suspend fun getStorageSheetNames(spreadsheetId: String, storageMarker: String): List<String> {
+        val worksheetNames = googleSheetsService.listWorkSheetNames(spreadsheetId)
+        return worksheetNames.filter { worksheetName -> worksheetName.contains(storageMarker) }
+    }
+
+    private suspend fun updateCachedStorageNames(spreadsheetId: String, storageMarker: String){
+        val storageNames = getStorageSheetNames(spreadsheetId, storageMarker)
+
+        val cachedWorksheetStorageInfos = database.standDao().getWorksheetAndProductStandsForSpreadsheet(spreadsheetId)
+
+        for (storageName in storageNames){
+            val worksheetStorageInfo = cachedWorksheetStorageInfos.firstOrNull { it.worksheetStorageInfo.worksheetName == storageName }
+            if (worksheetStorageInfo == null){
+                database.standDao().upsertWorksheetStorageInfo(WorksheetStorageInfo(
+                    id = null,
+                    spreadSheetId = spreadsheetId,
+                    worksheetName = storageName
+                ))
+            }
+        }
+    }
+
+
+
+    suspend fun readAllStorageSheets(spreadsheetId: String, storageMarker: String){
+        updateCachedStorageNames(spreadsheetId, storageMarker)
+        val storageNames= getStorageSheetNames(spreadsheetId, storageMarker)
+        for(storageName in storageNames){
+            readStorageSheet(spreadsheetId, storageName)
+        }
+    }
+
     private suspend fun readStorageSheet(spreadsheetId: String, worksheetName: String) {
+        updateCachedStorageNames(spreadsheetId, storageMarker = "-Raktár")
+
         //get cached info
         val worksheetAndProductStands = database.standDao()
-            .getWorksheetAndProductStandsForSpreadsheet(spreadsheetId)
-            .firstOrNull { it.worksheetStorageInfo.worksheetName == worksheetName }
+            .getWorksheetAndProductStandsForSpreadsheetWithName(spreadsheetId, worksheetName)
 
         if (worksheetAndProductStands == null) {
             throw IllegalArgumentException(

@@ -7,7 +7,6 @@ import com.google.api.client.json.gson.GsonFactory
 import com.google.api.services.drive.Drive
 import com.google.api.services.drive.DriveScopes
 import com.google.api.services.drive.model.File
-import com.google.api.services.drive.model.FileList
 import hu.blueberry.drive.base.CloudBase
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -22,13 +21,14 @@ class DriveService @Inject constructor(
     object MimeType {
         const val FOLDER = "application/vnd.google-apps.folder"
         const val SPREADSHEET = "application/vnd.google-apps.spreadsheet"
-        const val XLSL_DOCUMENT = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+        const val XLSL_DOCUMENT =
+            "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
         const val PDF = "application/pdf"
         const val PNG = "image/png"
     }
 
-    companion object{
-        const val TAG = "DriveManager"
+    companion object {
+        const val TAG = "DriveService"
     }
 
     val drive: Drive
@@ -36,12 +36,11 @@ class DriveService @Inject constructor(
 
 
     private fun getDriveService(): Drive? {
-            return Drive.Builder(
-                NetHttpTransport(), GsonFactory.getDefaultInstance(),
-                cloudBase.getCredentials(scopes)
-            ).setApplicationName("Project Aquamarine").build()
+        return Drive.Builder(
+            NetHttpTransport(), GsonFactory.getDefaultInstance(),
+            cloudBase.getCredentials(scopes)
+        ).setApplicationName("Project Aquamarine").build()
     }
-
 
 
     fun createFolder(name: String): String {
@@ -86,14 +85,16 @@ class DriveService @Inject constructor(
     }
 
 
-    fun searchFilesMatchingParentsAndMimeType(parentIdList: List<String>?, mimeType: String?): MutableList<File> {
-
+    fun searchFilesMatchingParentsAndMimeTypes(
+        parentIdList: List<String>?,
+        mimeTypes: List<String>?
+    ): MutableList<File> {
         val files = drive.files().list()
-
         files.q = GoogleDriveQueryBuilder()
             .parents(parentIdList)
-            .and()
-            .mimeType(mimeType)
+            .and {
+                it.listOfMimeTypes(mimeTypes)
+            }
             .createQuery()
 
         val result = files.execute()
@@ -103,20 +104,20 @@ class DriveService @Inject constructor(
         }
 
         return result?.files ?: mutableListOf()
-
     }
 
-    fun searchFilesWithStringMatchingInName(name:String): MutableList<File> {
+    fun searchFilesWithStringMatchingInName(name: String): MutableList<File> {
 
         val files = drive.files().list()
 
         //files.q = "mimeType='${MimeType.SPREADSHEET}'" + " and name contains '$name'"
         files.q = GoogleDriveQueryBuilder()
             .mimeType(MimeType.SPREADSHEET)
-            .and()
-            .queryText("name")
-            .contains()
-            .stringValue(name)
+            .and {
+                it.queryText("name")
+                    .contains()
+                    .stringValue(name)
+            }
             .createQuery()
 
         val result = files.execute()
@@ -159,9 +160,6 @@ class DriveService @Inject constructor(
         f = drive.files().create(f, mediaContent).execute()
         return f.id
     }
-
-
-
 
 
 }

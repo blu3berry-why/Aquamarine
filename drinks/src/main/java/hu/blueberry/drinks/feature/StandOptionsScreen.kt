@@ -22,10 +22,11 @@ fun StandOptionsScreen(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Button(onClick = { navigateToProductList() }) {
-            Text(text = "Product List")
-        }
 
+
+        Button(onClick = { } ){
+            Text(text = "Open Spreadsheet")
+        }
 
         Button(onClick = { viewModel.readProductDetails("Segedlet") }) {
             Text(text = "Read SpreadSheet")
@@ -35,7 +36,7 @@ fun StandOptionsScreen(
             Text(text = "Read Scale")
         }
 
-        Button(onClick = { viewModel.readStock() }) {
+        Button(onClick = { viewModel.readAllStock() }) {
             Text(text = "Read F17")
         }
 

@@ -32,3 +32,8 @@ object MenuScreen
 
 @Serializable
 object SelectFolder
+
+@Serializable
+class SelectFiles(
+    val fileTypes: List<String>
+)

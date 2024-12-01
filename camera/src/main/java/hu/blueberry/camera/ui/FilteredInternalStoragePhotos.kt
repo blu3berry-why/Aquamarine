@@ -44,7 +44,7 @@ fun FilteredInternalStoragePhotos(
     viewModel: InternalStorageViewModel = hiltViewModel(),
 ) {
     val filterText = viewModel.filterText.collectAsState()
-    val filteredPhotos = viewModel.filteredInternalStoragePhotos.collectAsState()
+    val filteredPhotos = viewModel.filteredInternalStoragePhotos
 
     Box(
         modifier = Modifier
@@ -61,8 +61,8 @@ fun FilteredInternalStoragePhotos(
 
             LazyColumn {
                 // TODO This does not work when removing an item, it does not update !!!
-                items(filteredPhotos.value.size) {
-                    val internalPhoto = filteredPhotos.value[it]
+                items(filteredPhotos.size) {
+                    val internalPhoto = filteredPhotos[it]
 
                     PhotoNameRow(
                         name = internalPhoto.name,

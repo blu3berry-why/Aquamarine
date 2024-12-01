@@ -1,5 +1,7 @@
 package hu.blueberry.camera.viewModel
 
+import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -23,15 +25,9 @@ class InternalStorageViewModel @Inject constructor(
     private val memoryDatabase: MemoryDatabase,
 ) : PermissionHandlingViewModel() {
 
-    private val _internalStoragePhotos: MutableStateFlow<MutableList<InternalStoragePhoto>> =
-        MutableStateFlow<MutableList<InternalStoragePhoto>>(mutableListOf())
+    val internalStoragePhotos :SnapshotStateList<InternalStoragePhoto> = mutableStateListOf()
+    val filteredInternalStoragePhotos :SnapshotStateList<InternalStoragePhoto> = mutableStateListOf()
 
-    val internalStoragePhotos = _internalStoragePhotos.asStateFlow()
-
-    private val _filteredInternalStoragePhotos =
-        MutableStateFlow<MutableList<InternalStoragePhoto>>(mutableListOf())
-
-    val filteredInternalStoragePhotos = _filteredInternalStoragePhotos.asStateFlow()
 
     init {
         loadInternalStoragePhotos()
@@ -41,15 +37,16 @@ class InternalStorageViewModel @Inject constructor(
 
     private fun loadInternalStoragePhotos() {
         viewModelScope.launch {
-            _internalStoragePhotos.value =
-                fileService.loadPhotosFromInternalStorage().toMutableList()
-            _filteredInternalStoragePhotos.value = _internalStoragePhotos.value
+            internalStoragePhotos.clear()
+            internalStoragePhotos.addAll(fileService.loadPhotosFromInternalStorage())
+            filterInternalStoragePhotos()
         }
     }
 
     fun filterInternalStoragePhotos() {
-        _filteredInternalStoragePhotos.value =
-            _internalStoragePhotos.value.filter{photo -> photo.name.contains(filterText.value) }.toMutableList()
+        filteredInternalStoragePhotos.clear()
+        val filteredPhotos = internalStoragePhotos.filter{photo -> photo.name.contains(filterText.value) }
+        filteredInternalStoragePhotos.addAll(filteredPhotos)
     }
 
     fun uploadPNG(
@@ -77,7 +74,7 @@ class InternalStorageViewModel @Inject constructor(
     }
 
     private fun removePhoto(internalStoragePhoto: InternalStoragePhoto) {
-        _internalStoragePhotos.value.remove(internalStoragePhoto)
+        internalStoragePhotos.remove(internalStoragePhoto)
         filterInternalStoragePhotos()
     }
 }

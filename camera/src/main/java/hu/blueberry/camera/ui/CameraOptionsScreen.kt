@@ -3,11 +3,16 @@ package hu.blueberry.camera.ui
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.CameraAlt
+import androidx.compose.material.icons.filled.Image
+import androidx.compose.material.icons.filled.OpenInBrowser
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import hu.blueberry.camera.ui.elements.buttons.WideFilledButton
 
 @Composable
 fun CameraOptionsScreen(
@@ -20,17 +25,24 @@ fun CameraOptionsScreen(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Button(onClick = { navigateToTakePhoto() }) {
-            Text(text = "Take Photo")
-        }
+        WideFilledButton (
+            icon = Icons.Default.CameraAlt,
+            text = "Take Photo",
+            onClick = { navigateToTakePhoto() }
+        )
 
-        Button(onClick = { navigateToStoredPictures()}) {
-            Text(text = "Stored Pictures")
-        }
+        WideFilledButton (
+            icon = Icons.Default.Image,
+            text = "Stored Pictures",
+            onClick = { navigateToStoredPictures() }
+        )
 
-        Button(onClick = { navigateToSelectFolder()}) {
-            Text(text = "Select Folder")
-        }
+        WideFilledButton (
+            icon = Icons.Default.OpenInBrowser,
+            text = "Select Folder",
+            onClick = { navigateToSelectFolder() }
+        )
+
 
     }
 

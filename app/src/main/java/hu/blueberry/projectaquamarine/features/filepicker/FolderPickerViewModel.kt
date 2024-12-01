@@ -1,5 +1,7 @@
 package hu.blueberry.projectaquamarine.features.filepicker
 
+import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.lifecycle.viewModelScope
 import com.google.api.services.drive.model.File
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -8,8 +10,6 @@ import hu.blueberry.drive.base.handleResponse
 import hu.blueberry.drive.model.MemoryDatabase
 import hu.blueberry.drive.repositories.DriveRepository
 import hu.blueberry.drive.services.DriveService
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -38,13 +38,17 @@ class FolderPickerViewModel @Inject constructor(
     /**
      * Here we only work with folders
      */
-    private var mimeType: String? = DriveService.MimeType.FOLDER
+    private var mimeTypes: List<String>? = listOf( DriveService.MimeType.FOLDER, DriveService.MimeType.SPREADSHEET)
 
     /**
      * The folders to show
      */
-    private var _files: MutableStateFlow<List<File>>  = MutableStateFlow(listOf())
-    val displayedFiles = _files.asStateFlow()
+    /*private var _files: MutableStateFlow<List<File>>  = MutableStateFlow(listOf())
+    val displayedFiles = _files.asStateFlow()*/
+
+
+    private val _files: SnapshotStateList<File> = mutableStateListOf()
+    val displayedFiles = _files
 
     /**
      * Loads the files in the root folder
@@ -60,10 +64,12 @@ class FolderPickerViewModel @Inject constructor(
         val list = lastParent?.let { listOf(it) } ?: listOf()
 
         viewModelScope.launch {
-            driveRepository.searchFilesMatchingParentsAndMimeType(list, mimeType).collectLatest {
+            driveRepository.searchFilesMatchingParentsAndMimeTypes(list, mimeTypes).collectLatest {
                 handleResponse(
                     resource = it,
-                    onSuccess = {returnedFiles -> _files.value = returnedFiles}
+                    onSuccess = {returnedFiles ->
+                        setFilesAndFolders(returnedFiles)
+                        }
                     )
             }
         }
@@ -76,5 +82,14 @@ class FolderPickerViewModel @Inject constructor(
 
     fun selectFolder(){
         lastParent?.let { memoryDatabase.folderId = it  }
+    }
+
+    private fun setFilesAndFolders(filesAndFolders:List<File>){
+
+        _files.clear()
+        val sortedFiles = filesAndFolders.sortedBy {
+            it.mimeType
+        }
+        _files.addAll(sortedFiles)
     }
 }

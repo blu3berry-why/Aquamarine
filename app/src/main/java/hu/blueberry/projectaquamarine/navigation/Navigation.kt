@@ -85,5 +85,10 @@ fun AppNavigation(){
 
         addStandNestedGraph(navController = navController)
 
+        composable<SelectFiles> {
+            val args = it.toRoute<SelectFiles>()
+            FilePicker()
+        }
+
     }
 }

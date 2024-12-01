@@ -6,6 +6,7 @@ import androidx.room.Transaction
 import androidx.room.Upsert
 import hu.blueberry.persistentstorage.model.updatedextradata.merged.WorksheetAndProductStands
 import hu.blueberry.persistentstorage.model.updatedextradata.product.ProductStand
+import hu.blueberry.persistentstorage.model.updatedextradata.spreadsheet.WorksheetStorageInfo
 
 @Dao
 interface StandDao {
@@ -15,6 +16,12 @@ interface StandDao {
     @Upsert
     fun upsertProductStand(productStand: ProductStand)
 
+    @Upsert
+    fun upsertWorksheetStorageInfo(worksheetStorageInfo: WorksheetStorageInfo)
+
+    @Query("SELECT * FROM worksheet_storage_info WHERE spreadsheet_id = :spreadsheetId")
+    fun getWorksheetsBySpreadSheetId(spreadsheetId: String): List<WorksheetStorageInfo>
+
     @Query("""
         SELECT * FROM product_stand WHERE worksheet_id=:worksheetId AND productOwnerId = :productId
     """)
@@ -23,6 +30,10 @@ interface StandDao {
     @Transaction
     @Query("SELECT * FROM worksheet_storage_info WHERE spreadsheet_id = :spreadsheetId")
     fun getWorksheetAndProductStandsForSpreadsheet(spreadsheetId: String): List<WorksheetAndProductStands>
+
+    @Transaction
+    @Query("SELECT * FROM worksheet_storage_info WHERE spreadsheet_id = :spreadsheetId AND worksheet_name = :worksheetName")
+    fun getWorksheetAndProductStandsForSpreadsheetWithName(spreadsheetId: String, worksheetName:String): WorksheetAndProductStands?
 
 
     /**

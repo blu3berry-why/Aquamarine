@@ -1,5 +1,7 @@
 package hu.blueberry.projectaquamarine.features.navigationsuitescaffold
 
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
@@ -9,12 +11,15 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.sp
 import hu.blueberry.camera.ui.CameraOptionsScreen
 import hu.blueberry.drinks.feature.StandOptionsScreen
 import hu.blueberry.projectaquamarine.features.SettingsScreen
-import hu.blueberry.projectaquamarine.navigation.AppNavigation
+
 
 @Composable
 fun MyBottomBarNavigation(
@@ -25,17 +30,28 @@ fun MyBottomBarNavigation(
 ) {
     var currentDestination by rememberSaveable { mutableStateOf(AppDestinations.CAMERA) }
 
+
     NavigationSuiteScaffold(
         navigationSuiteItems = {
             AppDestinations.entries.forEach {
                 item(
                     icon = {
-                        Icon(
-                            it.icon,
-                            contentDescription = stringResource(it.contentDescription)
-                        )
+                        Column (
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                            verticalArrangement = Arrangement.Center
+                        ) {
+                            Icon(
+                                it.icon,
+                                contentDescription = stringResource(it.contentDescription),
+                                modifier = Modifier.scale(1.2f)
+                            )
+                            Text(
+                                text = stringResource(it.label),
+                                fontSize = 14.sp
+                            )
+                        }
                     },
-                    label = { Text(stringResource(it.label)) },
+
                     selected = it == currentDestination,
                     onClick = { currentDestination = it }
                 )
@@ -49,10 +65,12 @@ fun MyBottomBarNavigation(
                 navigateToStoredPictures = navigateToStoredPictures,
                 navigateToSelectFolder = navigateToSelectFolder,
             )
+
             AppDestinations.STAND -> StandOptionsScreen(
                 navigateToProductList = navigateToProductList,
             )
-            AppDestinations.SETTINGS-> SettingsScreen()
+
+            AppDestinations.SETTINGS -> SettingsScreen()
         }
     }
 }
