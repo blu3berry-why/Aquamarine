@@ -2,6 +2,7 @@ package hu.blueberry.drinks.repository
 
 import hu.blueberry.drive.base.ResourceState
 import hu.blueberry.drive.base.handleWithFlow
+import hu.blueberry.drive.model.Settings
 import hu.blueberry.drive.services.GoogleSheetsService
 import hu.blueberry.persistentstorage.Database
 import hu.blueberry.persistentstorage.dao.ProductIdAndRowInSpreadSheet
@@ -13,11 +14,11 @@ import javax.inject.Inject
 class StandRepository @Inject constructor(
     private val googleSheetsService: GoogleSheetsService,
     private val database: Database,
-    private val templateFunctionsRepository: TemplateFunctionsRepository
+    private val templateFunctionsRepository: TemplateFunctionsRepository,
+    private val propertiesRepository: ProductPropertiesRepository
 ) {
 
     var worksheetId: Int? = null
-
 
     suspend fun readStorageSheetFlow(spreadsheetId: String, worksheetName: String): Flow<ResourceState<Unit>> {
         return handleWithFlow { readStorageSheet(spreadsheetId, worksheetName) }
@@ -52,6 +53,8 @@ class StandRepository @Inject constructor(
 
 
     suspend fun readAllStorageSheets(spreadsheetId: String, storageMarker: String){
+        //TODO
+        propertiesRepository.readProductDetails(spreadsheetId, Settings.ProductPropertiesWorksheet)
         updateCachedStorageNames(spreadsheetId, storageMarker)
         val storageNames= getStorageSheetNames(spreadsheetId, storageMarker)
         for(storageName in storageNames){
@@ -60,7 +63,7 @@ class StandRepository @Inject constructor(
     }
 
     private suspend fun readStorageSheet(spreadsheetId: String, worksheetName: String) {
-        updateCachedStorageNames(spreadsheetId, storageMarker = "-Raktár")
+        updateCachedStorageNames(spreadsheetId, storageMarker = Settings.StorageMarker)
 
         //get cached info
         val worksheetAndProductStands = database.standDao()
@@ -130,6 +133,12 @@ class StandRepository @Inject constructor(
         )
 
     }
+
+    suspend fun getWorksheetInfos(spreadsheetId: String): List<WorksheetStorageInfo>{
+        return database.standDao().getWorksheetsBySpreadSheetId(spreadsheetId)
+    }
+
+
 
 
 }

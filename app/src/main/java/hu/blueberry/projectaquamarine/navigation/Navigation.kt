@@ -24,10 +24,10 @@ import hu.blueberry.projectaquamarine.features.navigationsuitescaffold.MyBottomB
 import hu.blueberry.projectaquamarine.features.product.old.ProductDetailsPage
 
 @Composable
-fun AppNavigation(){
+fun AppNavigation() {
     val navController = rememberNavController()
 
-    NavHost(navController = navController , startDestination = AuthScreen) {
+    NavHost(navController = navController, startDestination = AuthScreen) {
         composable<AuthScreen> {
             AuthenticationPage {
                 navController.navigate(MenuScreen) {
@@ -41,9 +41,11 @@ fun AppNavigation(){
 
         composable<ScreenB> {
             val args = it.toRoute<ScreenB>()
-            Column (modifier = Modifier.fillMaxSize(),
+            Column(
+                modifier = Modifier.fillMaxSize(),
                 verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.CenterHorizontally)
+                horizontalAlignment = Alignment.CenterHorizontally
+            )
             {
                 Text(text = "${args.name}, ${args.age} years old")
             }
@@ -60,13 +62,20 @@ fun AppNavigation(){
         composable<MenuScreen> {
             MyBottomBarNavigation(
                 navigateToTakePhoto = { navController.navigate(TakePhoto) },
-                navigateToStoredPictures = { navController.navigate(StoredPictures)},
-                navigateToProductList = { navController.navigate(ProductList)},
-                navigateToSelectFolder = {navController.navigate(SelectFolder)},
-                navigateToFilePickFolderAndSpreadsheet = { navController.navigate(SelectFiles(
-                    listOf(DriveService.MimeType.FOLDER,
-                        DriveService.MimeType.SPREADSHEET)
-                ))}
+                navigateToStoredPictures = { navController.navigate(StoredPictures) },
+                navigateToProductList = { navController.navigate(ProductList) },
+                navigateToSelectFolder = { navController.navigate(SelectFolder) },
+                navigateToFilePickFolderAndSpreadsheet = {
+                    navController.navigate(
+                        route = SelectFiles(
+                            fileTypes = listOf(
+                                DriveService.MimeType.FOLDER,
+                                DriveService.MimeType.SPREADSHEET
+                            ),
+                            chooseType = DriveService.MimeType.SPREADSHEET
+                        ),
+                    )
+                }
             )
         }
 
@@ -92,7 +101,7 @@ fun AppNavigation(){
 
         composable<SelectFiles> {
             val args = it.toRoute<SelectFiles>()
-            FilePicker(fileTypes = args.fileTypes)
+            FilePicker(fileTypes = args.fileTypes, chooseType = args.chooseType)
         }
 
     }

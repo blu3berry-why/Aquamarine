@@ -1,6 +1,7 @@
 package hu.blueberry.projectaquamarine.features.stand2
 
 import dagger.hilt.android.lifecycle.HiltViewModel
+import hu.blueberry.drinks.repository.WorkingDirectoryRepository
 import hu.blueberry.drive.PermissionHandlingViewModel
 import hu.blueberry.persistentstorage.Database
 import hu.blueberry.persistentstorage.model.updatedextradata.WorkingDirectory
@@ -11,7 +12,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class StandStartScreenViewModel @Inject constructor(
-    val database: Database,
+    private val workingDirectoryRepository: WorkingDirectoryRepository
 ) : PermissionHandlingViewModel() {
 
     private var workingDirectory: MutableStateFlow<WorkingDirectory?> = MutableStateFlow(null)
@@ -23,9 +24,9 @@ class StandStartScreenViewModel @Inject constructor(
         getWorkingDirectoryFromDatabase()
     }
 
-    private fun getWorkingDirectoryFromDatabase() {
+    fun getWorkingDirectoryFromDatabase() {
         runIO(request = {
-            workingDirectory.value = database.workingDirectoryDao().getWorkingDirectoryInfo(5)
+            workingDirectory.value = workingDirectoryRepository.getWorkingDirectory()
         })
     }
 

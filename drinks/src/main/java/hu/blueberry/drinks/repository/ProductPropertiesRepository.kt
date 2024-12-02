@@ -23,7 +23,7 @@ class ProductPropertiesRepository @Inject constructor(
         return handleWithFlow { readProductDetails(spreadSheetId, workSheetName) }
     }
 
-    private suspend fun readProductDetails(
+    suspend fun readProductDetails(
         spreadSheetId: String,
         workSheetName: String,
         startRow: Int = 2

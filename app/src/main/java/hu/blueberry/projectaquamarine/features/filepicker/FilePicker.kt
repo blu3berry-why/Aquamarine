@@ -44,17 +44,20 @@ import hu.blueberry.drive.services.DriveService
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FilePicker(
-    viewModel: FolderPickerViewModel = hiltViewModel(),
-    fileTypes: List<String> = listOf(DriveService.MimeType.FOLDER)
+    viewModel: FilePickerViewModel = hiltViewModel(),
+    fileTypes: List<String> = listOf(DriveService.MimeType.FOLDER),
+    chooseType: String = DriveService.MimeType.FOLDER,
+    navigateAfterChoosing: () -> Unit = {}
 ) {
-    val folders = viewModel.displayedFiles
+    val files = viewModel.displayedFiles
 
-    LaunchedEffect(viewModel.accepetedMimeTypes) {
+    LaunchedEffect(viewModel.acceptedMimeTypes) {
         viewModel.setMimeTypes(fileTypes)
+        viewModel.chooseType.value = chooseType
     }
 
+    val chosenType = viewModel.chooseType.collectAsState()
     val currentFolder = viewModel.lastParentDisplayName.collectAsState()
-
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
 
     Scaffold(
@@ -87,33 +90,37 @@ fun FilePicker(
         ) {
 
             LazyColumn {
-                items(folders, key = { it.name }) { folder ->
+                items(files, key = { it.name }) { file ->
                     FileRow(
-                        folder, onClick = {
-                            viewModel.openFolder(folder = folder)
-                        }
+                        file = file,
+                        onClick = returnFileChoosingOnClick(viewModel, file),
+                        navigateAfterChoosing = navigateAfterChoosing
                     )
                 }
             }
-            WideFilledButton(
-                icon = Icons.Outlined.CheckCircle,
-                text = "Select Folder",
-                onClick = { viewModel.selectFolder() },
-                modifier = Modifier.padding(bottom = 10.dp)
-            )
+            if (chosenType.value == DriveService.MimeType.FOLDER) {
+                WideFilledButton(
+                    icon = Icons.Outlined.CheckCircle,
+                    text = "Select Folder",
+                    onClick = { viewModel.selectFolder() },
+                    modifier = Modifier.padding(bottom = 10.dp)
+                )
+            }
         }
 
     }
 }
 
 @Composable
-fun FileRow(file: File, onClick: () -> Unit) {
+fun FileRow(file: File, onClick: () -> Unit, navigateAfterChoosing: () -> Unit) {
+
     Row(
         horizontalArrangement = Arrangement.Start,
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier
             .clickable {
                 onClick.invoke()
+                navigateAfterChoosing.invoke()
             }
             .fillMaxWidth()
             .background(Color.White)
@@ -141,5 +148,16 @@ fun FileRow(file: File, onClick: () -> Unit) {
             modifier = Modifier
                 .width(270.dp)
         )
+    }
+}
+
+fun returnFileChoosingOnClick(
+    viewModel: FilePickerViewModel,
+    file: File
+): () -> Unit {
+    when (file.mimeType) {
+        DriveService.MimeType.FOLDER -> return { viewModel.openFolder(file) }
+        DriveService.MimeType.SPREADSHEET -> return { viewModel.selectSpreadSheet(file) }
+        else -> return {}
     }
 }

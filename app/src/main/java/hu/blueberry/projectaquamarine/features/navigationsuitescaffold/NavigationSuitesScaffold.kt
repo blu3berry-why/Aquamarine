@@ -19,6 +19,7 @@ import androidx.compose.ui.unit.sp
 import hu.blueberry.projectaquamarine.features.camera.CameraOptionsScreen
 import hu.blueberry.projectaquamarine.features.StandOptionsScreen
 import hu.blueberry.projectaquamarine.features.SettingsScreen
+import hu.blueberry.projectaquamarine.features.stand2.StandStartScreen
 
 
 @Composable
@@ -67,9 +68,8 @@ fun MyBottomBarNavigation(
                 navigateToSelectFolder = navigateToSelectFolder,
             )
 
-            AppDestinations.STAND -> StandOptionsScreen(
-                navigateToProductList = navigateToProductList,
-                navigateToFilePickFolderAndSpreadsheet = navigateToFilePickFolderAndSpreadsheet,
+            AppDestinations.STAND -> StandStartScreen(
+                navigateToFilePickFolderAndSpreadsheet = navigateToFilePickFolderAndSpreadsheet
             )
 
             AppDestinations.SETTINGS -> SettingsScreen()

@@ -35,5 +35,6 @@ object SelectFolder
 
 @Serializable
 class SelectFiles(
-    val fileTypes: List<String>
+    val fileTypes: List<String>,
+    val chooseType: String
 )
