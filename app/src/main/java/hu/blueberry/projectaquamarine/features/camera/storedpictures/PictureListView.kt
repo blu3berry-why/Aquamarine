@@ -1,4 +1,4 @@
-package hu.blueberry.camera.ui
+package hu.blueberry.projectaquamarine.features.camera.storedpictures
 
 import android.graphics.Bitmap
 import androidx.compose.foundation.BorderStroke

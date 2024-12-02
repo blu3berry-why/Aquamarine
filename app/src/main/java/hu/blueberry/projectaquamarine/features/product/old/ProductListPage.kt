@@ -1,4 +1,4 @@
-package hu.blueberry.projectaquamarine.features.product
+package hu.blueberry.projectaquamarine.features.product.old
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -12,7 +12,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import hu.blueberry.drinks.viewModel.ProductsViewModel
+import hu.blueberry.projectaquamarine.features.product.ProductsViewModel
 import hu.blueberry.drive.permissions.ManagePermissionsWithPermissionManager
 import hu.blueberry.projectaquamarine.navigation.ProductDetails
 import hu.blueberry.projectaquamarine.navigation.stand.StandNavigation

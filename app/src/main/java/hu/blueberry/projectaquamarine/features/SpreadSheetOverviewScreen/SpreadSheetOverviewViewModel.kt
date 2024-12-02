@@ -1,4 +1,4 @@
-package hu.blueberry.drinks.feature.SpreadSheetOverviewScreen
+package hu.blueberry.projectaquamarine.features.SpreadSheetOverviewScreen
 
 import androidx.lifecycle.ViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel

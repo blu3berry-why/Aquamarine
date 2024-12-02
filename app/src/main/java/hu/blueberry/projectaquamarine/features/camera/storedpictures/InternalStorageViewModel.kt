@@ -1,8 +1,7 @@
-package hu.blueberry.camera.viewModel
+package hu.blueberry.projectaquamarine.features.camera.storedpictures
 
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.snapshots.SnapshotStateList
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import hu.blueberry.drive.PermissionHandlingViewModel
@@ -11,11 +10,9 @@ import hu.blueberry.drive.model.MemoryDatabase
 import hu.blueberry.drive.repositories.DriveRepository
 import hu.blueberry.drive.services.FileService
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import java.io.File
 import javax.inject.Inject
-import kotlin.js.ExperimentalJsFileName
 
 
 @HiltViewModel

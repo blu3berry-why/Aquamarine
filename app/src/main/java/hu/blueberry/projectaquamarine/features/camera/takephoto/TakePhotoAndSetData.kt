@@ -1,4 +1,4 @@
-package hu.blueberry.camera.ui
+package hu.blueberry.projectaquamarine.features.camera.takephoto
 
 
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -29,9 +29,9 @@ import coil.compose.AsyncImage
 import hu.blueberry.camera.R
 import hu.blueberry.camera.models.enums.PhotoClockType
 import hu.blueberry.camera.models.enums.PhotoTakenTime
-import hu.blueberry.camera.ui.elements.ExposedDropdownMenuSample
-import hu.blueberry.camera.viewModel.CameraViewModel
+import hu.blueberry.projectaquamarine.features.elements.ExposedDropdownMenuSample
 import hu.blueberry.drive.permissions.ManagePermissionsWithPermissionManager
+import hu.blueberry.projectaquamarine.features.camera.CameraViewModel
 import hu.blueberry.themes.theme.ProjectAquamarineTheme
 
 @Composable

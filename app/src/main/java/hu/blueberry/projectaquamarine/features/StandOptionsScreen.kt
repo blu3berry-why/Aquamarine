@@ -1,4 +1,4 @@
-package hu.blueberry.drinks.feature
+package hu.blueberry.projectaquamarine.features
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -9,12 +9,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
-import hu.blueberry.drinks.viewModel.ProductDetailsViewModel
+import hu.blueberry.projectaquamarine.features.product.ProductDetailsViewModel
 
 @Composable
 fun StandOptionsScreen(
     navigateToProductList: () -> Unit,
-    viewModel: ProductDetailsViewModel = hiltViewModel<ProductDetailsViewModel>()
+    viewModel: ProductDetailsViewModel = hiltViewModel<ProductDetailsViewModel>(),
+    navigateToFilePickFolderAndSpreadsheet: () -> Unit
 ) {
 
     Column(
@@ -24,7 +25,7 @@ fun StandOptionsScreen(
     ) {
 
 
-        Button(onClick = { } ){
+        Button(onClick = { navigateToFilePickFolderAndSpreadsheet.invoke() } ){
             Text(text = "Open Spreadsheet")
         }
 

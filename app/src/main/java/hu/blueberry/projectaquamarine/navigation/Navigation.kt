@@ -12,15 +12,16 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
-import hu.blueberry.camera.ui.FilteredInternalStoragePhotos
-import hu.blueberry.camera.ui.TakePhotoAndSetData
+import hu.blueberry.drive.services.DriveService
+import hu.blueberry.projectaquamarine.features.camera.storedpictures.FilteredInternalStoragePhotos
+import hu.blueberry.projectaquamarine.features.camera.takephoto.TakePhotoAndSetData
 import hu.blueberry.projectaquamarine.navigation.stand.addStandNestedGraph
-import hu.blueberry.projectaquamarine.features.product.ProductListPage
-import hu.blueberry.projectaquamarine.features.AuthenticationPage
+import hu.blueberry.projectaquamarine.features.product.old.ProductListPage
+import hu.blueberry.projectaquamarine.auth.AuthenticationPage
 import hu.blueberry.projectaquamarine.features.HomeMenuPage
 import hu.blueberry.projectaquamarine.features.filepicker.FilePicker
 import hu.blueberry.projectaquamarine.features.navigationsuitescaffold.MyBottomBarNavigation
-import hu.blueberry.projectaquamarine.features.product.ProductDetailsPage
+import hu.blueberry.projectaquamarine.features.product.old.ProductDetailsPage
 
 @Composable
 fun AppNavigation(){
@@ -61,7 +62,11 @@ fun AppNavigation(){
                 navigateToTakePhoto = { navController.navigate(TakePhoto) },
                 navigateToStoredPictures = { navController.navigate(StoredPictures)},
                 navigateToProductList = { navController.navigate(ProductList)},
-                navigateToSelectFolder = {navController.navigate(SelectFolder)}
+                navigateToSelectFolder = {navController.navigate(SelectFolder)},
+                navigateToFilePickFolderAndSpreadsheet = { navController.navigate(SelectFiles(
+                    listOf(DriveService.MimeType.FOLDER,
+                        DriveService.MimeType.SPREADSHEET)
+                ))}
             )
         }
 
@@ -87,7 +92,7 @@ fun AppNavigation(){
 
         composable<SelectFiles> {
             val args = it.toRoute<SelectFiles>()
-            FilePicker()
+            FilePicker(fileTypes = args.fileTypes)
         }
 
     }

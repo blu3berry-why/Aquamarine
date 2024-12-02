@@ -66,6 +66,8 @@ dependencies {
 
     camera()
 
+    implementation(Dependencies.coil)
+
     auth()
 
     hilt()

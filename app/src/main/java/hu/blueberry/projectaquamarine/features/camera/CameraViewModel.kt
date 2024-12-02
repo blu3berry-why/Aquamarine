@@ -1,4 +1,4 @@
-package hu.blueberry.camera.viewModel
+package hu.blueberry.projectaquamarine.features.camera
 
 import android.content.Context
 import android.icu.text.SimpleDateFormat

@@ -1,4 +1,4 @@
-package hu.blueberry.camera.ui.elements
+package hu.blueberry.projectaquamarine.features.elements
 
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.DropdownMenuItem

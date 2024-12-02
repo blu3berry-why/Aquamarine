@@ -1,4 +1,4 @@
-package hu.blueberry.projectaquamarine.features.product
+package hu.blueberry.projectaquamarine.features.product.old
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column

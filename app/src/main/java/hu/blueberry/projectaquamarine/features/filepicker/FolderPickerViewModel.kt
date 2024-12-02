@@ -10,6 +10,9 @@ import hu.blueberry.drive.base.handleResponse
 import hu.blueberry.drive.model.MemoryDatabase
 import hu.blueberry.drive.repositories.DriveRepository
 import hu.blueberry.drive.services.DriveService
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -34,12 +37,15 @@ class FolderPickerViewModel @Inject constructor(
          */
         get() = parentList.lastOrNull()?.id
 
+    private val lastParentName: MutableStateFlow<String> = MutableStateFlow("Root")
+    val lastParentDisplayName: StateFlow<String> = lastParentName.asStateFlow()
 
     /**
      * Here we only work with folders
      */
     private var mimeTypes: List<String>? = listOf( DriveService.MimeType.FOLDER, DriveService.MimeType.SPREADSHEET)
-
+    val accepetedMimeTypes: List<String>?
+        get() = mimeTypes
     /**
      * The folders to show
      */
@@ -77,6 +83,7 @@ class FolderPickerViewModel @Inject constructor(
 
     fun openFolder(folder: File){
         parentList.add(folder)
+        lastParentName .value = folder.name
         loadFilesInFolder()
     }
 
@@ -91,5 +98,9 @@ class FolderPickerViewModel @Inject constructor(
             it.mimeType
         }
         _files.addAll(sortedFiles)
+    }
+
+    fun setMimeTypes(mimeTypesList: List<String>){
+        mimeTypes = mimeTypesList
     }
 }

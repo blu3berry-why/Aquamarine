@@ -1,4 +1,4 @@
-package hu.blueberry.drinks.viewModel
+package hu.blueberry.projectaquamarine.features.product
 
 
 import dagger.hilt.android.lifecycle.HiltViewModel

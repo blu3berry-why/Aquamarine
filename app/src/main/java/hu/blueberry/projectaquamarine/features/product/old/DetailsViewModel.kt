@@ -1,4 +1,4 @@
-package hu.blueberry.projectaquamarine.features.product
+package hu.blueberry.projectaquamarine.features.product.old
 
 
 import androidx.lifecycle.ViewModel

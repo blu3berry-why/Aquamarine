@@ -16,8 +16,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.sp
-import hu.blueberry.camera.ui.CameraOptionsScreen
-import hu.blueberry.drinks.feature.StandOptionsScreen
+import hu.blueberry.projectaquamarine.features.camera.CameraOptionsScreen
+import hu.blueberry.projectaquamarine.features.StandOptionsScreen
 import hu.blueberry.projectaquamarine.features.SettingsScreen
 
 
@@ -27,6 +27,7 @@ fun MyBottomBarNavigation(
     navigateToStoredPictures: () -> Unit,
     navigateToProductList: () -> Unit,
     navigateToSelectFolder: () -> Unit,
+    navigateToFilePickFolderAndSpreadsheet: () -> Unit,
 ) {
     var currentDestination by rememberSaveable { mutableStateOf(AppDestinations.CAMERA) }
 
@@ -68,6 +69,7 @@ fun MyBottomBarNavigation(
 
             AppDestinations.STAND -> StandOptionsScreen(
                 navigateToProductList = navigateToProductList,
+                navigateToFilePickFolderAndSpreadsheet = navigateToFilePickFolderAndSpreadsheet,
             )
 
             AppDestinations.SETTINGS -> SettingsScreen()

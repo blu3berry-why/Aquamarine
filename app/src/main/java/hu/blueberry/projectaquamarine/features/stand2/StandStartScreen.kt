@@ -1,4 +1,4 @@
-package hu.blueberry.drinks.feature.stand
+package hu.blueberry.projectaquamarine.features.stand2
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Column

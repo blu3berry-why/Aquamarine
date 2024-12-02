@@ -1,4 +1,4 @@
-package hu.blueberry.drinks.feature.elemets.product
+package hu.blueberry.projectaquamarine.features.product
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
