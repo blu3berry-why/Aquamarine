@@ -6,6 +6,7 @@ import androidx.room.Index
 import androidx.room.PrimaryKey
 import hu.blueberry.persistentstorage.model.MeasureUnit
 import hu.blueberry.persistentstorage.model.ProductType
+import kotlinx.serialization.Serializable
 
 @Entity(tableName = "product_properties",
     indices = [
@@ -14,6 +15,8 @@ import hu.blueberry.persistentstorage.model.ProductType
             unique = true)
     ]
 )
+
+@Serializable
 data class ProductProperties(
     @PrimaryKey
     val id: Int? = null,

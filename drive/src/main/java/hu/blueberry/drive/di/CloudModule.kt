@@ -28,6 +28,7 @@ class CloudModule {
     @Singleton
     fun provideMemoryDatabase() = MemoryDatabase()
 
+
     @Provides
     @Singleton
     fun provideNetworkConnectivityObserver(@ApplicationContext context: Context) = NetworkConnectivityObserver(context)

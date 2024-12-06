@@ -45,9 +45,10 @@ class FileService @Inject constructor(
     suspend fun loadPhotosFromInternalStorage(): List<InternalStoragePhoto>{
         return withContext(Dispatchers.IO) {
             val files = context.filesDir.listFiles()
-            files?.filter { it.canRead() && it.isFile && it.name.endsWith(".png") }?.map {
+            files?.filter { it.canRead() && it.isFile && it.name.endsWith(".png")   }?.map {
                 val bytes = it.readBytes()
                 val bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
+                // TODO if the image is bad i should delete it
                 InternalStoragePhoto(it.name, bitmap, it.path)
             } ?: listOf()
         }

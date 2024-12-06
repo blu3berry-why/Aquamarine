@@ -1,9 +1,8 @@
-package hu.blueberry.projectaquamarine.features.stand2
+package hu.blueberry.projectaquamarine.features.stand
 
 import dagger.hilt.android.lifecycle.HiltViewModel
 import hu.blueberry.drinks.repository.WorkingDirectoryRepository
 import hu.blueberry.drive.PermissionHandlingViewModel
-import hu.blueberry.persistentstorage.Database
 import hu.blueberry.persistentstorage.model.updatedextradata.WorkingDirectory
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow

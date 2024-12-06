@@ -1,13 +1,11 @@
-package hu.blueberry.projectaquamarine.features.stand2
+package hu.blueberry.projectaquamarine.features.stand
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.Poll
-import androidx.compose.material3.Button
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -23,25 +21,24 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import hu.blueberry.projectaquamarine.features.elements.buttons.WideFilledButton
-import hu.blueberry.projectaquamarine.features.stand2.StandBasicInformation.StandBasicInformation
+import hu.blueberry.projectaquamarine.features.spreadsheet.options.SpreadsheetOptionsScreen
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun StandStartScreen(
     viewModel: StandStartScreenViewModel = hiltViewModel(),
-    navigateToFilePickFolderAndSpreadsheet: () -> Unit
+    navigateToFilePickFolderAndSpreadsheet: () -> Unit,
+    navigateToProductList: ()-> Unit,
+    navigateToStorageList:(String) -> Unit,
 ) {
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
     val workingDirectoryState = viewModel.currentWorkingDirectory.collectAsState()
     val spreadsheetName = workingDirectoryState.value?.choosenSpreadSheet?.name ?: "Select a Spreadsheet"
 
 
-    LaunchedEffect(workingDirectoryState.value) {
-        viewModel.getWorkingDirectoryFromDatabase()
-    }
+
     Scaffold(
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
@@ -70,10 +67,14 @@ fun StandStartScreen(
         ){
 
             if (workingDirectoryState.value == null){
-                Button(
+                WideFilledButton(
                     onClick = { navigateToFilePickFolderAndSpreadsheet() },
-                ) {
-                    Text(text = "Select Spreadsheet")
+                    text = "Select a Spreadsheet",
+                    icon = Icons.Default.Poll
+                )
+
+                LaunchedEffect(workingDirectoryState.value?.choosenSpreadSheet) {
+                    viewModel.getWorkingDirectoryFromDatabase()
                 }
             } else {
                 WideFilledButton(
@@ -82,15 +83,13 @@ fun StandStartScreen(
                     icon = Icons.Default.Poll
                 )
 
-                StandBasicInformation()
+                SpreadsheetOptionsScreen(
+                    navigateToProductList = navigateToProductList,
+                    navigateToStorageList = navigateToStorageList,
+                )
             }
         }
     }
 }
 
 
-@Preview
-@Composable
-fun StandStartScreenPreview() {
-    StandStartScreen(navigateToFilePickFolderAndSpreadsheet = {})
-}

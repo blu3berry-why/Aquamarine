@@ -5,6 +5,8 @@ import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.ExposedDropdownMenuDefaults
+import androidx.compose.material3.MenuAnchorType
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
@@ -24,7 +26,8 @@ import kotlin.enums.EnumEntries
 fun <T, J : EnumEntries<T>> ExposedDropdownMenuSample(
     options: J,
     selectedData: MutableStateFlow<T>,
-    onClick: ()-> Unit = {}
+    onClick: ()-> Unit = {},
+    label: String = "LABEL"
 ) {
     var expanded by remember { mutableStateOf(false) }
     var selectedOptionText by remember { mutableStateOf(selectedData.value) }
@@ -39,13 +42,13 @@ fun <T, J : EnumEntries<T>> ExposedDropdownMenuSample(
             // You can also provides null to completely disable the default input service.
             LocalTextInputService provides myTextInputService
         ) {
-            TextField(
+            OutlinedTextField(
                 // The `menuAnchor` modifier must be passed to the text field for correctness.
-                modifier = Modifier.menuAnchor(),
+                modifier = Modifier.menuAnchor(MenuAnchorType.PrimaryNotEditable, true),
                 readOnly = true,
                 value = selectedOptionText.toString(),
                 onValueChange = {},
-                label = { Text("Label") },
+                label = { Text(label) },
                 trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) },
                 colors = ExposedDropdownMenuDefaults.textFieldColors(),
                 /*

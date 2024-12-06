@@ -17,6 +17,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Upload
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -42,7 +43,7 @@ fun FilteredInternalStoragePhotos(
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color.LightGray), contentAlignment = Alignment.TopCenter
+        , contentAlignment = Alignment.TopCenter
     ) {
         Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.fillMaxSize()) {
             Text(text = "Upload Picture")
@@ -51,6 +52,7 @@ fun FilteredInternalStoragePhotos(
                 viewModel.filterText.value = filterText
                 viewModel.filterInternalStoragePhotos()
             })
+            HorizontalDivider()
 
             LazyColumn {
                 // TODO This does not work when removing an item, it does not update !!!
@@ -78,8 +80,6 @@ fun PhotoNameRow(name: String, image: ImageBitmap, uploadPicture: ()->Unit) {
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier
                 .fillMaxWidth()
-                .background(Color.LightGray)
-                .border(BorderStroke(1.dp, Color.DarkGray))
                 .padding(horizontal = 3.dp)
                 .height(70.dp)
 
@@ -105,8 +105,9 @@ fun PhotoNameRow(name: String, image: ImageBitmap, uploadPicture: ()->Unit) {
                     }
                     .padding(8.dp)
             )
-        }
 
+        }
+    HorizontalDivider()
 
 }
 

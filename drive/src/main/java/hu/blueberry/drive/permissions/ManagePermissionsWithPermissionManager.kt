@@ -15,20 +15,16 @@ fun ManagePermissionsWithPermissionManager(permissionManager: PermissionRequestM
 
     when (permission.value) {
         PermissionRequest.NO_REQUESTS -> {}
-
         PermissionRequest.NEEDS_PERMISSION -> {
 
             val activityLauncher = rememberLauncherForActivityResult(
-                contract = ActivityResultContracts.StartActivityForResult()
+                contract = ActivityResultContracts.StartActivityForResult(),
+                onResult = { onResult()}
             )
-            {
-                onResult()
-            }
+
             SideEffect {
                 activityLauncher.launch(permissionManager.intent)
             }
-
         }
     }
-    
 }

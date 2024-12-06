@@ -1,22 +1,13 @@
-package hu.blueberry.projectaquamarine.features.product
+package hu.blueberry.projectaquamarine.features.stand.product.list
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Bolt
-import androidx.compose.material.icons.filled.Liquor
-import androidx.compose.material.icons.filled.LocalBar
-import androidx.compose.material.icons.filled.LocalDrink
-import androidx.compose.material.icons.filled.LocalPizza
-import androidx.compose.material.icons.filled.Sell
-import androidx.compose.material.icons.filled.ShoppingBag
-import androidx.compose.material.icons.filled.SportsBar
-import androidx.compose.material.icons.filled.WaterDrop
-import androidx.compose.material.icons.filled.WineBar
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -34,35 +25,26 @@ import hu.blueberry.persistentstorage.model.updatedextradata.product.ProductProp
 @Composable
 fun ProductPropertiesCard(
     productProperties: ProductProperties,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    navigateToProduct: (Int) -> Unit,
 ) {
     Row(
         verticalAlignment = Alignment.Top,
         horizontalArrangement = Arrangement.Start,
         modifier = modifier
+            .clickable {
+                navigateToProduct(productProperties.id!!)
+            }
             .fillMaxWidth()
             .height(62.dp)
             .padding(top = 6.dp)
     ) {
 
         Icon(
-            imageVector = when(productProperties.type){
-                ProductType.BEER -> Icons.Default.SportsBar
-                ProductType.WINE -> Icons.Default.WineBar
-                ProductType.ENERGY_DRINK -> Icons.Default.Bolt
-                ProductType.SPIRIT -> Icons.Default.Liquor
-                ProductType.FOOD -> Icons.Default.LocalPizza
-                ProductType.SOFT_DRINK -> Icons.Default.LocalDrink
-                ProductType.COCKTAIL_INGREDIENT -> Icons.Default.LocalBar
-                ProductType.PREMIUM_SPIRIT -> Icons.Default.Sell
-                ProductType.PALINKA -> Icons.Default.WaterDrop
-                ProductType.OTHER -> Icons.Default.ShoppingBag
-            }
-
-            ,
+            imageVector = productProperties.type.toImageVector(),
             contentDescription = "Beer",
             modifier = Modifier.padding(start = 10.dp)
-            )
+        )
         Column(
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.Start,
@@ -74,11 +56,13 @@ fun ProductPropertiesCard(
 
 
     }
+    HorizontalDivider()
 }
+
 
 @Preview
 @Composable
-fun ProductPropertiesCardPreview(){
+fun ProductPropertiesCardPreview() {
     Column {
         ProductPropertiesCard(
             productProperties = ProductProperties(
@@ -88,18 +72,21 @@ fun ProductPropertiesCardPreview(){
                 measureUnit = MeasureUnit.LITER,
                 sellingPrice = 1000,
                 sellingQuantityForPurchasedSingleProduct = 50.0,
-            )
+            ),
+            navigateToProduct = { },
         )
         ProductPropertiesCard(
-                productProperties = ProductProperties(
-                    id = null,
-                    name = "Edelweiss Hefe (0,5L)",
-                    type = ProductType.BEER,
-                    measureUnit = MeasureUnit.LITER,
-                    sellingPrice = 1000,
-                    sellingQuantityForPurchasedSingleProduct = 50.0,
-                )
-                )
+            productProperties = ProductProperties(
+                id = null,
+                name = "Edelweiss Hefe (0,5L)",
+                type = ProductType.BEER,
+                measureUnit = MeasureUnit.LITER,
+                sellingPrice = 1000,
+                sellingQuantityForPurchasedSingleProduct = 50.0,
+            ),
+            navigateToProduct = { },
+        )
+
     }
 
 }

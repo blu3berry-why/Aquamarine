@@ -21,6 +21,7 @@ import androidx.compose.material.icons.filled.Folder
 import androidx.compose.material.icons.outlined.CheckCircle
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -79,6 +80,7 @@ fun FilePicker(
                 },
                 scrollBehavior = scrollBehavior,
             )
+            HorizontalDivider()
         },
     ) { innerPadding ->
         Column(
@@ -88,14 +90,14 @@ fun FilePicker(
                 .fillMaxSize()
                 .padding(innerPadding)
         ) {
-
             LazyColumn {
-                items(files, key = { it.name }) { file ->
+                items(files, key = { it.id   }) { file ->
                     FileRow(
                         file = file,
                         onClick = returnFileChoosingOnClick(viewModel, file),
                         navigateAfterChoosing = navigateAfterChoosing
                     )
+
                 }
             }
             if (chosenType.value == DriveService.MimeType.FOLDER) {
@@ -123,8 +125,6 @@ fun FileRow(file: File, onClick: () -> Unit, navigateAfterChoosing: () -> Unit) 
                 navigateAfterChoosing.invoke()
             }
             .fillMaxWidth()
-            .background(Color.White)
-            .border(BorderStroke(1.dp, Color.LightGray))
             .padding(horizontal = 3.dp)
             .height(70.dp)
     ) {
@@ -149,6 +149,7 @@ fun FileRow(file: File, onClick: () -> Unit, navigateAfterChoosing: () -> Unit) 
                 .width(270.dp)
         )
     }
+    HorizontalDivider()
 }
 
 fun returnFileChoosingOnClick(

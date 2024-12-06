@@ -5,7 +5,7 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 @Entity(tableName = "product_stand")
-data class ProductStand(
+data class  ProductStand(
     @PrimaryKey val id: Int?,
     val productOwnerId: Int,
     @ColumnInfo("worksheet_id") val worksheetId:Int,

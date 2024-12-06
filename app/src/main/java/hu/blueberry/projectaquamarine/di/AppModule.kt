@@ -17,4 +17,6 @@ object AppModule {
     @Singleton
     fun provideAuthenticatedUser() = AuthenticatedUser()
 
+
+
 }

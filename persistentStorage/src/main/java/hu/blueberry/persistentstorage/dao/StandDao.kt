@@ -20,20 +20,30 @@ interface StandDao {
     fun upsertWorksheetStorageInfo(worksheetStorageInfo: WorksheetStorageInfo)
 
     @Query("SELECT * FROM worksheet_storage_info WHERE spreadsheet_id = :spreadsheetId")
-    fun getWorksheetsBySpreadSheetId(spreadsheetId: String): List<WorksheetStorageInfo>
+    fun getWorksheets(spreadsheetId: String): List<WorksheetStorageInfo>
 
     @Query("""
         SELECT * FROM product_stand WHERE worksheet_id=:worksheetId AND productOwnerId = :productId
     """)
-    fun getProductStandByWorksheetIdAndProductId(worksheetId:Int, productId:Int):ProductStand?
+    fun getProductStand(worksheetId:Int, productId:Int):ProductStand?
+
+    @Query("""
+        SELECT * FROM product_stand 
+        JOIN worksheet_storage_info on worksheet_id = worksheet_storage_info.id
+        WHERE worksheet_name=:worksheetName AND productOwnerId = :productId AND spreadsheet_id = :spreadsheetId
+    """)
+    fun getProductStand(spreadsheetId: String, worksheetName:String, productId:Int):ProductStand?
 
     @Transaction
     @Query("SELECT * FROM worksheet_storage_info WHERE spreadsheet_id = :spreadsheetId")
-    fun getWorksheetAndProductStandsForSpreadsheet(spreadsheetId: String): List<WorksheetAndProductStands>
+    fun getWorksheetAndProductStands(spreadsheetId: String): List<WorksheetAndProductStands>
 
     @Transaction
-    @Query("SELECT * FROM worksheet_storage_info WHERE spreadsheet_id = :spreadsheetId AND worksheet_name = :worksheetName")
-    fun getWorksheetAndProductStandsForSpreadsheetWithName(spreadsheetId: String, worksheetName:String): WorksheetAndProductStands?
+    @Query("""
+        SELECT * FROM worksheet_storage_info 
+        WHERE spreadsheet_id = :spreadsheetId 
+        AND worksheet_name = :worksheetName""")
+    fun getWorksheetAndProductStands(spreadsheetId: String, worksheetName:String): WorksheetAndProductStands?
 
 
     /**
@@ -48,4 +58,6 @@ interface StandDao {
         """)
     fun getStartingRowForStorage(spreadsheetId: String): Int
 
+
 }
+

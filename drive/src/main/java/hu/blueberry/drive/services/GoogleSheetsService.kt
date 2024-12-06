@@ -16,6 +16,9 @@ import com.google.api.services.sheets.v4.model.UpdateSheetPropertiesRequest
 import com.google.api.services.sheets.v4.model.UpdateValuesResponse
 import com.google.api.services.sheets.v4.model.ValueRange
 import hu.blueberry.drive.base.CloudBase
+import hu.blueberry.drive.model.google.RangeBuilder
+import hu.blueberry.drive.model.google.enums.InputOption
+import hu.blueberry.drive.model.google.enums.MajorDimension
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -35,15 +38,6 @@ class GoogleSheetsService @Inject constructor(
 
     private val sheets: Sheets
         get() = getSheetsService()!!
-
-    object InputOption {
-        val RAW = "RAW"
-        val USER_ENTERED = "USER_ENTERED"
-        val FORMULA = "FORMULA"
-    }
-
-    val MAJOR_DIMENSION = "ROWS"
-
 
     fun createSheet(name: String): String? {
         var spreadsheet = Spreadsheet()
@@ -70,11 +64,12 @@ class GoogleSheetsService @Inject constructor(
     suspend fun readSpreadSheetFormula(
         spreadsheetId: String,
         range: String,
+        inputOption: InputOption = InputOption.FORMULA
     ): ValueRange? {
         var valueRange: ValueRange? = null
 
         val spreadsheet = sheets.spreadsheets().values().get(spreadsheetId, range)
-        spreadsheet.valueRenderOption = InputOption.FORMULA
+        spreadsheet.valueRenderOption = inputOption.stringValue
 
         valueRange = spreadsheet.execute()
 
@@ -83,42 +78,50 @@ class GoogleSheetsService @Inject constructor(
 
     fun writeSpreadSheet(
         spreadsheetId: String,
-        range: String,
+        rangeBuilder: RangeBuilder,
         values: MutableList<MutableList<Any>>,
+        majorDimension: MajorDimension = MajorDimension.ROW,
+        inputOption: InputOption = InputOption.USER_ENTERED
     ): UpdateValuesResponse? {
 
         var result: UpdateValuesResponse? = null
         val body = ValueRange()
         body.setValues(values)
-        body.majorDimension = MAJOR_DIMENSION
+        body.majorDimension = majorDimension.stringValue
         result = sheets.spreadsheets().values()
-            .update(spreadsheetId, range, body)
+            .update(spreadsheetId, rangeBuilder.build(), body)
             .apply {
-                valueInputOption = InputOption.USER_ENTERED
+                valueInputOption = inputOption.stringValue
             }
             .execute()
         return result
     }
 
-    fun updateSpreadSheet(spreadsheetId: String, valueRange: ValueRange): UpdateValuesResponse? {
+    fun updateSpreadSheet(
+        spreadsheetId: String,
+        valueRange: ValueRange,
+        inputOption: InputOption = InputOption.USER_ENTERED
+    ): UpdateValuesResponse? {
         return sheets.spreadsheets().values().update(spreadsheetId, valueRange.range, valueRange)
-            .apply { valueInputOption = InputOption.USER_ENTERED }.execute()
+            .apply { valueInputOption = inputOption.stringValue }.execute()
     }
 
     fun appendToSpreadSheet(
         spreadsheetId: String,
         range: String,
         values: MutableList<MutableList<Any>>,
+        majorDimension: MajorDimension = MajorDimension.ROW,
+        inputOption: InputOption = InputOption.USER_ENTERED
     ): AppendValuesResponse? {
 
         var result: AppendValuesResponse? = null
         val body = ValueRange()
         body.setValues(values)
-        body.majorDimension = MAJOR_DIMENSION
+        body.majorDimension = majorDimension.stringValue
         result = sheets.spreadsheets().values()
             .append(spreadsheetId, range, body)
             .apply {
-                valueInputOption = InputOption.USER_ENTERED
+                valueInputOption = inputOption.stringValue
             }
             .execute()
         return result
@@ -151,7 +154,6 @@ class GoogleSheetsService @Inject constructor(
         val sheetId = sheet.sheets.filter { it.properties.title == oldName }
             .firstOrNull()?.properties?.sheetId ?: return null
 
-
         val request = Request().apply {
             updateSheetProperties = UpdateSheetPropertiesRequest().apply {
                 this.properties = SheetProperties().apply {
@@ -164,37 +166,6 @@ class GoogleSheetsService @Inject constructor(
         val batch = BatchUpdateSpreadsheetRequest().setRequests(listOf(request))
 
         spreadsheet = sheets.spreadsheets().batchUpdate(spreadsheetId, batch).execute()
-        return spreadsheet
-    }
-
-    fun initializeFirstTab(
-        spreadsheetId: String,
-        newName: String,
-    ): BatchUpdateSpreadsheetResponse? {
-        var spreadsheet = BatchUpdateSpreadsheetResponse()
-        val sheet = sheets.spreadsheets().get(spreadsheetId).execute()
-
-        val sheetId = sheet.sheets[0].properties.sheetId
-
-        val request = Request().apply {
-            updateSheetProperties = UpdateSheetPropertiesRequest().apply {
-                this.properties = SheetProperties().apply {
-                    this.sheetId = sheetId
-                    this.title = newName
-                }
-                this.fields = "title"
-            }
-        }
-
-        val batch = BatchUpdateSpreadsheetRequest().setRequests(listOf(request))
-
-        spreadsheet = sheets.spreadsheets().batchUpdate(spreadsheetId, batch).execute()
-
-        writeSpreadSheet(
-            spreadsheetId,
-            "${newName}!A1:B1",
-            mutableListOf(mutableListOf("Név", "Hányad"))
-        )
         return spreadsheet
     }
 

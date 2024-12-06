@@ -9,12 +9,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
-import hu.blueberry.projectaquamarine.features.product.ProductDetailsViewModel
 
 @Composable
 fun StandOptionsScreen(
     navigateToProductList: () -> Unit,
-    viewModel: ProductDetailsViewModel = hiltViewModel<ProductDetailsViewModel>(),
+
     navigateToFilePickFolderAndSpreadsheet: () -> Unit
 ) {
 
@@ -29,17 +28,6 @@ fun StandOptionsScreen(
             Text(text = "Open Spreadsheet")
         }
 
-        Button(onClick = { viewModel.readProductDetails("Segedlet") }) {
-            Text(text = "Read SpreadSheet")
-        }
-
-        Button(onClick = { viewModel.readScaleInfo("Mérleg_segéd") }) {
-            Text(text = "Read Scale")
-        }
-
-        Button(onClick = { viewModel.readAllStock() }) {
-            Text(text = "Read F17")
-        }
 
     }
 }

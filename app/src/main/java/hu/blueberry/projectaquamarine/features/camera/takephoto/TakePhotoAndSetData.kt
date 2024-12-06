@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
+import androidx.compose.material3.Label
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -104,9 +105,9 @@ fun TakePhotoAndSetData(
                                     Text(text = "Upload")
                                 }
 
-                            /*
-                            * Take New Picture
-                            * */
+                                /*
+                                * Take New Picture
+                                * */
                                 Button(
                                     onClick =
                                     {
@@ -145,14 +146,16 @@ fun TakePhotoAndSetData(
 
                 ExposedDropdownMenuSample(
                     options = PhotoTakenTime.entries,
-                    viewModel.selectedTakenType,
-                    viewModel::setPhotoName
+                    selectedData = viewModel.selectedTakenType,
+                    onClick = viewModel::setPhotoName,
+                    label = stringResource(hu.blueberry.projectaquamarine.R.string.time)
                 )
 
                 ExposedDropdownMenuSample(
-                    PhotoClockType.entries,
-                    viewModel.selectedClockType,
-                    viewModel::setPhotoName
+                    options = PhotoClockType.entries,
+                    selectedData = viewModel.selectedClockType,
+                    onClick = viewModel::setPhotoName,
+                    label = stringResource(hu.blueberry.projectaquamarine.R.string.clock_name)
                 )
             }
         }

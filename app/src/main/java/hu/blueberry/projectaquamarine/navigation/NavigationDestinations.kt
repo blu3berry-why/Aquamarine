@@ -19,10 +19,7 @@ data class ScreenB(
 object HomeMenuPage
 
 @Serializable
-object ProductList
-
-@Serializable
-data class ProductDetails(val name:String)
+data class ProductDetails(val id:Int)
 
 @Serializable
 object StoredPictures
@@ -36,5 +33,24 @@ object SelectFolder
 @Serializable
 class SelectFiles(
     val fileTypes: List<String>,
-    val chooseType: String
+    val chooseType: String,
 )
+
+@Serializable
+object ProductListScreen
+
+@Serializable
+data class StorageItemList(
+    val storageName: String,
+)
+
+@Serializable
+data class StorageItemDetails(
+    val productId: Int,
+)
+
+
+
+
+
+

@@ -3,7 +3,9 @@ package hu.blueberry.persistentstorage.model.updatedextradata.product
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import kotlinx.serialization.Serializable
 
+@Serializable
 @Entity(tableName = "scale_info")
 data class ScaleInfo(
     @PrimaryKey val id: Int?,

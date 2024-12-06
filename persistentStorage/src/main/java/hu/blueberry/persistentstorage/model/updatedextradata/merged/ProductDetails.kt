@@ -4,7 +4,10 @@ import androidx.room.Embedded
 import androidx.room.Relation
 import hu.blueberry.persistentstorage.model.updatedextradata.product.ProductProperties
 import hu.blueberry.persistentstorage.model.updatedextradata.product.ScaleInfo
+import kotlinx.serialization.Serializable
 
+
+@Serializable
 data class ProductAndScaleInfo(
     @Embedded val productProperties: ProductProperties,
     @Relation(

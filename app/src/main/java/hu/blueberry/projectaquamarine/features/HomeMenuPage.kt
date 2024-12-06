@@ -10,12 +10,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import hu.blueberry.projectaquamarine.features.product.ProductDetailsViewModel
 
 @Composable
 fun HomeMenuPage(
     navController: NavController,
-    viewModel: ProductDetailsViewModel = hiltViewModel()
 ) {
 
 

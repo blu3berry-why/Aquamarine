@@ -13,15 +13,16 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
 import hu.blueberry.drive.services.DriveService
-import hu.blueberry.projectaquamarine.features.camera.storedpictures.FilteredInternalStoragePhotos
 import hu.blueberry.projectaquamarine.features.camera.takephoto.TakePhotoAndSetData
-import hu.blueberry.projectaquamarine.navigation.stand.addStandNestedGraph
-import hu.blueberry.projectaquamarine.features.product.old.ProductListPage
 import hu.blueberry.projectaquamarine.auth.AuthenticationPage
 import hu.blueberry.projectaquamarine.features.HomeMenuPage
+import hu.blueberry.projectaquamarine.features.camera.storedpictures.FilteredInternalStoragePhotos
 import hu.blueberry.projectaquamarine.features.filepicker.FilePicker
 import hu.blueberry.projectaquamarine.features.navigationsuitescaffold.MyBottomBarNavigation
-import hu.blueberry.projectaquamarine.features.product.old.ProductDetailsPage
+import hu.blueberry.projectaquamarine.features.stand.product.details.ProductDetailsScreen
+import hu.blueberry.projectaquamarine.features.stand.product.list.ProductListScreen
+import hu.blueberry.projectaquamarine.features.stand.storage.details.SingleItemStandDetailsScreen
+import hu.blueberry.projectaquamarine.features.stand.storage.list.StorageItemsListScreen
 
 @Composable
 fun AppNavigation() {
@@ -39,20 +40,12 @@ fun AppNavigation() {
         }
 
 
-        composable<ScreenB> {
-            val args = it.toRoute<ScreenB>()
-            Column(
-                modifier = Modifier.fillMaxSize(),
-                verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.CenterHorizontally
-            )
-            {
-                Text(text = "${args.name}, ${args.age} years old")
-            }
-        }
-
         composable<TakePhoto> {
             TakePhotoAndSetData()
+        }
+
+        composable<StoredPictures> {
+            FilteredInternalStoragePhotos()
         }
 
         composable<HomeMenuPage> {
@@ -63,7 +56,7 @@ fun AppNavigation() {
             MyBottomBarNavigation(
                 navigateToTakePhoto = { navController.navigate(TakePhoto) },
                 navigateToStoredPictures = { navController.navigate(StoredPictures) },
-                navigateToProductList = { navController.navigate(ProductList) },
+                navigateToProductList = { navController.navigate(ProductListScreen) },
                 navigateToSelectFolder = { navController.navigate(SelectFolder) },
                 navigateToFilePickFolderAndSpreadsheet = {
                     navController.navigate(
@@ -75,7 +68,8 @@ fun AppNavigation() {
                             chooseType = DriveService.MimeType.SPREADSHEET
                         ),
                     )
-                }
+                },
+                navigateToStorageList = { navController.navigate(StorageItemList(it))}
             )
         }
 
@@ -83,26 +77,33 @@ fun AppNavigation() {
             FilePicker()
         }
 
-
-        composable<ProductList> {
-            ProductListPage(navController)
-        }
-
-        composable<ProductDetails> {
-            val args = it.toRoute<ProductDetails>()
-            ProductDetailsPage(args.name)
-        }
-
-        composable<StoredPictures> {
-            FilteredInternalStoragePhotos()
-        }
-
-        addStandNestedGraph(navController = navController)
-
         composable<SelectFiles> {
             val args = it.toRoute<SelectFiles>()
             FilePicker(fileTypes = args.fileTypes, chooseType = args.chooseType)
         }
 
+        composable<ProductListScreen> {
+            ProductListScreen(
+                navigateToProduct = { id -> navController.navigate(ProductDetails(id))}
+            )
+        }
+
+        composable<ProductDetails> {
+            val args = it.toRoute<ProductDetails>()
+            ProductDetailsScreen(productId = args.id)
+        }
+
+        composable<StorageItemList> {
+            val args = it.toRoute<StorageItemList>()
+            StorageItemsListScreen(
+                worksheetName = args.storageName,
+                navigateToProduct = { id -> navController.navigate(StorageItemDetails(id))}
+            )
+        }
+
+        composable<StorageItemDetails> {
+            val args = it.toRoute<StorageItemDetails>()
+            SingleItemStandDetailsScreen(productId = args.productId)
+        }
     }
 }

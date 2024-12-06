@@ -31,7 +31,11 @@ abstract class PermissionHandlingViewModel : ViewModel() {
                 }
             }
         } else {
-            throw Exception(exception.toString())
+            if (exception is Throwable){
+                throw exception
+            }else {
+                throw Exception(exception.toString())
+            }
         }
     }
 
@@ -101,9 +105,9 @@ abstract class PermissionHandlingViewModel : ViewModel() {
     }
 
     fun runIO(
-        request: suspend () -> Unit,
         onError: (error: Any) -> Unit = {},
         onSuccess: () -> Unit = {},
+        request: suspend () -> Unit,
     ) {
         viewModelScope.launch(Dispatchers.IO) {
             try {
@@ -117,4 +121,5 @@ abstract class PermissionHandlingViewModel : ViewModel() {
             }
         }
     }
+
 }

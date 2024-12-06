@@ -7,7 +7,7 @@ import javax.inject.Inject
 
 class TemplateFunctionsRepository @Inject constructor(
     private val database: Database,
-    private val googleSheetsService: GoogleSheetsService
+    private val googleSheetsService: GoogleSheetsService,
 ){
     suspend fun <T> readItems(
         spreadSheetId: String,
@@ -15,13 +15,17 @@ class TemplateFunctionsRepository @Inject constructor(
         startColumn: String,
         endColumn: String,
         parseItem: (MutableList<Any>, ProductIdAndRowInSpreadSheet) -> T,
-        updateCacheItem: (T) -> Unit
+        updateCacheItem: (T) -> Unit,
+        loadRowsInSpreadSheet: ()->Unit = {}
     ) {
         //Get products and rows where they are
         var productIdAndRowList =
-            database.productFittingDao().loadAllProductIdsAndRowsInSpreadsheet(spreadSheetId)
+            database.productFittingDao().getAllProductIdsAndRowsInSpreadsheet(spreadSheetId)
         productIdAndRowList = productIdAndRowList.sortedBy { it.rowInSpreadSheet }.toMutableList()
 
+        if (productIdAndRowList.isEmpty()){
+
+        }
         //Get the start row since we need to start with this one
         var startRow = productIdAndRowList[0].rowInSpreadSheet
 
@@ -59,14 +63,14 @@ class TemplateFunctionsRepository @Inject constructor(
     fun <T> updateCachedItemOrInsertIfNotExists(
         newItem: T,
         getItemFromDatabase: (T) -> T?,
-        upsertNotYetCachedItem: (T) -> Unit,
-        upsertUpdatedCachedItem: (cachedItem:T, newItem:T) -> Unit,
+        insertNotYetCachedItem: (T) -> Unit,
+        updateUpdatedCachedItem: (cachedItem:T, newItem:T) -> Unit,
     ) {
         val cachedInfo = getItemFromDatabase(newItem)
         if (cachedInfo == null) {
-            upsertNotYetCachedItem(newItem)
+            insertNotYetCachedItem(newItem)
         } else {
-            upsertUpdatedCachedItem(cachedInfo, newItem)
+            updateUpdatedCachedItem(cachedInfo, newItem)
         }
     }
 }

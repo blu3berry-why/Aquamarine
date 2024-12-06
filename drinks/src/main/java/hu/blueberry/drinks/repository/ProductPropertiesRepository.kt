@@ -6,6 +6,7 @@ import hu.blueberry.drive.services.GoogleSheetsService
 import hu.blueberry.persistentstorage.Database
 import hu.blueberry.persistentstorage.model.MeasureUnit
 import hu.blueberry.persistentstorage.model.ProductType
+import hu.blueberry.persistentstorage.model.updatedextradata.merged.ProductAndScaleInfo
 import hu.blueberry.persistentstorage.model.updatedextradata.product.ProductProperties
 import hu.blueberry.persistentstorage.model.updatedextradata.product.ProductSpreadSheetInfo
 import kotlinx.coroutines.flow.Flow
@@ -20,10 +21,10 @@ class ProductPropertiesRepository @Inject constructor(
         spreadSheetId: String,
         workSheetName: String
     ): Flow<ResourceState<MutableList<ProductProperties>>> {
-        return handleWithFlow { readProductDetails(spreadSheetId, workSheetName) }
+        return handleWithFlow { readProductProperties(spreadSheetId, workSheetName) }
     }
 
-    suspend fun readProductDetails(
+    suspend fun readProductProperties(
         spreadSheetId: String,
         workSheetName: String,
         startRow: Int = 2
@@ -73,10 +74,10 @@ class ProductPropertiesRepository @Inject constructor(
     ) {
 
         val cachedRowInSpreadSheetInfos = database.productSpreadSheetInfoDao()
-            .loadAllProductSpreadSheetInfoWithSpreadSheetId(spreadSheetId)
+            .getAllProductSpreadSheetInfo(spreadSheetId)
 
         for (productAndRow in newList) {
-            val productId = database.productNewDao().getProductByName(productAndRow.first.name).id
+            val productId = database.productNewDao().getProduct(productAndRow.first.name).id
             val spreadSheetInfo =
                 cachedRowInSpreadSheetInfos.firstOrNull { it.productPropertiesId == productId }
 
@@ -139,4 +140,15 @@ class ProductPropertiesRepository @Inject constructor(
         database.productNewDao().upsertProductPropertyList(listToSave)
     }
 
+    suspend fun getAllProducts(spreadsheetId: String):List<ProductProperties>{
+        return database.productFittingDao().getProductProperties(spreadsheetId)
+    }
+
+    suspend fun getProductAndScaleInfo(productId:Int): ProductAndScaleInfo {
+        return database.productNewDao().getProductAndScaleInfo(productId) ?: throw IllegalArgumentException("Product with id '$productId' does not exist!")
+    }
+
+    suspend fun getProductProperties(id:Int): ProductProperties {
+        return database.productNewDao().getProduct(id)
+    }
 }

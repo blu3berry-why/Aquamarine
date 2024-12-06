@@ -1,5 +1,18 @@
 package hu.blueberry.persistentstorage.model
 
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Bolt
+import androidx.compose.material.icons.filled.Liquor
+import androidx.compose.material.icons.filled.LocalBar
+import androidx.compose.material.icons.filled.LocalDrink
+import androidx.compose.material.icons.filled.LocalPizza
+import androidx.compose.material.icons.filled.Sell
+import androidx.compose.material.icons.filled.ShoppingBag
+import androidx.compose.material.icons.filled.SportsBar
+import androidx.compose.material.icons.filled.WaterDrop
+import androidx.compose.material.icons.filled.WineBar
+import androidx.compose.ui.graphics.vector.ImageVector
+
 enum class ProductType(val displayString: String) {
     BEER("SÖR"),
     WINE("BOROK"),
@@ -41,4 +54,19 @@ enum class ProductType(val displayString: String) {
             }
         }
     }
+        fun toImageVector(): ImageVector {
+            return when(this){
+                BEER -> Icons.Default.SportsBar
+                WINE -> Icons.Default.WineBar
+                ENERGY_DRINK -> Icons.Default.Bolt
+                SPIRIT -> Icons.Default.Liquor
+                FOOD -> Icons.Default.LocalPizza
+                SOFT_DRINK -> Icons.Default.LocalDrink
+                COCKTAIL_INGREDIENT -> Icons.Default.LocalBar
+                PREMIUM_SPIRIT -> Icons.Default.Sell
+                PALINKA -> Icons.Default.WaterDrop
+                OTHER -> Icons.Default.ShoppingBag
+            }
+        }
+
 }

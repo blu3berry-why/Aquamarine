@@ -9,7 +9,7 @@ import hu.blueberry.persistentstorage.model.updatedextradata.WorkingDirectory
 interface WorkingDirectoryDao {
 
     @Query("SELECT * FROM working_directories WHERE id = :id")
-    fun getWorkingDirectoryInfo(id:Int): WorkingDirectory?
+    fun getWorkingDirectory(id:Int): WorkingDirectory?
 
     @Upsert
     fun upsertWorkingDirectory(workingDirectory: WorkingDirectory)

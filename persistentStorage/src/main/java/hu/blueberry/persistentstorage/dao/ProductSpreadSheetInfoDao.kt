@@ -13,7 +13,7 @@ interface ProductSpreadSheetInfoDao {
         SELECT * FROM product_spreadsheet_info WHERE product_spreadsheet_info.spreadsheet_id = :spreadSheetId
         """
     )
-    fun loadAllProductSpreadSheetInfoWithSpreadSheetId(spreadSheetId: String): List<ProductSpreadSheetInfo>
+    fun getAllProductSpreadSheetInfo(spreadSheetId: String): List<ProductSpreadSheetInfo>
 
      @Delete
      fun deleteProductSpreadSheetInfo(productSpreadSheetInfo: ProductSpreadSheetInfo)

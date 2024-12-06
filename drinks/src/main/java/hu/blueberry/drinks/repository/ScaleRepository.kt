@@ -23,7 +23,7 @@ class ScaleRepository @Inject constructor(
     }
 
 
-    private suspend fun readScale(spreadSheetId: String, worksheetName: String) {
+    suspend fun readScale(spreadSheetId: String, worksheetName: String) {
         templateFunctionsRepository.readItems<ScaleInfo>(
             spreadSheetId = spreadSheetId,
             worksheetName = worksheetName,
@@ -63,8 +63,8 @@ class ScaleRepository @Inject constructor(
             getItemFromDatabase = {
                 database.scaleInfoDao().getScaleInfoOfProduct(it.productOwnerId)
             },
-            upsertNotYetCachedItem = { database.scaleInfoDao().upsertScaleInfo(it) },
-            upsertUpdatedCachedItem = { cached, new ->
+            insertNotYetCachedItem = { database.scaleInfoDao().upsertScaleInfo(it) },
+            updateUpdatedCachedItem = { cached, new ->
                 database.scaleInfoDao().upsertScaleInfo(
                     cached.copy(
                         fullWeight = new.fullWeight,

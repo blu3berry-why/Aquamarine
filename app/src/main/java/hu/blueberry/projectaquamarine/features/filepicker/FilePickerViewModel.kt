@@ -4,13 +4,11 @@ import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import com.google.api.services.drive.model.File
 import dagger.hilt.android.lifecycle.HiltViewModel
+import hu.blueberry.drinks.model.MemoryDatabase2
 import hu.blueberry.drinks.repository.WorkingDirectoryRepository
 import hu.blueberry.drive.PermissionHandlingViewModel
 import hu.blueberry.drive.repositories.DriveRepository
 import hu.blueberry.drive.services.DriveService
-import hu.blueberry.persistentstorage.Database
-import hu.blueberry.persistentstorage.model.updatedextradata.MyFile
-import hu.blueberry.persistentstorage.model.updatedextradata.WorkingDirectory
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -19,7 +17,8 @@ import javax.inject.Inject
 @HiltViewModel
 class FilePickerViewModel @Inject constructor(
     private val driveRepository: DriveRepository,
-    private val workingDirectoryRepository: WorkingDirectoryRepository
+    private val workingDirectoryRepository: WorkingDirectoryRepository,
+    private val memoryDatabase2: MemoryDatabase2
 ) : PermissionHandlingViewModel() {
     /**
      * Starts with the root folder of the Drive
@@ -47,7 +46,6 @@ class FilePickerViewModel @Inject constructor(
 
     var chooseType: MutableStateFlow<String> = MutableStateFlow(DriveService.MimeType.FOLDER)
 
-    private lateinit var workingDirectory: WorkingDirectory
 
     /**
      * The folders to show
@@ -84,7 +82,7 @@ class FilePickerViewModel @Inject constructor(
 
     private fun loadWorkingDirectory() {
         runIO(request = {
-            workingDirectory = workingDirectoryRepository.getWorkingDirectory()
+            workingDirectoryRepository.getWorkingDirectory()
         })
     }
 
@@ -97,7 +95,7 @@ class FilePickerViewModel @Inject constructor(
     fun selectFolder() {
         lastParent?.let {
             runIO(
-                request = { workingDirectoryRepository.setWorkingDirectoryFolder(workingDirectory, it) }
+                request = { workingDirectoryRepository.setWorkingDirectoryFolder(memoryDatabase2.workingDirectory, it) }
             )
         }
 
@@ -105,7 +103,7 @@ class FilePickerViewModel @Inject constructor(
 
     fun selectSpreadSheet(file: File) {
         runIO(
-            request = { workingDirectoryRepository.setWorkingDirectorySpreadsheet(workingDirectory, file) }
+            request = { workingDirectoryRepository.setWorkingDirectorySpreadsheet(memoryDatabase2.workingDirectory, file) }
         )
     }
 
