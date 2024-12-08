@@ -1,4 +1,4 @@
-package hu.blueberry.projectaquamarine.auth
+package hu.blueberry.projectaquamarine.auth.helper.googlesigninbutton
 
 import android.content.Context
 import androidx.lifecycle.ViewModel
@@ -8,15 +8,12 @@ import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.tasks.Task
 import dagger.hilt.android.lifecycle.HiltViewModel
 import hu.blueberry.projectaquamarine.auth.helper.AuthenticatedUser
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 
 @HiltViewModel
-class AuthViewModel @Inject constructor(val authenticatedUser: AuthenticatedUser) : ViewModel() {
+class GoogleSignInButtonViewModel @Inject constructor(val authenticatedUser: AuthenticatedUser) : ViewModel() {
     companion object{
-        const val CLIENT_ID = "897296513955-etbugvtbv0lspttm49agdbj0od9jl5ku.apps.googleusercontent.com"
         const val SIGN_IN_REQUEST_CODE = 1
     }
 
@@ -27,21 +24,15 @@ class AuthViewModel @Inject constructor(val authenticatedUser: AuthenticatedUser
     }
 
     fun handle(task: Task<GoogleSignInAccount>?, onError: (String) -> Unit, onSuccess: () -> Unit){
-        val account = task?.getResult(ApiException::class.java)
         try {
+            val account = task?.getResult(ApiException::class.java)
             if (account == null) {
                 onError("Account is null")
             } else {
-                    try {
-                        onSuccess()
-                    }catch (e: Exception){
-                        onError(e.message.toString())
-                    }
-
+                onSuccess()
             }
         } catch (e: ApiException) {
             onError(e.message.toString())
         }
     }
-
 }

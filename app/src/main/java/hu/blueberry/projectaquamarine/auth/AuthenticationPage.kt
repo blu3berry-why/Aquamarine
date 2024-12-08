@@ -9,13 +9,15 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.lifecycle.viewmodel.compose.viewModel
+import hu.blueberry.projectaquamarine.auth.helper.googlesigninbutton.ButtonGoogleSignIn
 import hu.blueberry.projectaquamarine.auth.helper.getGoogleSignInClient
 
 @Composable
 fun AuthenticationPage(
-    onAuthenticated: () -> Unit
-){
+    onAuthenticated: () -> Unit,
 
+){
     Column (modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally)
