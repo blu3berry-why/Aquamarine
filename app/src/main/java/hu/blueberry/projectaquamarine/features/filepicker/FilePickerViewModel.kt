@@ -120,5 +120,15 @@ class FilePickerViewModel @Inject constructor(
         mimeTypes = mimeTypesList
     }
 
+    fun returnToPreviousParent(navigateBack: ()->Unit){
+        if (parentList.size > 1){
+            parentList.removeAt(parentList.lastIndex)
+            lastParentName.value = lastParent!!.name
+            loadFilesInFolder()
+        }else{
+            navigateBack.invoke()
+        }
+    }
+
 
 }

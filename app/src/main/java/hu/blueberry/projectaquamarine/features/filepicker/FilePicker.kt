@@ -1,8 +1,5 @@
 package hu.blueberry.projectaquamarine.features.filepicker
 
-import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -48,7 +45,7 @@ fun FilePicker(
     viewModel: FilePickerViewModel = hiltViewModel(),
     fileTypes: List<String> = listOf(DriveService.MimeType.FOLDER),
     chooseType: String = DriveService.MimeType.FOLDER,
-    navigateAfterChoosing: () -> Unit = {}
+    navigateBack: () -> Unit,
 ) {
     val files = viewModel.displayedFiles
 
@@ -71,7 +68,7 @@ fun FilePicker(
                     titleContentColor = MaterialTheme.colorScheme.primary,
                 ),
                 navigationIcon = {
-                    IconButton(onClick = { /* do something */ }) {
+                    IconButton(onClick = { viewModel.returnToPreviousParent(navigateBack) }) {
                         Icon(
                             imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                             contentDescription = "Localized description"
@@ -91,11 +88,11 @@ fun FilePicker(
                 .padding(innerPadding)
         ) {
             LazyColumn {
-                items(files, key = { it.id   }) { file ->
+                items(files, key = { it.id }) { file ->
                     FileRow(
                         file = file,
                         onClick = returnFileChoosingOnClick(viewModel, file),
-                        navigateAfterChoosing = navigateAfterChoosing
+                        navigateBack = navigateBack
                     )
 
                 }
@@ -104,7 +101,10 @@ fun FilePicker(
                 WideFilledButton(
                     icon = Icons.Outlined.CheckCircle,
                     text = "Select Folder",
-                    onClick = { viewModel.selectFolder() },
+                    onClick = {
+                        viewModel.selectFolder()
+                        navigateBack.invoke()
+                    },
                     modifier = Modifier.padding(bottom = 10.dp)
                 )
             }
@@ -114,7 +114,7 @@ fun FilePicker(
 }
 
 @Composable
-fun FileRow(file: File, onClick: () -> Unit, navigateAfterChoosing: () -> Unit) {
+fun FileRow(file: File, onClick: () -> Unit, navigateBack: () -> Unit) {
 
     Row(
         horizontalArrangement = Arrangement.Start,
@@ -122,7 +122,10 @@ fun FileRow(file: File, onClick: () -> Unit, navigateAfterChoosing: () -> Unit) 
         modifier = Modifier
             .clickable {
                 onClick.invoke()
-                navigateAfterChoosing.invoke()
+                if (file.mimeType != DriveService.MimeType.FOLDER) {
+                    navigateBack.invoke()
+                }
+
             }
             .fillMaxWidth()
             .padding(horizontal = 3.dp)
