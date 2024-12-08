@@ -29,6 +29,7 @@ fun MyBottomBarNavigation(
     navigateToSelectFolder: () -> Unit,
     navigateToFilePickFolderAndSpreadsheet: () -> Unit,
     navigateToStorageList:(String) -> Unit,
+    onLogout:()-> Unit,
 ) {
     var currentDestination by rememberSaveable { mutableStateOf(AppDestinations.CAMERA) }
 
@@ -74,7 +75,7 @@ fun MyBottomBarNavigation(
                 navigateToStorageList = navigateToStorageList
             )
 
-            AppDestinations.SETTINGS -> SettingsScreen()
+            AppDestinations.SETTINGS -> SettingsScreen(onLogout = onLogout)
         }
     }
 }

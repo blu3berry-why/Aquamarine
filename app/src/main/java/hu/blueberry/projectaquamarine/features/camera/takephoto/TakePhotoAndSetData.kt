@@ -9,8 +9,13 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.CameraAlt
+import androidx.compose.material.icons.filled.PlusOne
+import androidx.compose.material.icons.filled.Upload
 import androidx.compose.material3.Button
 import androidx.compose.material3.Label
 import androidx.compose.material3.Text
@@ -33,6 +38,7 @@ import hu.blueberry.camera.models.enums.PhotoTakenTime
 import hu.blueberry.projectaquamarine.features.elements.ExposedDropdownMenuSample
 import hu.blueberry.drive.permissions.ManagePermissionsWithPermissionManager
 import hu.blueberry.projectaquamarine.features.camera.CameraViewModel
+import hu.blueberry.projectaquamarine.features.elements.buttons.WideFilledButton
 import hu.blueberry.themes.theme.ProjectAquamarineTheme
 
 @Composable
@@ -53,111 +59,116 @@ fun TakePhotoAndSetData(
 
     ManagePermissionsWithPermissionManager(permissionManager = viewModel.permissionManager)
 
-    ProjectAquamarineTheme {
-        Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.SpaceEvenly
-            ) {
 
-                Text(text = photoName.value)
+    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
+        ) {
+            Text(
+                modifier = Modifier.padding(30.dp),
+                text = photoName.value
+            )
 
-                Box(
-                    modifier = Modifier
-                        .height(500.dp)
-                        .width(400.dp),
-                    contentAlignment = Alignment.Center
+            if (selectedImageUri.value != null) {
+                /*
+                * When an image has been taken already
+                * */
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.SpaceBetween
                 ) {
-                    if (selectedImageUri.value != null) {
-                        /*
-                        * When an image has been taken already
-                        * */
-                        Column(
-                            horizontalAlignment = Alignment.CenterHorizontally,
-                            verticalArrangement = Arrangement.SpaceBetween
-                        ) {
-                            /*
-                            * Image preview
-                            * */
-                            AsyncImage(
-                                model = selectedImageUri.value,
-                                contentDescription = null,
-                                modifier = Modifier
-                                    .height(400.dp)
-                                    .width(300.dp)
-                                    .clip(RoundedCornerShape(10.dp)),
-                                contentScale = ContentScale.Crop
+                    /*
+                    * Image preview
+                    * */
+                    AsyncImage(
+                        model = selectedImageUri.value,
+                        contentDescription = null,
+                        modifier = Modifier
+                            .height(400.dp)
+                            .width(300.dp)
+                            .clip(RoundedCornerShape(10.dp)),
+                        contentScale = ContentScale.Crop
+                    )
+
+                    /*
+                * Upload Button
+                * */
+                    WideFilledButton(
+                        onClick =
+                        {
+                            viewModel.uploadPNG(
+                                onSuccess = {
+                                    viewModel.showToastImageHasBeenSaved(context)
+                                }
                             )
-                            Row {
-                                /*
-                            * Upload Button
-                            * */
-                                Button(
-                                    onClick =
-                                    {
-                                        viewModel.uploadPNG(
-                                            onSuccess = {
-                                                viewModel.showToastImageHasBeenSaved(context)
-                                            }
-                                        )
-                                    }
-                                ) {
-                                    Text(text = "Upload")
-                                }
+                        },
+                        text = stringResource(hu.blueberry.projectaquamarine.R.string.upload_photo),
+                        icon = Icons.Default.Upload
+                    )
 
-                                /*
-                                * Take New Picture
-                                * */
-                                Button(
-                                    onClick =
-                                    {
-                                        viewModel.resetPage()
-                                    }
-                                ) {
-                                    Text(text = "Take new picture")
-                                }
-                            }
+                    /*
+                    * Take New Picture
+                    * */
+                    WideFilledButton(
+                        onClick =
+                        {
+                            viewModel.resetPage()
+                        },
+                        text = stringResource(hu.blueberry.projectaquamarine.R.string.take_new_picture),
+                        icon = Icons.Default.PlusOne
+                    )
 
 
-                        }
-
-                    } else {
-                        /*
-                        * No image just a button to take one
-                        * */
-                        Button(
-                            onClick =
-                            {
-                                val file = viewModel.createImageFile(context)
-
-                                viewModel.uri = FileProvider.getUriForFile(
-                                    context,
-                                    fileProvider,
-                                    file
-                                )
-                                // Take picture
-                                takePictureLauncher.launch(viewModel.uri)
-                            }
-                        ) {
-                            Text(text = "Take Photo")
-                        }
-                    }
                 }
 
-                ExposedDropdownMenuSample(
-                    options = PhotoTakenTime.entries,
-                    selectedData = viewModel.selectedTakenType,
-                    onClick = viewModel::setPhotoName,
-                    label = stringResource(hu.blueberry.projectaquamarine.R.string.time)
-                )
+            } else {
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.SpaceEvenly,
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(vertical = 30.dp)
+                ) {
 
-                ExposedDropdownMenuSample(
-                    options = PhotoClockType.entries,
-                    selectedData = viewModel.selectedClockType,
-                    onClick = viewModel::setPhotoName,
-                    label = stringResource(hu.blueberry.projectaquamarine.R.string.clock_name)
-                )
+                    Column {
+                        ExposedDropdownMenuSample(
+                            options = PhotoTakenTime.entries,
+                            selectedData = viewModel.selectedTakenType,
+                            onClick = viewModel::setPhotoName,
+                            label = stringResource(hu.blueberry.projectaquamarine.R.string.time)
+                        )
+
+                        ExposedDropdownMenuSample(
+                            options = PhotoClockType.entries,
+                            selectedData = viewModel.selectedClockType,
+                            onClick = viewModel::setPhotoName,
+                            label = stringResource(hu.blueberry.projectaquamarine.R.string.clock_name)
+                        )
+                    }
+
+                    /*
+               * No image just a button to take one
+               * */
+                    WideFilledButton(
+                        onClick =
+                        {
+                            val file = viewModel.createImageFile(context)
+
+                            viewModel.uri = FileProvider.getUriForFile(
+                                context,
+                                fileProvider,
+                                file
+                            )
+                            // Take picture
+                            takePictureLauncher.launch(viewModel.uri)
+                        },
+                        text = stringResource(hu.blueberry.projectaquamarine.R.string.take_photo),
+                        icon = Icons.Default.CameraAlt
+                    )
+                }
             }
+
         }
     }
 }

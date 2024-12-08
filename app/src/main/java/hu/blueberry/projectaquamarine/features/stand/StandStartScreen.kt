@@ -37,6 +37,10 @@ fun StandStartScreen(
     val workingDirectoryState = viewModel.currentWorkingDirectory.collectAsState()
     val spreadsheetName = workingDirectoryState.value?.choosenSpreadSheet?.name ?: "Select a Spreadsheet"
 
+    LaunchedEffect(viewModel) {
+        viewModel.refreshSpreadsheetName()
+    }
+
 
 
     Scaffold(
@@ -48,14 +52,7 @@ fun StandStartScreen(
                     containerColor = MaterialTheme.colorScheme.primaryContainer,
                     titleContentColor = MaterialTheme.colorScheme.primary,
                 ),
-                navigationIcon = {
-                    IconButton(onClick = { /* do something */ }) {
-                        Icon(
-                            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                            contentDescription = "Localized description"
-                        )
-                    }
-                },
+
                 scrollBehavior = scrollBehavior,
             )
         },

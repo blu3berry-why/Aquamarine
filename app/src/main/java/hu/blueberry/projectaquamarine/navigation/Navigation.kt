@@ -1,13 +1,6 @@
 package hu.blueberry.projectaquamarine.navigation
 
-
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -39,7 +32,6 @@ fun AppNavigation() {
             }
         }
 
-
         composable<TakePhoto> {
             TakePhotoAndSetData()
         }
@@ -69,17 +61,22 @@ fun AppNavigation() {
                         ),
                     )
                 },
-                navigateToStorageList = { navController.navigate(StorageItemList(it))}
+                navigateToStorageList = { navController.navigate(StorageItemList(it))},
+                onLogout = { navController.navigate(AuthScreen)}
             )
         }
 
         composable<SelectFolder> {
-            FilePicker()
+            FilePicker(navigateBack = {navController.popBackStack()})
         }
 
         composable<SelectFiles> {
             val args = it.toRoute<SelectFiles>()
-            FilePicker(fileTypes = args.fileTypes, chooseType = args.chooseType)
+            FilePicker(
+                fileTypes = args.fileTypes,
+                chooseType = args.chooseType,
+                navigateBack = {navController.popBackStack()
+                })
         }
 
         composable<ProductListScreen> {

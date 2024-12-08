@@ -2,9 +2,6 @@ import org.gradle.api.JavaVersion
 
 object Versions {
 
-
-
-
     //Base
     const val coreKtx =  "1.12.0"
     const val lifecycle = "2.7.0"

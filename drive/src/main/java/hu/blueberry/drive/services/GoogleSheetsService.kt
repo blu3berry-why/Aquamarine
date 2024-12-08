@@ -19,6 +19,7 @@ import hu.blueberry.drive.base.CloudBase
 import hu.blueberry.drive.model.google.RangeBuilder
 import hu.blueberry.drive.model.google.enums.InputOption
 import hu.blueberry.drive.model.google.enums.MajorDimension
+import hu.blueberry.drive.model.google.enums.RenderOption
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -45,7 +46,6 @@ class GoogleSheetsService @Inject constructor(
             .apply { title = name }
 
         spreadsheet = sheets.spreadsheets().create(spreadsheet).execute()
-        spreadsheet.properties
 
         return spreadsheet.spreadsheetId
     }
@@ -64,7 +64,7 @@ class GoogleSheetsService @Inject constructor(
     suspend fun readSpreadSheetFormula(
         spreadsheetId: String,
         range: String,
-        inputOption: InputOption = InputOption.FORMULA
+        inputOption: RenderOption = RenderOption.UNFORMATTED_VALUE
     ): ValueRange? {
         var valueRange: ValueRange? = null
 
@@ -84,11 +84,12 @@ class GoogleSheetsService @Inject constructor(
         inputOption: InputOption = InputOption.USER_ENTERED
     ): UpdateValuesResponse? {
 
-        var result: UpdateValuesResponse? = null
         val body = ValueRange()
         body.setValues(values)
         body.majorDimension = majorDimension.stringValue
-        result = sheets.spreadsheets().values()
+        val result = sheets
+            .spreadsheets()
+            .values()
             .update(spreadsheetId, rangeBuilder.build(), body)
             .apply {
                 valueInputOption = inputOption.stringValue

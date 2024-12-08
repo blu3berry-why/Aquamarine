@@ -24,7 +24,6 @@ class StorageListViewModel @Inject constructor(
 
         //TODO gány
         runIO {
-            productsAndStands.clear()
             memoryDatabase2.selectedWorksheet = workSheetName
 
             if (memoryDatabase2.workingDirectory.choosenSpreadSheet == null) {
@@ -33,17 +32,29 @@ class StorageListViewModel @Inject constructor(
 
             memoryDatabase2.runCodeIfSpreadsheetIdNotNull {
                 runIO {
+                    addProducts(standRepository.getProductStandsForSpreadsheetWithWorksheetName(
+                        it,
+                        workSheetName
+                    ))
+
                     standRepository.readStorageSheet(it, workSheetName)
-                    var result = standRepository.getProductStandsForSpreadsheetWithWorksheetName(
+                    val result = standRepository.getProductStandsForSpreadsheetWithWorksheetName(
                         it,
                         workSheetName
                     )
-                    result = result.filter { it.product != null }
-                    productsAndStands.addAll(result)
+                    addProducts(result)
                 }
             }
 
         }
+    }
+
+    private fun addProducts(products: List<ProductAndStand>){
+        productsAndStands.clear()
+        val result = products.filter { it.product != null }
+        productsAndStands.addAll(result)
+
+
     }
 
 

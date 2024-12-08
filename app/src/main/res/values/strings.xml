@@ -9,4 +9,9 @@
     <string name="save">Save</string>
     <string name="clock_name">Clock name</string>
     <string name="time">Time</string>
+    <string name="take_new_picture">Take new picture</string>
+    <string name="take_photo">Take Photo</string>
+    <string name="upload_photo">Upload Photo</string>
+    <string name="log_in_to_google">Log in to Google</string>
+    <string name="logout">Logout</string>
 </resources>

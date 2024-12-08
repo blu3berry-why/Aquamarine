@@ -3,7 +3,9 @@ package hu.blueberry.drive
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.api.client.googleapis.extensions.android.gms.auth.UserRecoverableAuthIOException
+import com.google.api.services.drive.Drive
 import hu.blueberry.drive.base.ResourceState
 import hu.blueberry.drive.base.handleResponse
 import hu.blueberry.drive.permissions.PermissionRequestManager
