@@ -2,6 +2,7 @@ package hu.blueberry.projectaquamarine.features.camera.storedpictures
 
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.snapshots.SnapshotStateList
+import androidx.compose.ui.text.toUpperCase
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import hu.blueberry.drive.PermissionHandlingViewModel
@@ -12,6 +13,7 @@ import hu.blueberry.drive.services.FileService
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import java.io.File
+import java.util.Locale
 import javax.inject.Inject
 
 
@@ -42,7 +44,8 @@ class InternalStorageViewModel @Inject constructor(
 
     fun filterInternalStoragePhotos() {
         filteredInternalStoragePhotos.clear()
-        val filteredPhotos = internalStoragePhotos.filter{photo -> photo.name.contains(filterText.value) }
+        val filteredPhotos = internalStoragePhotos.filter{photo -> photo.name.uppercase(Locale.ROOT)
+            .contains(filterText.value.uppercase(Locale.ROOT)) }
         filteredInternalStoragePhotos.addAll(filteredPhotos)
     }
 
